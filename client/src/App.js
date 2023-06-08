@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -8,11 +9,16 @@ function App() {
       .then((r) => r.json())
       .then((data) => setCount(data.count));
   }, []);
-console.log(count.count)
+
   return (
-    <div className="App">
-      <h1>Page Count: {count.count}</h1>
-    </div>
+    <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route path="/testing" element={<h1>Test Route</h1>} />
+            <Route path="/" element={<h1>Page Count: {count.count}</h1>} />
+          </Routes>
+        </div>
+    </BrowserRouter>
   );
 }
 
