@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :users, only: [:create]
   get '/hello', to: 'application#hello_world'
 
   get '*path', 
