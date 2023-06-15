@@ -10,7 +10,7 @@ const formFields = {
 };
 const keys = Object.keys(formFields);
 
-function Signup() {
+function Signup({ onLogin }) {
     const [signup, setSignup] = useState(formFields);
     const [errors, setErrors] = useState([]);
 
@@ -32,8 +32,8 @@ function Signup() {
         })
         .then((r) => {
             if (r.ok) {
-                r.json().then((r) => console.log(r))
-                setSignup(formFields)
+                r.json().then((user) => onLogin(user));
+                setSignup(formFields);
             } else {
                 r.json().then((err) => setErrors(err.errors))
             }
