@@ -9,6 +9,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    if session[:user_id]
+      render json: User.find(session[:user_id])
+    else
+      render json: { error: "Please Sign In"}, status: :unauthorized
+    end
+  end
+
   private
   def user_params
     params.permit(:email, :password, :password_confirmation, :first_name, :last_name, :job_title)
