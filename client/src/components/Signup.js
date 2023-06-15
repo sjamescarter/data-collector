@@ -7,7 +7,8 @@ const formFields = {
     email: "",
     password: "",
     password_confirmation: ""
-}
+};
+const keys = Object.keys(formFields);
 
 function Signup() {
     const [signup, setSignup] = useState(formFields);
@@ -30,7 +31,6 @@ function Signup() {
             body: JSON.stringify(signup)
         })
         .then((r) => {
-            setErrors([])
             if (r.ok) {
                 r.json().then((r) => console.log(r))
                 setSignup(formFields)
@@ -44,23 +44,17 @@ function Signup() {
         <div>
             <h1>Sign up</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="first_name">First Name: </label>
-                <input type="text" name="first_name" value={signup.first_name} onChange={handleChange} />
-                <label htmlFor="last_name">Last Name: </label>
-                <input type="text" name="last_name" value={signup.last_name} onChange={handleChange} />
-                <label htmlFor="job_title">Job Title: </label>
-                <input type="text" name="job_title" value={signup.job_title} onChange={handleChange} />                
-                <label htmlFor="email">Email: </label>
-                <input type="text" name="email" value={signup.email} onChange={handleChange} />
-                <label htmlFor="password">Password: </label>
-                <input type="password" name="password" value={signup.password} onChange={handleChange} />
-                <label htmlFor="password_confirmation">Password Confirmation: </label>
-                <input type="password" name="password_confirmation" value={signup.password_confirmation} onChange={handleChange} />
+                {keys.map((key) => 
+                    <div key={keys.indexOf(key)}>
+                        <label htmlFor={key}>{key[0].toUpperCase() + key.split("_").join(" ").slice(1)}: </label>
+                        <input type={key[0] === "p" ? "password" : "text"} name={key} value={signup[key]} onChange={handleChange} />   
+                    </div>
+                )}
                 <input type="submit" value="Signup" />
             </form>
             {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
         </div>
-    )
+    );
 }
 
-export default Signup
+export default Signup;
