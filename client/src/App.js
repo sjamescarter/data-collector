@@ -3,19 +3,19 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from "./components/Signup";
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch("/hello")
-      .then((r) => r.json())
-      .then((data) => setCount(data.count));
+    // fetch("/hello")
+    //   .then((r) => r.json())
+    //   .then((data) => setCount(data.count));
   }, []);
 
   return (
     <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route path="/" element={<h1>Page Count: {count.count}</h1>} />
+            <Route path="/" element={<h1>myDATAcollector</h1>} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>
