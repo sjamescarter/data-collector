@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import SignUpForm from './SignUpForm';
+import SignUpForm from '../components/SignUpForm';
+import LoginForm from '../components/LoginForm';
 
 function Login({ onLogin }) {
     const [showLogin, setShowLogin] = useState(true)
@@ -10,7 +11,7 @@ function Login({ onLogin }) {
                 (
                     <>
                     <h1>Sign In</h1>
-                    
+                    <LoginForm onLogin={onLogin} />
                     <p>
                         New to this app? 
                         <button onClick={() => setShowLogin(!showLogin)}>Sign Up Here!</button>
