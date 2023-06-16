@@ -10,7 +10,7 @@ const formFields = {
 };
 const keys = Object.keys(formFields);
 
-function Signup({ onLogin }) {
+function SignUpForm({ onLogin }) {
     const [signup, setSignup] = useState(formFields);
     const [errors, setErrors] = useState([]);
 
@@ -42,7 +42,6 @@ function Signup({ onLogin }) {
 
     return (
         <div>
-            <h1>Sign up</h1>
             <form onSubmit={handleSubmit}>
                 {keys.map((key) => 
                     <div key={keys.indexOf(key)}>
@@ -57,4 +56,4 @@ function Signup({ onLogin }) {
     );
 }
 
-export default Signup;
+export default SignUpForm;
