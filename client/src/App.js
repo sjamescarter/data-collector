@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Signup from "./components/Signup";
 import Login from "./components/Login";
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<h1>myDATAcollector</h1>} />
-            <Route path="/signup" element={<Signup onLogin={setUser}/>} />
           </Routes>
         </div>
     </BrowserRouter>
