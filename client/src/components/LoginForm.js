@@ -3,7 +3,6 @@ import { useState } from 'react';
 function LoginForm({ onLogin }) {
     const [form, setForm] = useState({email: "", password: ""});
     const [errors, setErrors] = useState([]);
-    const keys = Object.keys(form);
 
     function handleChange(e) {
         setForm({
