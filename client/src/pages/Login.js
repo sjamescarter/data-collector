@@ -9,23 +9,23 @@ function Login({ onLogin }) {
         <div>
             {showLogin? 
                 (
-                    <>
-                    <h1>Sign In</h1>
-                    <LoginForm onLogin={onLogin} />
-                    <p>
-                        New to this app? 
-                        <button onClick={() => setShowLogin(!showLogin)}>Sign Up Here!</button>
-                    </p>
-                    </>
+                    <div className="login">
+                        <h1>Sign In</h1>
+                        <LoginForm onLogin={onLogin} />
+                        <p style={{textAlign: "center"}}>
+                            Need an account? 
+                            <span className="btn" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
+                        </p>
+                    </div>
             ) : (
-                <>
-                    <h1>Sign Up</h1>
-                    <SignUpForm onLogin={onLogin} />
-                    <p>
-                        Already have an account? 
-                        <button onClick={() => setShowLogin(!showLogin)}>Sign In Here!</button>
-                    </p>
-                </>
+                    <div className="login">
+                        <h1>Sign Up</h1>
+                        <SignUpForm onLogin={onLogin} />
+                        <p>
+                            Already have an account? 
+                            <button onClick={() => setShowLogin(true)}>Sign In Here!</button>
+                        </p>
+                    </div>
             )}
         </div>
     )
