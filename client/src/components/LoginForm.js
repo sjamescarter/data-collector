@@ -33,17 +33,17 @@ function LoginForm({ onLogin }) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <div class="input-container">
+                <div className="input-container">
                     <i className="material-icons input-icon">mail</i>
                     <input type="text" name="email" className="input-field" placeholder="Email" value={form.email} onChange={handleChange} />
                 </div>
-                <div class="input-container">
+                <div className="input-container">
                     <i className="material-icons input-icon">lock</i>
                     <input type="password" name="password" className="input-field" placeholder="Password" value={form.password} onChange={handleChange} /> 
                 </div>
                 <input type="submit" className="input-submit" value="Sign In" />
             </form>
-            <ul class="errors">
+            <ul className="errors">
                 {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
             </ul>
         </div>

@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route path="/" element={<h1>myDATAcollector</h1>} />
+            <Route path="/" element={<h1>myData Collector</h1>} />
           </Routes>
         </div>
     </BrowserRouter>
