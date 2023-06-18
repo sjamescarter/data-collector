@@ -12,7 +12,7 @@ function Login({ onLogin }) {
                     <div className="login">
                         <h1>Sign In</h1>
                         <LoginForm onLogin={onLogin} />
-                        <p style={{textAlign: "center"}}>
+                        <p style={{textAlign: "center", padding: "16px"}}>
                             Need an account? 
                             <span className="btn" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
                         </p>
