@@ -14,16 +14,16 @@ function Login({ onLogin }) {
                         <LoginForm onLogin={onLogin} />
                         <p style={{textAlign: "center", padding: "16px"}}>
                             Need an account? 
-                            <span className="btn" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
+                            <span className="shoLGN" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
                         </p>
                     </div>
             ) : (
                     <div className="login">
                         <h1>Sign Up</h1>
                         <SignUpForm onLogin={onLogin} />
-                        <p>
+                        <p style={{textAlign: "center", padding: "16px"}}>
                             Already have an account? 
-                            <button onClick={() => setShowLogin(true)}>Sign In Here!</button>
+                            <span className="shoLGN" onClick={() => setShowLogin(true)}>Sign In Here!</span>
                         </p>
                     </div>
             )}

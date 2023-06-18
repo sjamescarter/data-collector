@@ -1,14 +1,13 @@
 import { useState } from 'react';
 
 const formFields = {
-    first_name: "",
-    last_name: "",
-    job_title: "",
+    firstName: "",
+    lastName: "",
+    jobTitle: "",
     email: "",
     password: "",
-    password_confirmation: ""
+    passwordConfirmation: ""
 };
-const keys = Object.keys(formFields);
 
 function SignUpForm({ onLogin }) {
     const [signup, setSignup] = useState(formFields);
@@ -23,7 +22,7 @@ function SignUpForm({ onLogin }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        fetch("/users", {
+        fetch("/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -43,15 +42,37 @@ function SignUpForm({ onLogin }) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                {keys.map((key) => 
-                    <div key={keys.indexOf(key)}>
-                        <label htmlFor={key}>{key[0].toUpperCase() + key.split("_").join(" ").slice(1)}: </label>
-                        <input type={key[0] === "p" ? "password" : "text"} name={key} value={signup[key]} onChange={handleChange} />   
-                    </div>
-                )}
-                <input type="submit" value="Signup" />
+                <div class="input-container">
+                    <i className="material-icons input-icon">person</i>
+                    <input type="text" name="firstName" className="input-field" placeholder="First Name" value={signup.firstName} onChange={handleChange} />
+                    <input type="text" name="lastName" className="input-field" placeholder="Last Name" value={signup.lastName} onChange={handleChange} />
+                </div>
+
+                <div class="input-container">
+                    <i className="material-icons input-icon">work</i>
+                    <input type="text" name="jobTitle" className="input-field" placeholder="Job Title" value={signup.jobTitle} onChange={handleChange} />
+                </div>
+                
+                <div class="input-container">
+                    <i className="material-icons input-icon">mail</i>
+                    <input type="text" name="email" className="input-field" placeholder="Email" value={signup.email} onChange={handleChange} />
+                </div>
+
+                <div class="input-container">
+                    <i className="material-icons input-icon">lock</i>
+                    <input type="password" name="password" className="input-field" placeholder="Password" value={signup.password} onChange={handleChange} />
+                </div>
+
+                <div class="input-container">
+                    <i className="material-icons input-icon">lock</i>
+                    <input type="password" name="passwordConfirmation" className="input-field" placeholder="Confirm Password" value={signup.passwordConfirmation} onChange={handleChange} />
+                </div>
+
+                <input type="submit" className="input-submit" value="Sign Up" />
             </form>
-            {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
+            <ul class="errors">
+                {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
+            </ul>
         </div>
     );
 }
