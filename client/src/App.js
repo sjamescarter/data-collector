@@ -23,6 +23,9 @@ function App() {
         <div>
           <Routes>
             <Route path="/" element={<h1>myData [Collector]</h1>} />
+            <Route path="/students" element={<h1>myData [Collector]</h1>} />
+            <Route path="/students/new" element={<h1>myData [Collector]</h1>} />
+            <Route path="/goals/new" element={<h1>myData [Collector]</h1>} />
           </Routes>
         </div>
     </BrowserRouter>

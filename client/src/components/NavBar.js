@@ -46,7 +46,8 @@ function NavBar({ user, setUser }) {
         })
         .then(r => {
             if (r.ok) {
-                setUser(null)
+                setUser(null);
+                
             }
         })
     }
