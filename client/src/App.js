@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from "./pages/Login";
+import NavBar from "./components/NavBar";
 
 function App() {
   const [user, setUser] = useState("");
@@ -18,7 +19,8 @@ function App() {
 
   return (
     <BrowserRouter>
-        <div className="App">
+        <NavBar user={user} setUser={setUser} />
+        <div>
           <Routes>
             <Route path="/" element={<h1>myData [Collector]</h1>} />
           </Routes>
