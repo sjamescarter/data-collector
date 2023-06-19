@@ -13,4 +13,9 @@ puts "Seeding 🌱"
 # User.create(email: "lannette.simes@example.com", password: "pas5W0rd", password_confirmation: "pas5W0rd", first_name: "Lannette", last_name: "Simes", job_title: "Physical Therapist")
 # User.create(email: "janice-jones@example.com", password: "pas5W0rd", password_confirmation: "pas5W0rd", first_name: "Janice", last_name: "Jones", job_title: "Speech/Language Pathologist")
 
+# Student Seed Data
+Student.create(first_name: "James", last_name: "Jamison", grade_level: 6)
+Student.create(first_name: "Shirley", last_name: "Goodness", grade_level: 6)
+Student.create(first_name: "Javier", last_name: "Lopez", grade_level: 6)
+
 puts "Done Seeding 🌾"
