@@ -38,6 +38,20 @@ const StyledNavLink = styled(NavLink)`
 const Icon = styled.i`
     padding: 0 16px;
 `
+const SignOutButton = styled.button`
+    background-color: #6a8532;
+    border: none;
+    color: white;
+    display: flex;
+    padding: 10px 0;
+    text-decoration: none;
+    font-size: 1.25em;
+    width: 100%;
+    &:hover {
+        background-color: #f8f8f8;
+        color: #6a8532;
+    }
+`
 
 function NavBar({ user, setUser }) {
     function handleLogout() {
@@ -47,7 +61,7 @@ function NavBar({ user, setUser }) {
         .then(r => {
             if (r.ok) {
                 setUser(null);
-                
+
             }
         })
     }
@@ -69,10 +83,10 @@ function NavBar({ user, setUser }) {
                 <Icon className="material-icons">assignment_add</Icon>
                 New Goal
             </StyledNavLink>
-            <StyledNavLink to={"/logout"} onClick={handleLogout} className={activate}>
+            <SignOutButton onClick={handleLogout}>
                 <Icon className="material-icons">logout</Icon>
                 Sign Out
-            </StyledNavLink>
+            </SignOutButton>
         </SideNav>
     );
 }
