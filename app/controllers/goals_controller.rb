@@ -1,6 +1,4 @@
 class GoalsController < ApplicationController
-  before_action :find_user
-  rescue_from ActiveRecord::RecordInvalid, with: :invalid_response
 
   def create
     student = Student.find(params[:student_id])
