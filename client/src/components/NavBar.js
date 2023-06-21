@@ -17,6 +17,7 @@ const SideNav = styled.div`
 const Welcome = styled.h2`
     color: white;
     text-align: center;
+    font-size: 1.5em;
 `
 
 const StyledNavLink = styled(NavLink)`
@@ -70,6 +71,7 @@ function NavBar({ user, setUser }) {
 
     return (
         <SideNav>
+            <h2>myData [Collector]</h2>
             <Welcome>Welcome, {user.first_name}</Welcome>
             <StyledNavLink to={"/"} className={activate}>
                 <Icon className="material-icons">groups</Icon>
