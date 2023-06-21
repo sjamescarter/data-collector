@@ -1,22 +1,26 @@
+import { useState } from 'react';
 import styled from "styled-components";
+import Goal from "../components/Goal";
 
 function Student({ student }) {
+    const [showGoals, setShowGoals] = useState(false)
 
     return (
-        <Div>
-            <Circle>{student.initial}</Circle>
-            <p>{student.name}</p>
-            <p>Grade: {student.grade_level}</p>
-            <i className="material-icons">assignment_add</i>
-        </Div>
+        <StudentContainer onClick={() => setShowGoals(!showGoals)}>
+            <StudentGrid>
+                <Circle>{student.initial}</Circle>
+                <p>{student.name}</p>
+                <p>Grade: {student.grade_level}</p>
+                <i onClick={() => console.log()} className="material-icons">assignment_add</i>
+            </StudentGrid>
+            {showGoals ? student.goals.map((goal) => <Goal key={goal.id} goal={goal} />) : null}    
+        </StudentContainer>
     );
 }
 
-const Div = styled.div`
+const StudentContainer = styled.div`
     background-color: #d7dace;
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr 5%;
-    align-items: center;
+    border-radius: 4px;
     width: 80%;
     padding: .25em 1.2em;
     font-size: 1.25em;
@@ -27,6 +31,13 @@ const Div = styled.div`
         opacity: 1;
     }
 `
+
+const StudentGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 5%;
+    align-items: center;
+`
+
 const Circle = styled.div`
     background-color: #6a8532;
     color: #f8f8f8;
