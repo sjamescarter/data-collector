@@ -19,8 +19,8 @@ puts "Seeding 🌱"
 # Student.create(first_name: "Javier", last_name: "Lopez", grade_level: 6)
 
 # Goal Seed Data
-Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 1, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
-Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 2, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
-Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 3, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
+# Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 1, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
+# Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 2, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
+# Goal.create(user_id: 1, condition: "two digit addition problems", student_id: 3, behavior: "calculate correct answers", accuracy: 80, measurement: "teacher gradebook")
 
 puts "Done Seeding 🌾"
