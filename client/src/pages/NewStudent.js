@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 function NewStudent({ students, setStudents }) {
     const [form, setForm] = useState({first_name: "", last_name: "", grade_level: ""})
     const [errors, setErrors] = useState([]);
+
+    const navigate = useNavigate();
 
     function handleChange(e) {
         setForm({
@@ -26,6 +29,7 @@ function NewStudent({ students, setStudents }) {
             if (r.ok) {
                 r.json().then((student) => setStudents([...students, student]));
                 setForm({first_name: "", last_name: "", grade_level: ""});
+                navigate('/');
             } else {
                 r.json().then((err) => setErrors(err.errors))
             }
