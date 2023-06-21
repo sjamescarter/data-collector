@@ -1,12 +1,12 @@
 class StudentsController < ApplicationController
   def index
-    render json: Student.all
+    render json: @user.students.uniq
   end
 
   def create
     student = Student.create(student_params)
     if student.valid?
-      render json: student
+      render json: student, status: :created
     else
       render json: { errors: student.errors.full_messages }, status: :unprocessable_entity
     end
