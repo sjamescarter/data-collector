@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-function NewStudent() {
+function NewStudent({ students, setStudents }) {
     const [form, setForm] = useState({first_name: "", last_name: "", grade_level: ""})
     const [errors, setErrors] = useState([]);
 
@@ -24,8 +24,8 @@ function NewStudent() {
         })
         .then((r) => {
             if (r.ok) {
-                r.json().then((student) => console.log(student));
-                // setForm({email: "", password: ""});
+                r.json().then((student) => setStudents([...students, student]));
+                setForm({first_name: "", last_name: "", grade_level: ""});
             } else {
                 r.json().then((err) => setErrors(err.errors))
             }
@@ -33,8 +33,9 @@ function NewStudent() {
     }
 
     return (
+        <>
+            <h1>New Student</h1>
         <FormContainer>
-            <h2>New Student</h2>
             <form onSubmit={handleSubmit}>
                 <InputContainer>
                     <InputIcon className='material-icons'>person</InputIcon>
@@ -53,6 +54,7 @@ function NewStudent() {
                 {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
             </ul>
         </FormContainer>
+        </>
     );
 }
 
