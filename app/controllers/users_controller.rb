@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_before_action :find_user
+
   def create
     user = User.create(user_params)
     if user.valid?
