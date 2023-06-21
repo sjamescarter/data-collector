@@ -1,4 +1,3 @@
-// import { useEffect, useState } from "react";
 import Student from '../components/Student';
 
 function StudentList({ user, students }) {
