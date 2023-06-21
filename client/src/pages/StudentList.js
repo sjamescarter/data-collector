@@ -2,20 +2,25 @@
 import Student from '../components/Student';
 
 function StudentList({ user, students }) {
-    // const [students, setStudents] = useState([])
-
-    // useEffect(() => {
-    //     fetch('/students')
-    //     .then(r => r.json())
-    //     .then(data => setStudents(data))
-    // }, [])
-
     if (!students) return <p>Loading...</p>
+
+    const abc = [...students].sort((a, b) => {
+        const nameA = a.initial
+        const nameB = b.initial
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;}
+    })
 
     return(
         <div>
             <h1>Students</h1>
-            {students.map((student) => <Student key={student.name} student={student} />)}
+            
+            {/* Need a search bar and/or filters here */}
+
+            {abc.map((student) => <Student key={student.name} student={student} />)}
         </div>
     );
 }
