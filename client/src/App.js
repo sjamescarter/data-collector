@@ -8,7 +8,7 @@ import NewStudent from "./pages/NewStudent";
 function App() {
   const [user, setUser] = useState("");
   const [students, setStudents] = useState([]);
-console.log(students)
+
   useEffect(() => {
     fetch("/me")
       .then((r) => {
