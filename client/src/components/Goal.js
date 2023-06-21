@@ -9,7 +9,7 @@ function Goal({ goal }) {
             <i className="material-icons">addchart</i>
             <i className="material-icons">edit</i>
             <i className="material-icons">delete</i>
-            {goal.trials_complete ? <p>Student progress: {goal.trials_correct / goal.trials_complete}%</p> : null}
+            {goal.result ? <p>Student results: {goal.result}</p> : null}
         </GoalGrid>
     );
 }
