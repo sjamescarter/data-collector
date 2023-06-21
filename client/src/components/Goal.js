@@ -1,13 +1,15 @@
 import styled from "styled-components";
 
 function Goal({ goal }) {
+    
     return (
         <GoalGrid>
             <p>Given {goal.condition}, student will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
             <div></div>
-            <i className="material-icons">add_task</i>
+            <i className="material-icons">add_chart</i>
             <i className="material-icons">edit</i>
             <i className="material-icons">delete</i>
+            {goal.trials_complete ? <p>Student progress: {goal.trials_correct / goal.trials_complete}%</p> : null}
         </GoalGrid>
     );
 }
