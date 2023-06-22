@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import styled from "styled-components";
 import GoalEditor from './GoalEditor';
+import ResultsEditor from './ResultsEditor';
 
 function Goal({ goal, student, onDelete, handleUpdate }) {
     const [isEditing, setIsEditing] = useState(false)
+    const [editResults, setEditResults] = useState(false)
 
     return (
         <GoalGrid>
@@ -12,10 +14,15 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
                 : <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
             }
             <div></div>
-            <i className="material-icons">addchart</i>
+            <i onClick={() => setEditResults(!editResults)} className="material-icons">addchart</i>
             <i onClick={() => setIsEditing(!isEditing)} className="material-icons">edit</i>
             <i onClick={() => onDelete(goal.id, student.id)} className="material-icons">delete</i>
-            {goal.result ? <p>Student results: {goal.result}</p> : null}
+            {editResults 
+                ? <ResultsEditor student={student} goal={goal} setEditResults={setEditResults} handleUpdate={handleUpdate} /> 
+                : goal.result 
+                ? <p><b>Student results: {goal.result}</b></p> 
+                : null
+            }
         </GoalGrid>
     );
 }
