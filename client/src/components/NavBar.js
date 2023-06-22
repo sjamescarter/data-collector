@@ -1,6 +1,48 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+function NavBar({ user, setUser }) {
+    function handleLogout() {
+        fetch('/logout', {
+            method: 'DELETE'
+        })
+        .then(r => {
+            if (r.ok) {
+                setUser(null);
+            }
+        })
+    }
+    
+    const activate = ({ isActive }) => isActive ? "active" : ""
+    
+    return (
+        <SideNav>
+            <h2>myData [Collector]</h2>
+            <Welcome>Welcome, {user.first_name}</Welcome>
+            <StyledNavLink to={"/"} className={activate}>
+                <Icon className="material-icons">dashboard</Icon>
+                Dashboard
+            </StyledNavLink>
+            <StyledNavLink to={"/students"} className={activate}>
+                <Icon className="material-icons">groups</Icon>
+                Students
+            </StyledNavLink>
+            <StyledNavLink to={"/students/new"} className={activate}>
+                <Icon className="material-icons">person_add_alt_1</Icon>
+                New Student
+            </StyledNavLink>
+            <StyledNavLink to={"/goals/new"} className={activate}>
+                <Icon className="material-icons">assignment_add</Icon>
+                New Goal
+            </StyledNavLink>
+            <SignOutButton onClick={handleLogout}>
+                <Icon className="material-icons">logout</Icon>
+                Sign Out
+            </SignOutButton>
+        </SideNav>
+    );
+}
+
 const SideNav = styled.div`
     display: block;
     height: 100%;
@@ -54,44 +96,5 @@ const SignOutButton = styled.button`
         color: #6a8532;
     }
 `
-
-function NavBar({ user, setUser }) {
-    function handleLogout() {
-        fetch('/logout', {
-            method: 'DELETE'
-        })
-        .then(r => {
-            if (r.ok) {
-                setUser(null);
-
-            }
-        })
-    }
-
-    const activate = ({ isActive }) => isActive ? "active" : ""
-
-    return (
-        <SideNav>
-            <h2>myData [Collector]</h2>
-            <Welcome>Welcome, {user.first_name}</Welcome>
-            <StyledNavLink to={"/"} className={activate}>
-                <Icon className="material-icons">groups</Icon>
-                Students
-            </StyledNavLink>
-            <StyledNavLink to={"/students/new"} className={activate}>
-                <Icon className="material-icons">person_add_alt_1</Icon>
-                New Student
-            </StyledNavLink>
-            <StyledNavLink to={"/goals/new"} className={activate}>
-                <Icon className="material-icons">assignment_add</Icon>
-                New Goal
-            </StyledNavLink>
-            <SignOutButton onClick={handleLogout}>
-                <Icon className="material-icons">logout</Icon>
-                Sign Out
-            </SignOutButton>
-        </SideNav>
-    );
-}
 
 export default NavBar;
