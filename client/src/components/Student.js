@@ -2,8 +2,9 @@ import { useState } from 'react';
 import styled from "styled-components";
 import Goal from "../components/Goal";
 
-function Student({ student, onDelete }) {
-    const [showGoals, setShowGoals] = useState(false)
+function Student({ student, onDelete, handleUpdate }) {
+    const [showGoals, setShowGoals] = useState(false);
+    const orderedGoals = [...student.goals.sort((a, b) => a.id - b.id)];
 
     return (
         <StudentContainer>
@@ -13,7 +14,15 @@ function Student({ student, onDelete }) {
                 <p>Grade: {student.grade_level}</p>
                 <i onClick={() => console.log()} className="material-icons">assignment_add</i>
             </StudentGrid>
-            {showGoals ? student.goals.map((goal) => <Goal key={goal.id} goal={goal} student={student} onDelete={onDelete} />) : null}    
+            {showGoals 
+                ? orderedGoals.map((goal) => <Goal 
+                    key={goal.id} 
+                    goal={goal} 
+                    student={student} 
+                    onDelete={onDelete} 
+                    handleUpdate={handleUpdate} />) 
+                : null
+            }    
         </StudentContainer>
     );
 }
