@@ -13,7 +13,18 @@ function StudentList({ user, students, setStudents }) {
           return 1;}
     })
 
+    function handleUpdate(studentId, updatedGoal) {
+        const student = [...students].find((student) => student.id === studentId)
+        const goals = student.goals.filter((goal) => goal.id !== updatedGoal.id)
+
+        setStudents([
+            ...students.filter((student) => student.id !== studentId),
+            {...student, goals: [...goals, updatedGoal]}
+        ])
+    }
+
     function handleDelete(goalId, studentId) {
+        // put in a confirmation before delete
         const student = [...students].find((student) => student.id === studentId)
         const goals = student.goals.filter((goal) => goal.id !== goalId)
 
@@ -32,7 +43,7 @@ function StudentList({ user, students, setStudents }) {
             
             {/* Need a search bar and/or filters here */}
 
-            {abc.map((student) => <Student key={student.name} student={student} onDelete={handleDelete} />)}
+            {abc.map((student) => <Student key={student.name} student={student} onDelete={handleDelete} handleUpdate={handleUpdate} />)}
         </div>
     );
 }
