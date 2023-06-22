@@ -2,18 +2,18 @@ import { useState } from 'react';
 import styled from "styled-components";
 import Goal from "../components/Goal";
 
-function Student({ student }) {
+function Student({ student, onDelete }) {
     const [showGoals, setShowGoals] = useState(false)
 
     return (
-        <StudentContainer onClick={() => setShowGoals(!showGoals)}>
-            <StudentGrid>
+        <StudentContainer>
+            <StudentGrid onClick={() => setShowGoals(!showGoals)}>
                 <Circle>{student.initial}</Circle>
                 <p>{student.name}</p>
                 <p>Grade: {student.grade_level}</p>
                 <i onClick={() => console.log()} className="material-icons">assignment_add</i>
             </StudentGrid>
-            {showGoals ? student.goals.map((goal) => <Goal key={goal.id} goal={goal} />) : null}    
+            {showGoals ? student.goals.map((goal) => <Goal key={goal.id} goal={goal} student={student} onDelete={onDelete} />) : null}    
         </StudentContainer>
     );
 }

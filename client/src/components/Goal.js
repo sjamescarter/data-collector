@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
-function Goal({ goal }) {
+function Goal({ goal, student, onDelete }) {
 
     return (
         <GoalGrid>
-            <p>Given {goal.condition}, student will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
+            <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
             <div></div>
             <i className="material-icons">addchart</i>
             <i className="material-icons">edit</i>
-            <i className="material-icons">delete</i>
+            <i onClick={() => onDelete(goal.id, student.id)} className="material-icons">delete</i>
             {goal.result ? <p>Student results: {goal.result}</p> : null}
         </GoalGrid>
     );
