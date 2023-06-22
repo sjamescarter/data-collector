@@ -16,10 +16,18 @@ class GoalsController < ApplicationController
 #     goal = Goal.find(params[:id])
 #   end
 
-  private
+  def destroy
+    goal = find_goal
+    goal.destroy
+    head :no_content
+  end
 
+  private
   def goal_params
     params.permit(:condition, :behavior, :accuracy, :measurement, :trials_correct, :trials_total)
   end
 
+  def find_goal
+    @user.goals.find(params[:id])
+  end
 end
