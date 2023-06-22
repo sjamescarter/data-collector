@@ -1,13 +1,16 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function NavBar({ user, setUser }) {
+    const navigate = useNavigate();
+
     function handleLogout() {
         fetch('/logout', {
             method: 'DELETE'
         })
         .then(r => {
             if (r.ok) {
+                navigate('/');
                 setUser(null);
             }
         })
@@ -18,7 +21,7 @@ function NavBar({ user, setUser }) {
     return (
         <SideNav>
             <h2>myData [Collector]</h2>
-            <Welcome>Welcome, {user.first_name}</Welcome>
+            <Welcome>{user.first_name} {user.last_name}, {user.job_title}</Welcome>
             <StyledNavLink to={"/"} className={activate}>
                 <Icon className="material-icons">dashboard</Icon>
                 Dashboard
@@ -59,7 +62,7 @@ const SideNav = styled.div`
 const Welcome = styled.h2`
     color: white;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.2em;
 `
 
 const StyledNavLink = styled(NavLink)`
