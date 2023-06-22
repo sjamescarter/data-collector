@@ -48,6 +48,7 @@ const SignOutButton = styled.button`
     text-decoration: none;
     font-size: 1.25em;
     width: 100%;
+    cursor: pointer;
     &:hover {
         background-color: #f8f8f8;
         color: #6a8532;
