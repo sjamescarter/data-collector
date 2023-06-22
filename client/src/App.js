@@ -28,8 +28,8 @@ function App() {
         <NavBar user={user} setUser={setUser} />
         <div style={{marginLeft: "12.5em"}}>
           <Routes>
-            <Route path="/" element={<StudentList user={user} students={students} setStudents={setStudents}/>} />
-            {/* <Route path="/students" element={<StudentList user={user} />} /> */}
+            <Route path="/" element={<h1>Dashboard</h1>} />
+            <Route path="/students" element={<StudentList user={user} students={students} setStudents={setStudents}/>} />
             <Route path="/students/new" element={<NewStudent user={user} students={students} setStudents={setStudents} />} />
             <Route path="/goals/new" element={<h1>New Goal</h1>} />
           </Routes>
