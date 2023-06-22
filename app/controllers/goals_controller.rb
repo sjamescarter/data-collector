@@ -12,9 +12,15 @@ class GoalsController < ApplicationController
     end
   end
 
-#   def update
-#     goal = Goal.find(params[:id])
-#   end
+  def update
+    goal = find_goal
+    goal.update(goal_params)
+    if goal.valid?
+      render json: goal, status: :accepted
+    else
+      render json: { errors: goal.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   def destroy
     goal = find_goal
