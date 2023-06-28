@@ -3,10 +3,10 @@ class StudentSerializer < ActiveModel::Serializer
   has_many :goals
 
   def name
-    "#{self.object.first_name} #{self.object.last_name}"
+    "#{object.first_name} #{object.last_name}"
   end
 
   def initial
-    self.object.first_name[0]
+    object.first_name[0]
   end
 end
