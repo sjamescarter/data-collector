@@ -1,9 +1,13 @@
 class GoalsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
+
+  def index
+    render json: @user.goals
+  end
 
   def create
     student = Student.find(params[:student_id])
-    goal = Goal.create(goal_params)
-    @user.goals << goal
+    goal = @user.goals.create(goal_params)
     student.goals << goal
     if goal.valid?
       render json: goal, status: :created
@@ -35,5 +39,9 @@ class GoalsController < ApplicationController
 
   def find_goal
     @user.goals.find(params[:id])
+  end
+
+  def not_found_response
+    render json: { errors: ["Please select a student"]}, status: :not_found
   end
 end
