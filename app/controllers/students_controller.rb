@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   def index
-    render json: @user.students.uniq
+    render json: Student.all
   end
 
   def create
@@ -12,10 +12,9 @@ class StudentsController < ApplicationController
     end
   end
 
-  def show
-    student = Student.find(params[:id])
-    render json: student
-  end
+  # def show
+  #   render json: Student.where("first_name LIKE ?", params[:name])
+  # end
 
   private
   def student_params
@@ -25,5 +24,4 @@ class StudentsController < ApplicationController
       :grade_level=>params[:grade_level] 
     }
   end
-
 end
