@@ -28,7 +28,7 @@ function NavBar({ user, setUser }) {
             </StyledNavLink>
             <StyledNavLink to={"/students"} className={activate}>
                 <Icon className="material-icons">groups</Icon>
-                Students
+                My Students
             </StyledNavLink>
             <StyledNavLink to={"/students/new"} className={activate}>
                 <Icon className="material-icons">person_add_alt_1</Icon>
