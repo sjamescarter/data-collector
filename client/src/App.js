@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import MyStudents from "./pages/MyStudents";
 import NavBar from "./components/NavBar";
-import StudentList from "./pages/StudentList";
+import NewGoal from "./pages/NewGoal";
 import NewStudent from "./pages/NewStudent";
 
 function App() {
@@ -11,14 +13,17 @@ function App() {
 
   useEffect(() => {
     fetch("/me")
-      .then((r) => {
-        if (r.ok) {
-        r.json().then((user) => setUser(user));
-        }
-      })
-      fetch('/students')
-      .then(r => r.json())
-      .then(data => setStudents(data))
+    .then((r) => {
+      if (r.ok) {
+      r.json().then((user) => setUser(user));
+      }
+    })
+    fetch("/students")
+    .then((r) => {
+      if (r.ok) {
+        r.json().then((students) => setStudents(students));
+      }
+    })
   }, []);
 
   if (!user) return <Login onLogin={setUser} />
@@ -28,10 +33,10 @@ function App() {
         <NavBar user={user} setUser={setUser} />
         <div style={{marginLeft: "12.5em"}}>
           <Routes>
-            <Route path="/" element={<h1>Dashboard</h1>} />
-            <Route path="/students" element={<StudentList user={user} students={students} setStudents={setStudents}/>} />
-            <Route path="/students/new" element={<NewStudent user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/goals/new" element={<h1>New Goal</h1>} />
+            <Route path="/" element={<Dashboard students={students} setStudents={setStudents } />} />
+            <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
+            <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />} />
+            <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
           </Routes>
         </div>
     </BrowserRouter>
