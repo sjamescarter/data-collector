@@ -14,7 +14,7 @@ function Login({ onLogin }) {
                         <LoginForm onLogin={onLogin} />
                         <p style={{textAlign: "center", padding: "16px"}}>
                             Need an account? 
-                            <span className="shoLGN" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
+                            <span className="link" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
                         </p>
                     </div>
             ) : (
@@ -23,7 +23,7 @@ function Login({ onLogin }) {
                         <SignUpForm onLogin={onLogin} />
                         <p style={{textAlign: "center", padding: "16px"}}>
                             Already have an account? 
-                            <span className="shoLGN" onClick={() => setShowLogin(true)}>Sign In Here!</span>
+                            <span className="link" onClick={() => setShowLogin(true)}>Sign In Here!</span>
                         </p>
                     </div>
             )}
