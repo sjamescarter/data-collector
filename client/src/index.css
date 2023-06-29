@@ -33,7 +33,11 @@ form {
   display: block;
 }
 
-.shoLGN {
+i {
+  cursor: pointer;
+}
+
+.link {
   border: none;
   border-bottom: 1px solid #6a8532;
   background-color: white;
