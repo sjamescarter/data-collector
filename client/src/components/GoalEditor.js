@@ -70,28 +70,5 @@ const InputField = styled.input`
         outline-color: #6a8532;
     }
 `
-// const StyledSubmit = styled.input`
-//     background-color: #6a8532;
-//     color: white;
-//     border: 1.5px solid #6a8532; 
-//     border-radius: 8px;
-//     font-weight: bold;
-//     font-size: .8em;
-//     padding: 5px 10px;
-//     margin: 5px;
-//     cursor: pointer;
-// `
-
-// const Button = styled.button`
-//     background-color: #f8f8f8;
-//     color: #6a8532;
-//     border: 1.5px solid #6a8532; 
-//     border-radius: 8px;
-//     font-weight: bold;
-//     font-size: .8em;
-//     padding: 5px 10px;
-//     margin: 5px;
-//     cursor: pointer;
-// `
 
 export default GoalEditor;
