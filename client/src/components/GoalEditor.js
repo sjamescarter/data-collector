@@ -18,7 +18,6 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="condition" 
                 placeholder="condition"
-                style={{width: goalForm.condition.length + 2 + "ch"}} 
                 value={goalForm.condition} 
                 onChange={handleChange} 
             />,
@@ -28,7 +27,6 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="behavior" 
                 placeholder="behavior"
-                style={{width: goalForm.behavior.length + 2 + "ch"}} 
                 value={goalForm.behavior} 
                 onChange={handleChange} 
             />
@@ -46,7 +44,6 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="measurement" 
                 placeholder="measurement"
-                style={{width: goalForm.measurement.length + 2 + "ch"}} 
                 value={goalForm.measurement} 
                 onChange={handleChange} 
             />
@@ -60,12 +57,12 @@ const InputField = styled.input`
     background-color: #f8f8f8;
     border: none;
     border-bottom: 1px solid #999;
-    text-align: center;
+    box-sizing: border-box;
+    font-family: 'Ubuntu';
+    font-size: 1em;
     padding: 5px;
     margin: 5px 5px;
-    font-family: 'Ubuntu';
-    box-sizing: border-box;
-    font-size: 1em;
+    text-align: center;
     &:focus {
         outline-color: #6a8532;
     }
