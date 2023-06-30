@@ -14,14 +14,42 @@ function GoalEditor({ children, student, goal, onSubmit }) {
     return (
         <form onSubmit={(e) => onSubmit(e, goalForm)}>
             Given 
-            <InputField type="text" name="condition" style={{width: goalForm.condition.length + 2 + "ch"}} value={goalForm.condition} onChange={handleChange} />,
+            <InputField 
+                type="text" 
+                name="condition" 
+                placeholder="condition"
+                style={{width: goalForm.condition.length + 2 + "ch"}} 
+                value={goalForm.condition} 
+                onChange={handleChange} 
+            />,
             {" " + student.name.split(" ")[0] + " "} 
             will
-            <InputField type="text" name="behavior" style={{width: goalForm.behavior.length + 2 + "ch"}} value={goalForm.behavior} onChange={handleChange} />
+            <InputField 
+                type="text" 
+                name="behavior" 
+                placeholder="behavior"
+                style={{width: goalForm.behavior.length + 2 + "ch"}} 
+                value={goalForm.behavior} 
+                onChange={handleChange} 
+            />
             with
-            <InputField type="number" name="accuracy" style={{width: "6ch"}} value={goalForm.accuracy} onChange={handleChange} />
+            <InputField 
+                type="number" 
+                name="accuracy" 
+                placeholder="100"
+                style={{width: "6ch"}} 
+                value={goalForm.accuracy} 
+                onChange={handleChange} 
+            />
             % accuracy as measured by 
-            <InputField type="text" name="measurement" style={{width: goalForm.measurement.length + 2 + "ch"}} value={goalForm.measurement} onChange={handleChange} />
+            <InputField 
+                type="text" 
+                name="measurement" 
+                placeholder="measurement"
+                style={{width: goalForm.measurement.length + 2 + "ch"}} 
+                value={goalForm.measurement} 
+                onChange={handleChange} 
+            />
             by the next annual review.
             {children}
         </form>
