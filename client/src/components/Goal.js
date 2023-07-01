@@ -71,6 +71,7 @@ const GoalGrid = styled.div`
     grid-template-columns: 80% 5% 5% 5% 5%;
     align-items: center;
     padding: 0 15px;
+    margin-top: 1em;
     margin-bottom: 1em;
 `
 const StyledSubmit = styled.input`
