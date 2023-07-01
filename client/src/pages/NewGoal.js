@@ -58,19 +58,21 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         <>
             <h1>New Goal</h1>
             <Search search={search} setSearch={setSearch}>
-                {search 
-                        ? filtered.map((s) => <li 
-                            key={s.id} 
-                            onClick={(e) => {
-                                setGoalForm({
-                                    ...goalForm, 
-                                    student_id: s.id,
-                                });
-                                setSearch("")
-                            }}
-                        >{s.name}</li>) 
+                <ul>
+                    {search 
+                        ? filtered.map((s) => <Li 
+                        key={s.id} 
+                        onClick={(e) => {
+                            setGoalForm({
+                                ...goalForm, 
+                                student_id: s.id,
+                            });
+                            setSearch("")
+                        }}
+                        >{s.name}</Li>) 
                         : null
                     }
+                </ul>
             </Search>
             {goalForm.student_id 
                 ? <FormContainer>
@@ -91,5 +93,10 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         </>
     );
 }
+
+const Li = styled.li`
+    list-style: none;
+    cursor: pointer;
+`
 
 export default NewGoal;
