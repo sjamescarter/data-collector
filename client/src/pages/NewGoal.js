@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from "styled-components";
 import Search from '../components/Search';
 import { FormContainer, InputSubmit } from '../styles/';
@@ -17,14 +17,12 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
     const [search, setSearch] = useState("");
     const [errors, setErrors] = useState([]);
     const [goalForm, setGoalForm] = useState(goal);
-
-    const { id } = useParams();
-    if(id) { 
-        goalForm.student_id = parseInt(id, 10); 
-    }
-
+    
     const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()));
 
+    const navigate = useNavigate();
+    const { id } = useParams();
+    
     function handleSubmit(e, goalForm) {
         e.preventDefault();
         setErrors([]);
@@ -40,13 +38,12 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
                 r.json()
                 .then((goal) => {
                     const student = [...students].find((student) => student.id === goal.student.id);
-            
                     setStudents([
                         ...students.filter((s) => s.id !== student.id),
                         {...student, goals: [...student.goals, goal]}
                     ]);
-
                     setGoalForm(newGoal);
+                    navigate(`/students/${goal.student.id}`);
                 });
             } else {
                 r.json().then((err) => setErrors(err.errors))
@@ -54,26 +51,11 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         })
     }
 
+    if(id) { goalForm.student_id = parseInt(id, 10); }
+
     return (
         <>
             <h1>New Goal</h1>
-            <Search search={search} setSearch={setSearch}>
-                <ul>
-                    {search 
-                        ? filtered.map((s) => <Li 
-                        key={s.id} 
-                        onClick={(e) => {
-                            setGoalForm({
-                                ...goalForm, 
-                                student_id: s.id,
-                            });
-                            setSearch("")
-                        }}
-                        >{s.name}</Li>) 
-                        : null
-                    }
-                </ul>
-            </Search>
             {goalForm.student_id 
                 ? <FormContainer>
                     <h3>Goal</h3>
@@ -88,7 +70,23 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
                         </ul>
                     </GoalEditor>
                 </FormContainer>
-                : null
+                : <Search search={search} setSearch={setSearch}>
+                    <ul>
+                        {search 
+                            ? filtered.map((s) => <Li 
+                            key={s.id} 
+                            onClick={(e) => {
+                                setGoalForm({
+                                    ...goalForm, 
+                                    student_id: s.id,
+                                });
+                                setSearch("")
+                            }}
+                            >{s.name}</Li>) 
+                            : null
+                        }
+                    </ul>
+                </Search>
             }
         </>
     );
