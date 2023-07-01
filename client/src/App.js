@@ -6,6 +6,7 @@ import MyStudents from "./pages/MyStudents";
 import NavBar from "./components/NavBar";
 import NewGoal from "./pages/NewGoal";
 import NewStudent from "./pages/NewStudent";
+import Student from "./pages/Student"
 
 function App() {
   const [user, setUser] = useState("");
@@ -35,7 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard students={students} setStudents={setStudents } />} />
             <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/:id" element={<h1>Student</h1>} />
+            <Route path="/students/:id" element={<Student students={students} setStudents={setStudents} />} />
             <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
             <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />} />
             <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
