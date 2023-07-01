@@ -1,31 +1,17 @@
-import { useState } from 'react';
 import styled from "styled-components";
-import Goal from "./Goal";
 import { useNavigate } from 'react-router-dom';
 
-function StudentCard({ student, onDelete, handleUpdate }) {
-    const [showGoals, setShowGoals] = useState(false);
-
-    const orderedGoals = [...student.goals.sort((a, b) => a.id - b.id)];
+function StudentCard({ student }) {
     const navigate = useNavigate();
 
     return (
         <StudentContainer>
-            <StudentGrid onClick={() => setShowGoals(!showGoals)}>
+            <StudentGrid onClick={() => navigate(`/students/${student.id}`)}>
                 <Circle>{student.initial}</Circle>
                 <p>{student.name}</p>
                 <p>Grade: {student.grade_level}</p>
-                <i onClick={() => navigate('/students/' + student.id + '/goals/new')} className="material-icons">assignment_add</i>
+                <i onClick={() => navigate(`/students/${student.id}/goals/new`)} className="material-icons">assignment_add</i>
             </StudentGrid>
-            {showGoals 
-                ? orderedGoals.map((goal) => <Goal 
-                    key={goal.id} 
-                    goal={goal} 
-                    student={student} 
-                    onDelete={onDelete} 
-                    handleUpdate={handleUpdate} />) 
-                : null
-            }
         </StudentContainer>
     );
 }
