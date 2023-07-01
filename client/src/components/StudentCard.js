@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from "styled-components";
-import Goal from "../components/Goal";
+import Goal from "./Goal";
 import { useNavigate } from 'react-router-dom';
 
-function Student({ student, onDelete, handleUpdate }) {
+function StudentCard({ student, onDelete, handleUpdate }) {
     const [showGoals, setShowGoals] = useState(false);
 
     const orderedGoals = [...student.goals.sort((a, b) => a.id - b.id)];
@@ -15,7 +15,7 @@ function Student({ student, onDelete, handleUpdate }) {
                 <Circle>{student.initial}</Circle>
                 <p>{student.name}</p>
                 <p>Grade: {student.grade_level}</p>
-                <i onClick={() => navigate('/goals/new')} className="material-icons">assignment_add</i>
+                <i onClick={() => navigate('/students/' + student.id + '/goals/new')} className="material-icons">assignment_add</i>
             </StudentGrid>
             {showGoals 
                 ? orderedGoals.map((goal) => <Goal 
@@ -62,4 +62,4 @@ const Circle = styled.div`
     height: 40px;
     margin-right: 1em;
 `
-export default Student;
+export default StudentCard;
