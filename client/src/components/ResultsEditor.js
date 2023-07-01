@@ -15,7 +15,7 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
     function handleSubmit(e) {
         e.preventDefault();
         setErrors([]);
-        fetch('/goals/' + goal.id, {
+        fetch(`/goals/${goal.id}`, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
@@ -36,9 +36,19 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
         <form onSubmit={handleSubmit}>
             {student.name.split(" ")[0] + " "} 
             {goal.behavior + " "} in 
-            <InputField type="number" name="trials_correct" style={{width: "5ch"}} value={goalForm.total_correct} onChange={handleChange} />
+            <InputField 
+                type="number" 
+                name="trials_correct" 
+                value={goalForm.total_correct} 
+                onChange={handleChange} 
+            />
             out of  
-            <InputField type="number" name="trials_total" style={{width: "5ch"}} value={goalForm.trials_total} onChange={handleChange} />
+            <InputField 
+                type="number" 
+                name="trials_total" 
+                value={goalForm.trials_total} 
+                onChange={handleChange} 
+            />
             trials.
             <div>
             <StyledSubmit type="submit" value="Save" />
@@ -61,6 +71,7 @@ const InputField = styled.input`
     font-family: 'Ubuntu';
     box-sizing: border-box;
     font-size: 1em;
+    width: 5ch;
     &:focus {
         outline-color: #6a8532;
     }
