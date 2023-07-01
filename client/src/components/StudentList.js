@@ -1,12 +1,12 @@
-import Student from './Student';
+import StudentCard from './StudentCard';
 
 function StudentList({ students, setStudents }) {
 
     if (!students) return <p>Loading...</p>
 
     const abc = [...students].sort((a, b) => {
-        const nameA = a.initial
-        const nameB = b.initial
+        const nameA = a.name
+        const nameB = b.name
         if (nameA < nameB) {
           return -1;
         }
@@ -45,7 +45,7 @@ function StudentList({ students, setStudents }) {
 
     return(
         <div>
-            {abc.map((student) => <Student 
+            {abc.map((student) => <StudentCard 
                 key={student.name} 
                 student={student} 
                 onDelete={handleDelete} 
