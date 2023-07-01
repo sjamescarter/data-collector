@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import StudentList from "../components/StudentList";
 
-function MyStudents({ user, students, setStudents }) {
+function MyStudents() {
     const [userStudents, setUserStudents] = useState([]);
 
     useEffect(() => {
@@ -13,12 +13,10 @@ function MyStudents({ user, students, setStudents }) {
         })
     }, [])
 
-    // const userStudents = [...students.filter((student) => student.user_id === user.id)]
-
     return (
         <div>
             <h1>My Students</h1>
-            {<StudentList students={userStudents} />}
+            {<StudentList students={userStudents} setStudents={setUserStudents}/>}
         </div>
     );
 }
