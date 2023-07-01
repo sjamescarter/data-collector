@@ -28,9 +28,11 @@ function NewStudent({ students, setStudents }) {
         })
         .then((r) => {
             if (r.ok) {
-                r.json().then((student) => setStudents([...students, student]));
-                setForm({first_name: "", last_name: "", grade_level: ""});
-                navigate('/students');
+                r.json().then((student) => {
+                    setStudents([...students, student])
+                    setForm({first_name: "", last_name: "", grade_level: ""});
+                    navigate(`/students/${student.id}/goals/new`);
+                });
             } else {
                 r.json().then((err) => setErrors(err.errors))
             }
