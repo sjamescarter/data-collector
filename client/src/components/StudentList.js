@@ -1,6 +1,6 @@
 import StudentCard from './StudentCard';
 
-function StudentList({ students, setStudents }) {
+function StudentList({ students }) {
 
     if (!students) return <p>Loading...</p>
 
@@ -15,42 +15,14 @@ function StudentList({ students, setStudents }) {
         }
     })
 
-    function handleUpdate(studentId, updatedGoal) {
-        const student = [...students].find((student) => student.id === studentId)
-        const goals = student.goals.filter((goal) => goal.id !== updatedGoal.id)
-
-        setStudents([
-            ...students.filter((student) => student.id !== studentId),
-            {...student, goals: [...goals, updatedGoal]}
-        ])
-    }
-
-    function handleDelete(goalId, studentId) {
-        // put in a confirmation before delete
-        const student = [...students].find((student) => student.id === studentId)
-        const goals = student.goals.filter((goal) => goal.id !== goalId)
-
-        fetch('/goals/' + goalId, {
-            method: 'DELETE'
-        })
-        .then((r) => {
-            if(r.ok) {
-                setStudents([
-                    ...students.filter((student) => student.id !== studentId),
-                    {...student, goals}
-                ])
-            }
-        })
-    }
-
     return(
         <div>
-            {abc.map((student) => <StudentCard 
-                key={student.name} 
-                student={student} 
-                onDelete={handleDelete} 
-                handleUpdate={handleUpdate} 
-            />)}
+            {abc.map((student) => 
+                <StudentCard 
+                    key={student.id} 
+                    student={student}  
+                />
+            )}
         </div>
     );
 }
