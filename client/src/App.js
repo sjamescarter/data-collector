@@ -36,7 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard students={students} setStudents={setStudents } />} />
             <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/:id" element={<Student students={students} setStudents={setStudents} />} />
+            <Route path="/students/:id" element={<Student user={user} students={students} setStudents={setStudents} />} />
             <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
             <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />} />
             <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
