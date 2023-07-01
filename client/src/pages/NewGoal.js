@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import Search from '../components/Search';
 import { FormContainer, InputSubmit } from '../styles/';
@@ -6,11 +7,10 @@ import GoalEditor from '../components/GoalEditor';
 
 const newGoal = {
     student_id: "",
-    student: "",
-    condition: "condition", 
-    behavior: "behavior", 
-    accuracy: "100", 
-    measurement: "measurement"
+    condition: "", 
+    behavior: "", 
+    accuracy: "", 
+    measurement: ""
 }
 
 function NewGoal({ students, setStudents, goal=newGoal }) {
@@ -18,14 +18,12 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
     const [errors, setErrors] = useState([]);
     const [goalForm, setGoalForm] = useState(goal);
 
-    const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()))
-    
-    // function handleChange(e) {
-    //     setGoalForm({
-    //         ...goalForm,
-    //         [e.target.name]: e.target.value
-    //     });
-    // }
+    const { id } = useParams();
+    if(id) { 
+        goalForm.student_id = parseInt(id, 10); 
+    }
+
+    const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()));
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
@@ -62,15 +60,14 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
             <Search search={search} setSearch={setSearch}>
                 {search 
                         ? filtered.map((s) => <li 
-                        key={s.id} 
-                        onClick={(e) => {
-                            setGoalForm({
-                                ...goalForm, 
-                                student_id: s.id,
-                                student: s.name
-                            });
-                            setSearch("")
-                        }}
+                            key={s.id} 
+                            onClick={(e) => {
+                                setGoalForm({
+                                    ...goalForm, 
+                                    student_id: s.id,
+                                });
+                                setSearch("")
+                            }}
                         >{s.name}</li>) 
                         : null
                     }
@@ -94,20 +91,5 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         </>
     );
 }
-
-const Input = styled.input`
-    background-color: #f8f8f8;
-    border: none;
-    border-bottom: 1px solid #999;
-    text-align: center;
-    padding: 5px;
-    margin: 5px 5px;
-    font-family: 'Ubuntu';
-    box-sizing: border-box;
-    font-size: 1em;
-    &:focus {
-        outline-color: #6a8532;
-    }
-`
 
 export default NewGoal;
