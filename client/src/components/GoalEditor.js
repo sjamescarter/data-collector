@@ -21,7 +21,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 value={goalForm.condition} 
                 onChange={handleChange} 
             />,
-            {" " + student.name.split(" ")[0] + " "} 
+            {` ${student.name.split(" ")[0]} `} 
             will
             <InputField 
                 type="text" 
