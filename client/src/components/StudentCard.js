@@ -4,13 +4,18 @@ import { useNavigate } from 'react-router-dom';
 function StudentCard({ student }) {
     const navigate = useNavigate();
 
+    function handleClick(e) {
+        e.stopPropagation(); 
+        navigate(`/students/${student.id}/goals/new`);
+    }
+
     return (
         <StudentContainer>
             <StudentGrid onClick={() => navigate(`/students/${student.id}`)}>
                 <Circle>{student.initial}</Circle>
                 <p>{student.name}</p>
                 <p>Grade: {student.grade_level}</p>
-                <i onClick={() => navigate(`/students/${student.id}/goals/new`)} className="material-icons">assignment_add</i>
+                <i onClick={handleClick} className="material-icons">assignment_add</i>
             </StudentGrid>
         </StudentContainer>
     );
