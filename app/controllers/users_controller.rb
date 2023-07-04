@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def show
     if session[:user_id]
-      render json: User.find(session[:user_id])
+      render json: User.find(session[:user_id]), include: ['students', 'students.goals']
     else
       render json: { error: "Please Sign In"}, status: :unauthorized
     end
