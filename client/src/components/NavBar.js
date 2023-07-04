@@ -21,7 +21,7 @@ function NavBar({ user, setUser }) {
     return (
         <SideNav>
             <h2>myData [Collector]</h2>
-            <Welcome>{user.first_name} {user.last_name}, {user.job_title}</Welcome>
+            <Welcome>{user.firstName} {user.lastName}, {user.jobTitle}</Welcome>
             <StyledNavLink to={"/"} className={activate}>
                 <Icon className="material-icons">dashboard</Icon>
                 Dashboard
