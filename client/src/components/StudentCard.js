@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { I } from '../styles';
 
 function StudentCard({ student }) {
     const navigate = useNavigate();
@@ -15,7 +16,13 @@ function StudentCard({ student }) {
                 <Circle>{student.initial}</Circle>
                 <p>{student.name}</p>
                 <p>Grade: {student.grade_level}</p>
-                <i onClick={handleClick} className="material-icons">assignment_add</i>
+                <I 
+                    className="material-icons"
+                    onClick={handleClick} 
+                    title="Add Goal"
+                >
+                    assignment_add
+                </I>
             </StudentGrid>
         </StudentContainer>
     );
