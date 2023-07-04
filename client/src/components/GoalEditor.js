@@ -11,6 +11,10 @@ function GoalEditor({ children, student, goal, onSubmit }) {
         });
     }
 
+    function calcWidth(target) {
+        return (target.length > 13 ? target.length : 13);
+    }
+
     return (
         <form onSubmit={(e) => onSubmit(e, goalForm)}>
             Given 
@@ -18,6 +22,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="condition" 
                 placeholder="condition"
+                style={{width: `${calcWidth(goalForm.condition)}ch`}}
                 value={goalForm.condition} 
                 onChange={handleChange} 
             />,
@@ -27,6 +32,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="behavior" 
                 placeholder="behavior"
+                style={{width: `${calcWidth(goalForm.behavior)}ch`}}
                 value={goalForm.behavior} 
                 onChange={handleChange} 
             />
@@ -44,6 +50,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 type="text" 
                 name="measurement" 
                 placeholder="measurement"
+                style={{width: `${calcWidth(goalForm.measurement)}ch`}}
                 value={goalForm.measurement} 
                 onChange={handleChange} 
             />
