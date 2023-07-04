@@ -33,10 +33,6 @@ form {
   display: block;
 }
 
-i {
-  cursor: pointer;
-}
-
 .link {
   border: none;
   border-bottom: 1px solid #6a8532;
