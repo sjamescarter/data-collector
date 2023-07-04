@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   def index
-    render json: Student.all
+    render json: Student.all.to_json(only: [:id, :first_name, :last_name])
   end
 
   def create
@@ -13,7 +13,7 @@ class StudentsController < ApplicationController
   end
 
   # def show
-  #   render json: Student.where("first_name LIKE ?", params[:name])
+  #   render json: @user.students.find(params[:id]), current_user: @user
   # end
 
   private
