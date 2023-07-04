@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from "styled-components";
 import GoalEditor from './GoalEditor';
 import ResultsEditor from './ResultsEditor';
+import { I } from "../styles/index"
 
 function Goal({ goal, student, onDelete, handleUpdate }) {
     const [isEditing, setIsEditing] = useState(false)
@@ -46,14 +47,33 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
                     </ul>
                 </GoalEditor>
                 : <div>
-                    <h5>{goal.owner}'s Goal</h5>
+                    {/* <h5>Goal</h5> */}
                     <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
                 </div>
             }
-            <div></div>
-            <i onClick={() => setEditResults(!editResults)} className="material-icons">addchart</i>
-            <i onClick={() => setIsEditing(!isEditing)} className="material-icons">edit</i>
-            <i onClick={() => onDelete(goal.id, student.id)} className="material-icons">delete</i>
+            <div style={{padding: '6px'}}>
+            <I 
+                className="material-icons"
+                onClick={() => setEditResults(!editResults)} 
+                title="Add Data"
+            >
+                addchart
+            </I>
+            <I 
+                className="material-icons"
+                onClick={() => setIsEditing(!isEditing)} 
+                title="Edit Goal"
+            >
+                edit
+            </I>
+            <I 
+                className="material-icons"
+                onClick={() => onDelete(goal.id, student.id)}
+                title="Delete Goal"
+            >
+                delete
+            </I>
+            </div>
             {editResults 
                 ? <ResultsEditor student={student} goal={goal} setEditResults={setEditResults} handleUpdate={handleUpdate} /> 
                 : goal.result 
@@ -68,12 +88,12 @@ const GoalGrid = styled.div`
     background-color: #f8f8f8;
     border-radius: 4px;
     display: grid;
-    grid-template-columns: 80% 5% 5% 5% 5%;
-    align-items: center;
+    grid-template-columns: 1fr 50px;
     padding: 0 15px;
     margin-top: 1em;
     margin-bottom: 1em;
 `
+
 const StyledSubmit = styled.input`
     background-color: #6a8532;
     color: white;
@@ -97,4 +117,5 @@ const Button = styled.button`
     margin: 5px;
     cursor: pointer;
 `
+
 export default Goal;
