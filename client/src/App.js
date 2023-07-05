@@ -44,8 +44,9 @@ function App() {
             <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />}>
               <Route path=":name" element={<NewStudent students={students} setStudents={setStudents} />} />
             </Route>
-            <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
-            <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
+            <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />}>
+              <Route path="students/:id" element={<NewGoal students={students} setStudents={setStudents} />} />
+            </Route>
           </Routes>
         </div>
     </BrowserRouter>
