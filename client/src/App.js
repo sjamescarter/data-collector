@@ -40,9 +40,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard students={students} setStudents={setStudents} />} />
             <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />} />
-            <Route path="/students/new/:name" element={<NewStudent students={students} setStudents={setStudents} />} />
             <Route path="/students/:id" element={<Student user={user} students={students} setStudents={setStudents} />} />
+            <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />}>
+              <Route path=":name" element={<NewStudent students={students} setStudents={setStudents} />} />
+            </Route>
             <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
             <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
           </Routes>
