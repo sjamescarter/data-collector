@@ -19,12 +19,6 @@ function App() {
         r.json().then((user) => handleLogin(user));
       }
     })
-    // fetch(fetcher)
-    // .then((r) => {
-    //   if (r.ok) {
-    //     r.json().then((students) => setStudents(students));
-    //   }
-    // })
   }, []);
 
   function handleLogin(user) {
@@ -38,8 +32,7 @@ function App() {
   }
 
   if (!user) return <Login onLogin={handleLogin} />
-console.log(user)
-console.log(students)
+
   return (
     <BrowserRouter>
         <NavBar user={user} setUser={setUser} />
@@ -47,10 +40,10 @@ console.log(students)
           <Routes>
             <Route path="/" element={<Dashboard students={students} setStudents={setStudents} />} />
             <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/:id" element={<Student user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
             <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />} />
             <Route path="/students/new/:name" element={<NewStudent students={students} setStudents={setStudents} />} />
+            <Route path="/students/:id" element={<Student user={user} students={students} setStudents={setStudents} />} />
+            <Route path="/students/:id/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
             <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />} />
           </Routes>
         </div>
