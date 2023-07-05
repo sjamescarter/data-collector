@@ -42,8 +42,8 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
                         ...students.filter((s) => s.id !== student.id),
                         {...student, goals: [...student.goals, goal]}
                     ]);
-                    setGoalForm(newGoal);
                     navigate(`/students/${goal.student.id}`);
+                    setGoalForm(newGoal);
                 });
             } else {
                 r.json().then((err) => setErrors(err.errors))
@@ -51,11 +51,13 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         })
     }
 
-    if(id) { goalForm.student_id = parseInt(id, 10); }
+    if(id) { goalForm.student_id = parseInt(id, 10); } 
 
     return (
         <>
-            <h1>New Goal</h1>
+            <Head>
+                <h1>New Goal</h1>
+            </Head>
             {goalForm.student_id 
                 ? <FormContainer>
                     <h3>Goal</h3>
@@ -91,6 +93,17 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         </>
     );
 }
+
+const Head = styled.div`
+    align-items: center;
+    border-bottom: 1px solid #999;
+    display: grid;
+    font-size: 1.25em;
+    grid-template-columns: 3fr 140px;
+    margin: auto;
+    padding: 10px;
+    width: 80%;
+`
 
 const Li = styled.li`
     list-style: none;
