@@ -7,7 +7,7 @@ function StudentCard({ student }) {
 
     function handleClick(e) {
         e.stopPropagation(); 
-        navigate(`/students/${student.id}/goals/new`);
+        navigate(`/goals/new/students/${student.id}`);
     }
 
     return (
