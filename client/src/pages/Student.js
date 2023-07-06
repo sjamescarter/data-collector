@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Goal from "../components/Goal";
 
 function Student({ user, students, setStudents }) {
     const { id } = useParams();
+    const navigate = useNavigate();
     const student = students.find((student) => student.id === parseInt(id));
+
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
     const orderedGoals = [...filteredGoals.sort((a, b) => a.id - b.id)];
 
@@ -38,7 +40,18 @@ function Student({ user, students, setStudents }) {
 
     return (
         <div>
-            <h1>{student.name}</h1>
+            <Head>
+                <h1>{student.name}</h1>
+                <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
+                    <i 
+                        style={{padding: '0 6px'}}
+                        className="material-icons" 
+                    >
+                        assignment_add
+                    </i>
+                    <p style={{padding: '0 6px 0 0'}}>Add New Goal</p>
+                </Button>
+            </Head>
             <Container>
                 {orderedGoals.map((goal) => 
                     <Goal 
@@ -53,6 +66,17 @@ function Student({ user, students, setStudents }) {
     );
 }
 
+const Head = styled.div`
+    align-items: center;
+    border-bottom: 1px solid #999;
+    display: grid;
+    font-size: 1.25em;
+    grid-template-columns: auto 140px;
+    margin: auto;
+    padding: 10px;
+    width: 80%;
+`
+
 const Container = styled.div`
     background-color: #d7dace;
     border-radius: 4px;
@@ -64,6 +88,21 @@ const Container = styled.div`
     opacity: .9;
     &:hover {
         opacity: 1;
+    }
+`
+
+const Button = styled.button`
+    align-items: center;
+    background-color: #6a8532;
+    border: 2px solid #6a8532;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    padding: 4px;
+    opacity: .9;
+    &:hover {
+        opacity: 1;
+        cursor: pointer;
     }
 `
 export default Student;
