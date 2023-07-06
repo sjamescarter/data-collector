@@ -14,15 +14,18 @@ const newGoal = {
 }
 
 function NewGoal({ students, setStudents, goal=newGoal }) {
+    const { id } = useParams();
+    if(id) { goal.student_id = parseInt(id, 10); } 
+    if(!id) { goal.student_id = ""; }
+    
     const [search, setSearch] = useState("");
     const [errors, setErrors] = useState([]);
     const [goalForm, setGoalForm] = useState(goal);
     
     const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()));
-
+console.log(goalForm)
     const navigate = useNavigate();
-    const { id } = useParams();
-    
+
     function handleSubmit(e, goalForm) {
         e.preventDefault();
         setErrors([]);
@@ -51,8 +54,6 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
         })
     }
 
-    if(id) { goalForm.student_id = parseInt(id, 10); } 
-
     return (
         <>
             <Head>
@@ -77,7 +78,7 @@ function NewGoal({ students, setStudents, goal=newGoal }) {
                         {search 
                             ? filtered.map((s) => <Li 
                             key={s.id} 
-                            onClick={(e) => {
+                            onClick={() => {
                                 setGoalForm({
                                     ...goalForm, 
                                     student_id: s.id,
