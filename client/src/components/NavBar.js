@@ -22,19 +22,19 @@ function NavBar({ user, setUser }) {
         <SideNav>
             <h2>myData [Collector]</h2>
             <Welcome>{user.firstName} {user.lastName}, {user.jobTitle}</Welcome>
-            <StyledNavLink to={"/"} className={activate}>
+            <StyledNavLink to="/" className={activate}>
                 <Icon className="material-icons">dashboard</Icon>
                 Dashboard
             </StyledNavLink>
-            <StyledNavLink to={"/students"} className={activate}>
+            <StyledNavLink to="/students" className={activate}>
                 <Icon className="material-icons">groups</Icon>
                 My Students
             </StyledNavLink>
-            <StyledNavLink to={"/students/new"} className={activate}>
+            <StyledNavLink to="/students/new" className={activate}>
                 <Icon className="material-icons">person_add_alt_1</Icon>
                 New Student
             </StyledNavLink>
-            <StyledNavLink to={"/goals/new"} className={activate}>
+            <StyledNavLink to="/goals/new" className={activate}>
                 <Icon className="material-icons">assignment_add</Icon>
                 New Goal
             </StyledNavLink>
