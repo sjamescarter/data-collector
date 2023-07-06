@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const InputIcon = styled.i`
-    border: none;
-    border-bottom: 1px solid #999;
+    margin 0 10px 0 0;
 `
 export default InputIcon;
