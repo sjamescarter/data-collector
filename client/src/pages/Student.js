@@ -56,14 +56,17 @@ function Student() {
                 </Button>
             </Head>
             <Container>
-                {orderedGoals.map((goal) => 
-                    <Goal 
-                    key={goal.id} 
-                    goal={goal} 
-                    student={student} 
-                    onDelete={handleDelete} 
-                    handleUpdate={handleUpdate} 
-                />)}
+                {filteredGoals.length === 0 
+                    ? <p>Add a goal for {student.name} to keep in caseload.</p>
+                    : orderedGoals.map((goal) => 
+                        <Goal 
+                        key={goal.id} 
+                        goal={goal} 
+                        student={student} 
+                        onDelete={handleDelete} 
+                        handleUpdate={handleUpdate} 
+                    />)
+                }
             </Container>
         </div>
     );
