@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   def index
-    render json: Student.all.to_json(only: [:id, :first_name, :last_name])
+    render json: Student.all
   end
 
   def create
@@ -11,10 +11,6 @@ class StudentsController < ApplicationController
       render json: { errors: student.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
-  # def show
-  #   render json: @user.students.find(params[:id]), current_user: @user
-  # end
 
   private
   def student_params
