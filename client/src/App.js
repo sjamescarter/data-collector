@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserContext } from "./context/user";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import MyStudents from "./pages/MyStudents";
@@ -9,8 +10,7 @@ import NewStudent from "./pages/NewStudent";
 import Student from "./pages/Student"
 
 function App() {
-  const [user, setUser] = useState();
-  const [students, setStudents] = useState();
+  const { user, setUser, setStudents } = useContext(UserContext);
 
   useEffect(() => {
     fetch("/me")
@@ -35,16 +35,16 @@ function App() {
 
   return (
     <BrowserRouter>
-        <NavBar user={user} setUser={setUser} />
+        <NavBar />
         <div style={{marginLeft: "12.5em"}}>
           <Routes>
-            <Route path="/" element={<Dashboard students={students} setStudents={setStudents} />} />
-            <Route path="/students" element={<MyStudents user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/:id" element={<Student user={user} students={students} setStudents={setStudents} />} />
-            <Route path="/students/new" element={<NewStudent students={students} setStudents={setStudents} />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/students" element={<MyStudents />} />
+            <Route path="/students/:id" element={<Student />} />
+            <Route path="/students/new" element={<NewStudent />}>
               <Route path=":name" element={<NewStudent />} />
             </Route>
-            <Route path="/goals/new" element={<NewGoal students={students} setStudents={setStudents} />}>
+            <Route path="/goals/new" element={<NewGoal />}>
               <Route path="students/:id" element={<NewGoal />} />
             </Route>
           </Routes>
