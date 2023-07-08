@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormContainer, InputContainer, InputIcon, InputSubmit } from '../styles/';
 
 const newStudentForm = {firstName: "", lastName: "", gradeLevel: ""}
 
-function NewStudent({ students, setStudents, newForm=newStudentForm }) {
+function NewStudent({ newForm=newStudentForm }) {
+    const { students, setStudents } = useContext(UserContext);
+
     const { name } = useParams();
     if(name) {
         newForm = { 
@@ -46,7 +49,7 @@ function NewStudent({ students, setStudents, newForm=newStudentForm }) {
                 r.json().then((student) => {
                     setStudents([...students, student])
                     setForm(newStudentForm);
-                    navigate(`/students/${student.id}/goals/new`);
+                    navigate(`/goals/new/students/${student.id}`);
                 });
             } else {
                 r.json().then((err) => setErrors(err.errors))

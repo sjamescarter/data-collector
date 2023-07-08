@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import Search from "../components/Search";
 import StudentList from "../components/StudentList";
-import { useNavigate } from 'react-router-dom';
+import { filter } from '../components/utilities';
 
-function MyStudents({ students, setStudents }) {
+function MyStudents() {
+    const { students } = useContext(UserContext);
     const [search, setSearch] = useState("");
-    const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()))
+    const filtered = filter(students, search);
 
     const navigate = useNavigate();
 
@@ -21,18 +24,20 @@ function MyStudents({ students, setStudents }) {
                         >
                         person_add_alt_1
                     </i>
-                    <p style={{padding: '0 6px 0 0'}}>Add New Student</p>
+                    <p style={{padding: '0 6px 0 0'}}>Create Student</p>
                 </Button>
             </Head>
             {<Search search={search} setSearch={setSearch}>
                 {search 
-                    ? <li onClick={() => navigate(`/students/new/${search}`)}>
-                        Create New Student "{search}"
-                    </li> 
+                    ? <ul>
+                        <li onClick={() => navigate(`/goals/new`)}>
+                            Can't find a student? Click here to add an existing student to your caseload.
+                        </li> 
+                    </ul>
                     : null
                 }
             </Search>}
-            {<StudentList students={filtered} setStudents={setStudents}/>}
+            {<StudentList students={filtered} />}
         </div>
     );
 }
@@ -42,7 +47,7 @@ const Head = styled.div`
     border-bottom: 1px solid #999;
     display: grid;
     font-size: 1.25em;
-    grid-template-columns: 3fr 160px;
+    grid-template-columns: 3fr 145px;
     margin: auto;
     padding: 10px;
     width: 80%;

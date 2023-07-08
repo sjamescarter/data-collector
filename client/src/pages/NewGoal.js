@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { UserContext } from '../context/user';
 import styled from "styled-components";
 import Search from '../components/Search';
 import { FormContainer, InputSubmit } from '../styles/';
 import GoalEditor from '../components/GoalEditor';
+import { alphabetize, filter } from '../components/utilities';
 
 const newGoal = {
     student_id: "",
@@ -13,18 +15,27 @@ const newGoal = {
     measurement: ""
 }
 
-function NewGoal({ students, setStudents, goal=newGoal }) {
+function NewGoal({ goal=newGoal }) {
+    const { students, setStudents } = useContext(UserContext);
+
     const { id } = useParams();
     if(id) { goal.student_id = parseInt(id, 10); } 
     if(!id) { goal.student_id = ""; }
-    
+
+    const [allStudents, setAllStudents] = useState([{name: "Loading"}])
     const [search, setSearch] = useState("");
-    const [errors, setErrors] = useState([]);
     const [goalForm, setGoalForm] = useState(goal);
+    const [errors, setErrors] = useState([]);
     
-    const filtered = [...students].filter(r => r.name.toUpperCase().includes(search.toUpperCase()));
-console.log(goalForm)
+    const abc = alphabetize(allStudents);
+    const filtered = filter(abc, search);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch('/students')
+        .then(r => r.json())
+        .then(data => setAllStudents(data))
+    }, [])
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
@@ -54,6 +65,19 @@ console.log(goalForm)
         })
     }
 
+    const student = students.find((student) => student.id === goalForm.student_id)
+
+    function handleClick(s) {
+        setGoalForm({
+            ...goalForm, 
+            student_id: s.id,
+        });
+        if(!student) { 
+            setStudents([...students, s])
+        };
+        setSearch("");
+    }
+
     return (
         <>
             <Head>
@@ -63,10 +87,10 @@ console.log(goalForm)
                 ? <FormContainer>
                     <h3>Goal</h3>
                     <GoalEditor 
-                        student={students.find((student) => student.id === goalForm.student_id)}
+                        student={student}
                         goal={goalForm}
                         onSubmit={handleSubmit}
-                        >
+                    >
                         <InputSubmit type="submit" value="Create Goal" />
                         <ul className="errors">
                             {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
@@ -76,16 +100,15 @@ console.log(goalForm)
                 : <Search search={search} setSearch={setSearch}>
                     <ul>
                         {search 
-                            ? filtered.map((s) => <Li 
-                            key={s.id} 
-                            onClick={() => {
-                                setGoalForm({
-                                    ...goalForm, 
-                                    student_id: s.id,
-                                });
-                                setSearch("")
-                            }}
-                            >{s.name}</Li>) 
+                            ? <ul>
+                                {filtered.map((s) => <Li 
+                                    key={s.id} 
+                                    onClick={() => handleClick(s)}
+                                >{s.name}</Li>)}
+                                <Li onClick={() => navigate(`/students/new/${search}`)}>
+                                    Create New Student "<strong>{search}</strong>"
+                                </Li>
+                            </ul>
                             : null
                         }
                     </ul>

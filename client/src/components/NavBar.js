@@ -1,7 +1,10 @@
-import styled from 'styled-components';
+import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/user';
+import styled from 'styled-components';
 
-function NavBar({ user, setUser }) {
+function NavBar() {
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     function handleLogout() {
@@ -30,10 +33,10 @@ function NavBar({ user, setUser }) {
                 <Icon className="material-icons">groups</Icon>
                 My Students
             </StyledNavLink>
-            <StyledNavLink to="/students/new" className={activate}>
+            {/* <StyledNavLink to="/students/new" className={activate}>
                 <Icon className="material-icons">person_add_alt_1</Icon>
                 New Student
-            </StyledNavLink>
+            </StyledNavLink> */}
             <StyledNavLink to="/goals/new" className={activate}>
                 <Icon className="material-icons">assignment_add</Icon>
                 New Goal

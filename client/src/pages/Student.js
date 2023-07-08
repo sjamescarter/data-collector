@@ -1,8 +1,11 @@
+import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import Goal from "../components/Goal";
 
-function Student({ user, students, setStudents }) {
+function Student() {
+    const { user, students, setStudents } = useContext(UserContext);
     const { id } = useParams();
     const navigate = useNavigate();
     const student = students.find((student) => student.id === parseInt(id));
@@ -11,13 +14,13 @@ function Student({ user, students, setStudents }) {
     const orderedGoals = [...filteredGoals.sort((a, b) => a.id - b.id)];
 
     function handleUpdate(studentId, updatedGoal) {
-        const student = [...students].find((student) => student.id === studentId)
-        const goals = student.goals.filter((goal) => goal.id !== updatedGoal.id)
+        const student = [...students].find((student) => student.id === studentId);
+        const goals = student.goals.filter((goal) => goal.id !== updatedGoal.id);
 
         setStudents([
             ...students.filter((student) => student.id !== studentId),
             {...student, goals: [...goals, updatedGoal]}
-        ])
+        ]);
     }
 
     function handleDelete(goalId, studentId) {
