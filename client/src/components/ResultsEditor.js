@@ -1,16 +1,10 @@
 import { useState } from 'react'
 import styled from 'styled-components';
+import { handleChange } from './utilities';
 
 function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
-    const [goalForm, setGoalForm] = useState(goal);
+    const [goalForm, setGoalForm] = useState({goal, correct: "", total: ""});
     const [errors, setErrors] = useState([]);
-
-    function handleChange(e) {
-        setGoalForm({
-            ...goalForm,
-            [e.target.name]: e.target.value
-        });
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -20,7 +14,10 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(goalForm)
+            body: JSON.stringify({
+                trials_correct: goalForm.correct,
+                trials_total: goalForm.total
+            })
         })
         .then((r) => {
             if (r.ok) {
@@ -34,22 +31,22 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            {student.name.split(" ")[0] + " "} 
-            {goal.behavior + " "} in 
+            <label htmlFor="correct">Correct Trials:</label>  
             <InputField 
+                id="correct"
+                name="correct" 
                 type="number" 
-                name="trials_correct" 
-                value={goalForm.total_correct} 
-                onChange={handleChange} 
+                value={goalForm.correct} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />
-            out of  
+            <label htmlFor="total">Total Trials:</label>  
             <InputField 
+                id="total" 
+                name="total"
                 type="number" 
-                name="trials_total" 
-                value={goalForm.trials_total} 
-                onChange={handleChange} 
+                value={goalForm.total} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />
-            trials.
             <div>
             <StyledSubmit type="submit" value="Save" />
             <Button onClick={() => setEditResults(false)}>Cancel</Button>
@@ -71,7 +68,7 @@ const InputField = styled.input`
     font-family: 'Ubuntu';
     box-sizing: border-box;
     font-size: 1em;
-    width: 5ch;
+    width: 6ch;
     &:focus {
         outline-color: #6a8532;
     }

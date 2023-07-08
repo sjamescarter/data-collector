@@ -1,15 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components';
+import { handleChange } from './utilities';
 
 function GoalEditor({ children, student, goal, onSubmit }) {
     const [goalForm, setGoalForm] = useState(goal);
-
-    function handleChange(e) {
-        setGoalForm({
-            ...goalForm,
-            [e.target.name]: e.target.value
-        });
-    }
 
     function calcWidth(target) {
         return (target.length > 13 ? target.length : 13);
@@ -24,7 +18,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 placeholder="condition"
                 style={{width: `${calcWidth(goalForm.condition)}ch`}}
                 value={goalForm.condition} 
-                onChange={handleChange} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />,
             {` ${student.name.split(" ")[0]} `} 
             will
@@ -34,16 +28,16 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 placeholder="behavior"
                 style={{width: `${calcWidth(goalForm.behavior)}ch`}}
                 value={goalForm.behavior} 
-                onChange={handleChange} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />
             with
             <InputField 
                 type="number" 
                 name="accuracy" 
-                placeholder="100"
+                placeholder="0"
                 style={{width: "6ch"}} 
                 value={goalForm.accuracy} 
-                onChange={handleChange} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />
             % accuracy as measured by 
             <InputField 
@@ -52,7 +46,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 placeholder="measurement"
                 style={{width: `${calcWidth(goalForm.measurement)}ch`}}
                 value={goalForm.measurement} 
-                onChange={handleChange} 
+                onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
             />
             by the next annual review.
             {children}

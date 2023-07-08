@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { handleChange } from './utilities';
 
 const formFields = {
     first_name: "",
@@ -12,13 +13,6 @@ const formFields = {
 function SignUpForm({ onLogin }) {
     const [signup, setSignup] = useState(formFields);
     const [errors, setErrors] = useState([]);
-
-    function handleChange(e) {
-        setSignup({
-            ...signup,
-            [e.target.name]: e.target.value
-        });
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -44,28 +38,70 @@ function SignUpForm({ onLogin }) {
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
                     <i className="material-icons input-icon">person</i>
-                    <input type="text" name="first_name" className="input-field" placeholder="First Name" value={signup.first_name} onChange={handleChange} />
-                    <input type="text" name="last_name" className="input-field" placeholder="Last Name" value={signup.last_name} onChange={handleChange} />
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        className="input-field" 
+                        placeholder="First Name" 
+                        value={signup.first_name} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        className="input-field" 
+                        placeholder="Last Name" 
+                        value={signup.last_name} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
                 </div>
 
                 <div className="input-container">
                     <i className="material-icons input-icon">work</i>
-                    <input type="text" name="job_title" className="input-field" placeholder="Job Title" value={signup.job_title} onChange={handleChange} />
+                    <input 
+                        type="text" 
+                        name="job_title" 
+                        className="input-field" 
+                        placeholder="Job Title" 
+                        value={signup.job_title} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
                 </div>
                 
                 <div className="input-container">
                     <i className="material-icons input-icon">mail</i>
-                    <input type="text" name="email" className="input-field" placeholder="Email" value={signup.email} onChange={handleChange} />
+                    <input 
+                        type="text" 
+                        name="email" 
+                        className="input-field" 
+                        placeholder="Email" 
+                        value={signup.email} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
                 </div>
 
                 <div className="input-container">
                     <i className="material-icons input-icon">lock</i>
-                    <input type="password" name="password" className="input-field" placeholder="Password" value={signup.password} onChange={handleChange} />
+                    <input 
+                        type="password" 
+                        name="password" 
+                        className="input-field" 
+                        placeholder="Password" 
+                        value={signup.password} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
                 </div>
 
                 <div className="input-container">
                     <i className="material-icons input-icon">lock</i>
-                    <input type="password" name="password_confirmation" className="input-field" placeholder="Confirm Password" value={signup.password_confirmation} onChange={handleChange} />
+                    <input 
+                        type="password" 
+                        name="password_confirmation" 
+                        className="input-field" 
+                        placeholder="Confirm Password" 
+                        value={signup.password_confirmation} 
+                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                    />
                 </div>
 
                 <input type="submit" className="input-submit" value="Sign Up" />

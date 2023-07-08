@@ -1,15 +1,9 @@
 import { useState } from 'react';
+import { handleChange } from './utilities';
 
 function LoginForm({ onLogin }) {
     const [form, setForm] = useState({email: "", password: ""});
     const [errors, setErrors] = useState([]);
-
-    function handleChange(e) {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -41,7 +35,7 @@ function LoginForm({ onLogin }) {
                         className="input-field" 
                         placeholder="Email" 
                         value={form.email} 
-                        onChange={handleChange} 
+                        onChange={(e) => handleChange(form, setForm, e)} 
                     />
                 </div>
                 <div className="input-container">
@@ -52,7 +46,7 @@ function LoginForm({ onLogin }) {
                         className="input-field" 
                         placeholder="Password" 
                         value={form.password} 
-                        onChange={handleChange} 
+                        onChange={(e) => handleChange(form, setForm, e)} 
                     /> 
                 </div>
                 <input type="submit" className="input-submit" value="Sign In" />
