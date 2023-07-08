@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 import SignUpForm from '../components/SignUpForm';
 import LoginForm from '../components/LoginForm';
 
@@ -10,25 +11,33 @@ function Login({ onLogin }) {
             {showLogin? 
                 (
                     <div className="login">
-                        <h1>Sign In</h1>
+                        <H1>Sign In</H1>
                         <LoginForm onLogin={onLogin} />
-                        <p style={{textAlign: "center", padding: "16px"}}>
+                        <P>
                             Need an account? 
                             <span className="link" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
-                        </p>
+                        </P>
                     </div>
             ) : (
                     <div className="login">
-                        <h1>Sign Up</h1>
+                        <H1>Sign Up</H1>
                         <SignUpForm onLogin={onLogin} />
-                        <p style={{textAlign: "center", padding: "16px"}}>
+                        <P>
                             Already have an account? 
                             <span className="link" onClick={() => setShowLogin(true)}>Sign In Here!</span>
-                        </p>
+                        </P>
                     </div>
             )}
         </div>
     )
 } 
 
+const H1 = styled.h1`
+    text-align: center;
+`
+
+const P = styled.p`
+    text-align: center;
+    padding: 16px;
+`
 export default Login
