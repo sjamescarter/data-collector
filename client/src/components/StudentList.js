@@ -1,19 +1,11 @@
 import StudentCard from './StudentCard';
+import { alphabetize } from './utilities';
 
 function StudentList({ students }) {
 
     if (!students) return <p>Loading...</p>
-
-    const abc = [...students].sort((a, b) => {
-        const nameA = a.name
-        const nameB = b.name
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-    })
+    
+    const abc = alphabetize(students);
 
     return(
         <div>
