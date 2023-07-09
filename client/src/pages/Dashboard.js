@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Header } from "../styles";
 
 function Dashboard() {
     const navigate = useNavigate();
 
     return (
         <div>
-            <Head>
+            <Header>
                 <h1>Dashboard</h1>
-            </Head>
+            </Header>
             <Container>
                 <Button onClick={() => navigate('/students')}>
                     <I className="material-icons">groups</I>
@@ -27,16 +28,6 @@ function Dashboard() {
     )
 }
 
-const Head = styled.div`
-    align-items: center;
-    border-bottom: 1px solid #999;
-    display: grid;
-    font-size: 1.25em;
-    grid-template-columns: 3fr 140px;
-    margin: auto;
-    padding: 10px;
-    width: 80%;
-`
 const Container = styled.div`
     display: flex;
     grid-template-columns: 1fr 1fr 1fr;

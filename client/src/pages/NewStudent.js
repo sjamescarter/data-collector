@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormContainer, InputContainer, InputIcon, InputSubmit } from '../styles/';
+import { FormContainer, Header, InputContainer, InputIcon, InputSubmit } from '../styles/';
 
 const newStudentForm = {firstName: "", lastName: "", gradeLevel: ""}
 
@@ -59,9 +59,9 @@ function NewStudent({ newForm=newStudentForm }) {
 
     return (
         <>
-            <Head>
+            <Header>
                 <h1>New Student</h1>
-            </Head>
+            </Header>
             <FormContainer>
                 <form onSubmit={handleSubmit}>
                     <InputContainer>
@@ -84,17 +84,6 @@ function NewStudent({ newForm=newStudentForm }) {
         </>
     );
 }
-
-const Head = styled.div`
-    align-items: center;
-    border-bottom: 1px solid #999;
-    display: grid;
-    font-size: 1.25em;
-    grid-template-columns: 3fr 140px;
-    margin: auto;
-    padding: 10px;
-    width: 80%;
-`
 
 const InputField = styled.input`
     width: 100%;

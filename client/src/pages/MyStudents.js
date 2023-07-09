@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Search from "../components/Search";
 import StudentList from "../components/StudentList";
 import { filter } from '../components/utilities';
+import { Header, Li } from '../styles'
 
 function MyStudents() {
     const { students } = useContext(UserContext);
@@ -15,7 +16,7 @@ function MyStudents() {
 
     return (
         <div>
-            <Head>
+            <Header style={{gridTemplateColumns: '3fr 145px'}}>
                 <h1>My Students</h1>
                 <Button onClick={() => navigate(`/students/new`)}>
                     <i 
@@ -26,13 +27,13 @@ function MyStudents() {
                     </i>
                     <p style={{padding: '0 6px 0 0'}}>Create Student</p>
                 </Button>
-            </Head>
+            </Header>
             {<Search search={search} setSearch={setSearch}>
                 {search 
                     ? <ul>
-                        <li onClick={() => navigate(`/goals/new`)}>
+                        <Li onClick={() => navigate(`/goals/new`)}>
                             Can't find a student? Click here to add an existing student to your caseload.
-                        </li> 
+                        </Li> 
                     </ul>
                     : null
                 }
@@ -42,16 +43,6 @@ function MyStudents() {
     );
 }
 
-const Head = styled.div`
-    align-items: center;
-    border-bottom: 1px solid #999;
-    display: grid;
-    font-size: 1.25em;
-    grid-template-columns: 3fr 145px;
-    margin: auto;
-    padding: 10px;
-    width: 80%;
-`
 const Button = styled.button`
     align-items: center;
     background-color: #6a8532;

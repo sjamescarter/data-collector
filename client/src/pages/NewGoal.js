@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
-import styled from "styled-components";
 import Search from '../components/Search';
-import { FormContainer, InputSubmit } from '../styles/';
+import { FormContainer, Header, InputSubmit, Li } from '../styles/';
 import GoalEditor from '../components/GoalEditor';
 import { alphabetize, filter } from '../components/utilities';
 
@@ -80,9 +79,9 @@ function NewGoal({ goal=newGoal }) {
 
     return (
         <>
-            <Head>
+            <Header>
                 <h1>New Goal</h1>
-            </Head>
+            </Header>
             {goalForm.student_id 
                 ? <FormContainer>
                     <h3>Goal</h3>
@@ -117,21 +116,5 @@ function NewGoal({ goal=newGoal }) {
         </>
     );
 }
-
-const Head = styled.div`
-    align-items: center;
-    border-bottom: 1px solid #999;
-    display: grid;
-    font-size: 1.25em;
-    grid-template-columns: 3fr 140px;
-    margin: auto;
-    padding: 10px;
-    width: 80%;
-`
-
-const Li = styled.li`
-    list-style: none;
-    cursor: pointer;
-`
 
 export default NewGoal;

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
+import { Header } from '../styles'
 import Goal from "../components/Goal";
 
 function Student() {
@@ -43,7 +44,7 @@ function Student() {
 
     return (
         <div>
-            <Head>
+            <Header>
                 <h1>{student.name}</h1>
                 <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
                     <i 
@@ -54,7 +55,7 @@ function Student() {
                     </i>
                     <p style={{padding: '0 6px 0 0'}}>Add New Goal</p>
                 </Button>
-            </Head>
+            </Header>
             <Container>
                 {filteredGoals.length === 0 
                     ? <p>Add a goal for {student.name} to keep in caseload.</p>
@@ -71,17 +72,6 @@ function Student() {
         </div>
     );
 }
-
-const Head = styled.div`
-    align-items: center;
-    border-bottom: 1px solid #999;
-    display: grid;
-    font-size: 1.25em;
-    grid-template-columns: auto 140px;
-    margin: auto;
-    padding: 10px;
-    width: 80%;
-`
 
 const Container = styled.div`
     background-color: #d7dace;
