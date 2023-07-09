@@ -8,6 +8,10 @@ function Login({ onLogin }) {
 
     return (
         <div>
+            <div style={{backgroundColor: '#6a8532'}}>
+                <Logo>myData [Collector]</Logo>
+            </div>
+                
             {showLogin? 
                 (
                     <div className="login">
@@ -32,12 +36,20 @@ function Login({ onLogin }) {
     )
 } 
 
+
 const H1 = styled.h1`
     text-align: center;
 `
-
 const P = styled.p`
     text-align: center;
     padding: 16px;
+`
+const Logo = styled.h1`
+    color: white;
+    text-align: center;
+    font-size: 2.5em;
+    margin: auto;
+    padding: 1em;
+    width: 300px;
 `
 export default Login
