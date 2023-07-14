@@ -3,6 +3,7 @@ import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormContainer, Header, InputContainer, InputIcon, InputSubmit } from '../styles/';
+import { handleChange } from '../components/utilities';
 
 const newStudentForm = {firstName: "", lastName: "", gradeLevel: ""}
 
@@ -23,12 +24,7 @@ function NewStudent({ newForm=newStudentForm }) {
 
     const navigate = useNavigate();
 
-    function handleChange(e) {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
-    }
+    const change = (e) => handleChange(form, setForm, e)
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -66,12 +62,12 @@ function NewStudent({ newForm=newStudentForm }) {
                 <form onSubmit={handleSubmit}>
                     <InputContainer>
                         <InputIcon className='material-icons'>person</InputIcon>
-                        <InputField type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={handleChange} />
-                        <InputField  type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={handleChange} />
+                        <InputField type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={change} />
+                        <InputField  type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={change} />
                     </InputContainer>
                     <InputContainer>
                         <InputIcon className='material-icons'>school</InputIcon>
-                        <InputField  type="number" name="gradeLevel" placeholder="Grade Level: 1–12" value={form.gradeLevel} onChange={handleChange} />
+                        <InputField  type="number" name="gradeLevel" placeholder="Grade Level: 1–12" value={form.gradeLevel} onChange={change} />
                     </InputContainer>
                     <InputContainer>
                         <InputSubmit  type="submit" value="Create Student" />

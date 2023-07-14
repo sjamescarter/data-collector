@@ -16,22 +16,15 @@ function App() {
     fetch("/me")
     .then((r) => {
       if (r.ok) {
-        r.json().then((user) => handleLogin(user));
+        r.json().then((user) => setUser(user));
       }
     })
+    fetch('/students')
+    .then(r => r.json())
+    .then(data => setStudents(data))
   }, []);
 
-  function handleLogin(user) {
-    setUser({ 
-      id: user.id, 
-      firstName: user.first_name, 
-      lastName: user.last_name, 
-      jobTitle: user.job_title 
-    });
-    setStudents(user.students);
-  }
-
-  if (!user) return <Login onLogin={handleLogin} />
+  if (!user) return <Login onLogin={setUser} />
 
   return (
     <BrowserRouter>

@@ -6,27 +6,27 @@ import { Header } from '../styles'
 import Goal from "../components/Goal";
 
 function Student() {
-    const { user, students, setStudents } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const { id } = useParams();
     const navigate = useNavigate();
-    const student = students.find((student) => student.id === parseInt(id));
+    const student = user.students.find((student) => student.id === parseInt(id));
+    
+    if(!student) { return <h1>Student not found</h1>}
 
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
-    const orderedGoals = [...filteredGoals.sort((a, b) => a.id - b.id)];
 
     function handleUpdate(studentId, updatedGoal) {
-        const student = [...students].find((student) => student.id === studentId);
-        const goals = student.goals.filter((goal) => goal.id !== updatedGoal.id);
+        const goals = student.goals.map((goal) => goal.id === updatedGoal.id ? updatedGoal : goal);
 
-        setStudents([
-            ...students.filter((student) => student.id !== studentId),
-            {...student, goals: [...goals, updatedGoal]}
-        ]);
+        setUser({ ...user, students: [
+            ...user.students.map((student) => student.id === studentId 
+            ? {...student, goals: [...goals]} 
+            : student)
+        ]});
     }
 
     function handleDelete(goalId, studentId) {
         // put in a confirmation before delete
-        const student = [...students].find((student) => student.id === studentId)
         const goals = student.goals.filter((goal) => goal.id !== goalId)
 
         fetch('/goals/' + goalId, {
@@ -34,10 +34,13 @@ function Student() {
         })
         .then((r) => {
             if(r.ok) {
-                setStudents([
-                    ...students.filter((student) => student.id !== studentId),
+                filteredGoals.length === 1 
+                ? setUser({ ...user, students: [
+                    ...user.students.filter((student) => student.id !== studentId)]})
+                : setUser({ ...user, students: [
+                    ...user.students.filter((student) => student.id !== studentId),
                     {...student, goals}
-                ])
+                ]});
             }
         })
     }
@@ -57,9 +60,7 @@ function Student() {
                 </Button>
             </Header>
             <Container>
-                {filteredGoals.length === 0 
-                    ? <p>Add a goal for {student.name} to keep in caseload.</p>
-                    : orderedGoals.map((goal) => 
+                {filteredGoals.map((goal) => 
                         <Goal 
                         key={goal.id} 
                         goal={goal} 

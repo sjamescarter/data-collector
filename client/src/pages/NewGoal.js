@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import Search from '../components/Search';
@@ -15,26 +15,19 @@ const newGoal = {
 }
 
 function NewGoal({ goal=newGoal }) {
-    const { students, setStudents } = useContext(UserContext);
+    const { user, setUser, students } = useContext(UserContext);
 
     const { id } = useParams();
     if(id) { goal.student_id = parseInt(id, 10); } 
     if(!id) { goal.student_id = ""; }
 
-    const [allStudents, setAllStudents] = useState([{name: "Loading"}])
     const [search, setSearch] = useState("");
     const [goalForm, setGoalForm] = useState(goal);
     const [errors, setErrors] = useState([]);
     
-    const abc = alphabetize(allStudents);
+    const abc = alphabetize(students);
     const filtered = filter(abc, search);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetch('/students')
-        .then(r => r.json())
-        .then(data => setAllStudents(data))
-    }, [])
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
@@ -50,12 +43,11 @@ function NewGoal({ goal=newGoal }) {
             if (r.ok) {
                 r.json()
                 .then((goal) => {
-                    const student = [...students].find((student) => student.id === goal.student.id);
-                    setStudents([
-                        ...students.filter((s) => s.id !== student.id),
+                    setUser({ ...user, students: [
+                        ...user.students.filter((s) => s.id !== student.id),
                         {...student, goals: [...student.goals, goal]}
-                    ]);
-                    navigate(`/students/${goal.student.id}`);
+                    ]});
+                    navigate(`/students/${student.id}`);
                     setGoalForm(newGoal);
                 });
             } else {
@@ -71,9 +63,6 @@ function NewGoal({ goal=newGoal }) {
             ...goalForm, 
             student_id: s.id,
         });
-        if(!student) { 
-            setStudents([...students, s])
-        };
         setSearch("");
     }
 

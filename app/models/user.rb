@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
-  has_many :goals
+  has_many :goals, dependent: :destroy
   has_many :students, through: :goals
 
   validates :first_name, :last_name, :job_title, :email, :password_confirmation, presence: true

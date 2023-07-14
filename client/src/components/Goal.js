@@ -4,6 +4,7 @@ import GoalEditor from './GoalEditor';
 import ResultsEditor from './ResultsEditor';
 import { I } from "../styles/index"
 
+// Student calls Goal
 function Goal({ goal, student, onDelete, handleUpdate }) {
     const [isEditing, setIsEditing] = useState(false)
     const [editResults, setEditResults] = useState(false)

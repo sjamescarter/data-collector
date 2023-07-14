@@ -8,9 +8,9 @@ import { filter } from '../components/utilities';
 import { Header, Li } from '../styles'
 
 function MyStudents() {
-    const { students } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [search, setSearch] = useState("");
-    const filtered = filter(students, search);
+    const filtered = filter(user.students, search);
 
     const navigate = useNavigate();
 

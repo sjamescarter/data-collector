@@ -20,11 +20,11 @@ function NavBar() {
     }
     
     const activate = ({ isActive }) => isActive ? "active" : ""
-    
+
     return (
         <SideNav>
             <h2>myData [Collector]</h2>
-            <Welcome>{user.firstName} {user.lastName}, {user.jobTitle}</Welcome>
+            <Welcome>{user.first_name} {user.last_name}, {user.job_title}</Welcome>
             <StyledNavLink to="/" className={activate}>
                 <Icon className="material-icons">dashboard</Icon>
                 Dashboard
@@ -33,10 +33,6 @@ function NavBar() {
                 <Icon className="material-icons">groups</Icon>
                 My Students
             </StyledNavLink>
-            {/* <StyledNavLink to="/students/new" className={activate}>
-                <Icon className="material-icons">person_add_alt_1</Icon>
-                New Student
-            </StyledNavLink> */}
             <StyledNavLink to="/goals/new" className={activate}>
                 <Icon className="material-icons">assignment_add</Icon>
                 New Goal
