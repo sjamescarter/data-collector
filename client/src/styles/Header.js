@@ -5,8 +5,9 @@ const Header = styled.div`
     border-bottom: 1px solid #999;
     display: grid;
     font-size: 1.25em;
-    grid-template-columns: 3fr 140px;
+    grid-template-columns: 3fr 115px;
     margin: auto;
+    margin-top: 20px;
     padding: 10px;
     width: 80%;
 `

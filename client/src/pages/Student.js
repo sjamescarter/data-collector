@@ -48,7 +48,10 @@ function Student() {
     return (
         <div>
             <Header>
-                <h1>{student.name}</h1>
+                <div>
+                    <h1 style={{margin: "0"}}>{student.name}</h1>
+                    <small>Grade: {student.grade_level}</small>
+                </div>
                 <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
                     <i 
                         style={{padding: '0 6px'}}
@@ -56,7 +59,7 @@ function Student() {
                     >
                         assignment_add
                     </i>
-                    <p style={{padding: '0 6px 0 0'}}>Add New Goal</p>
+                    <p>New Goal</p>
                 </Button>
             </Header>
             <Container>
