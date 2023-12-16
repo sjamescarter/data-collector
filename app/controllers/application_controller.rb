@@ -2,11 +2,11 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::Serialization
 
-  before_action :find_user
+  before_action :authorize
   rescue_from ActiveRecord::RecordInvalid, with: :invalid_response
 
   private
-  def find_user
+  def authorize
     if session[:user_id]
       @user = User.find(session[:user_id])
     else

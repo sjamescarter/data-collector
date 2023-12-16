@@ -17,6 +17,7 @@ class StudentsController < ApplicationController
     motivated = students.filter { |student| student.goals.length > params[:n].to_i }
     render json: motivated
   end
+  
   private
   def student_params
     { 
