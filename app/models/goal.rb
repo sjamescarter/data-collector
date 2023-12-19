@@ -1,6 +1,7 @@
 class Goal < ApplicationRecord
   belongs_to :user
   belongs_to :student
+  has_many :data
 
   validates :condition, :behavior, :accuracy, :measurement, presence: true
   validates :accuracy, numericality: { in: 0..100 }
