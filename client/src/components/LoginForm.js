@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { handleChange } from './utilities';
 
-function LoginForm({ onLogin }) {
+function LoginForm({ onLogin, loadApp }) {
     const [form, setForm] = useState({email: "", password: ""});
     const [errors, setErrors] = useState([]);
 
@@ -18,10 +18,11 @@ function LoginForm({ onLogin }) {
             if (r.ok) {
                 r.json().then((user) => onLogin(user));
                 setForm({email: "", password: ""});
+                loadApp();
             } else {
-                r.json().then((err) => setErrors(err.errors))
+                r.json().then((err) => setErrors(err.errors));
             }
-        })
+        });
     }
 
     return (

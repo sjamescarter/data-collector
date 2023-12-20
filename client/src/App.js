@@ -12,7 +12,7 @@ import Student from "./pages/Student"
 function App() {
   const { user, setUser, setStudents } = useContext(UserContext);
 
-  useEffect(() => {
+  const loadApp = () => {
     fetch("/me")
     .then((r) => {
       if (r.ok) {
@@ -20,11 +20,13 @@ function App() {
       }
     })
     fetch('/students')
-    .then(r => r.json())
-    .then(data => setStudents(data))
-  }, []);
+    .then((r) => r.json())
+    .then((data) => setStudents(data))
+  }
 
-  if (!user) return <Login onLogin={setUser} />
+  useEffect(loadApp, []);
+
+  if (!user) return <Login onLogin={setUser} loadApp={loadApp}/>
 
   return (
     <BrowserRouter>

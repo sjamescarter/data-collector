@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SignUpForm from '../components/SignUpForm';
 import LoginForm from '../components/LoginForm';
 
-function Login({ onLogin }) {
+function Login({ onLogin, loadApp }) {
     const [showLogin, setShowLogin] = useState(true)
 
     return (
@@ -16,7 +16,7 @@ function Login({ onLogin }) {
                 (
                     <div className="login">
                         <H1>Sign In</H1>
-                        <LoginForm onLogin={onLogin} />
+                        <LoginForm onLogin={onLogin} loadApp={loadApp} />
                         <P>
                             Need an account? 
                             <span className="link" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
@@ -25,7 +25,7 @@ function Login({ onLogin }) {
             ) : (
                     <div className="login">
                         <H1>Sign Up</H1>
-                        <SignUpForm onLogin={onLogin} />
+                        <SignUpForm onLogin={onLogin} loadApp={loadApp} />
                         <P>
                             Already have an account? 
                             <span className="link" onClick={() => setShowLogin(true)}>Sign In Here!</span>

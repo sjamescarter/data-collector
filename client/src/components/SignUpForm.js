@@ -10,7 +10,7 @@ const formFields = {
     password_confirmation: ""
 };
 
-function SignUpForm({ onLogin }) {
+function SignUpForm({ onLogin, loadApp }) {
     const [signup, setSignup] = useState(formFields);
     const [errors, setErrors] = useState([]);
 
@@ -27,10 +27,11 @@ function SignUpForm({ onLogin }) {
             if (r.ok) {
                 r.json().then((user) => onLogin(user));
                 setSignup(formFields);
+                loadApp();
             } else {
-                r.json().then((err) => setErrors(err.errors))
+                r.json().then((err) => setErrors(err.errors));
             }
-        })
+        });
     }
 
     return (
