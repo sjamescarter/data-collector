@@ -5,6 +5,7 @@ import Search from '../components/Search';
 import { FormContainer, Header, InputSubmit, Li } from '../styles/';
 import GoalEditor from '../components/GoalEditor';
 import { alphabetize, filter } from '../components/utilities';
+import styled from 'styled-components';
 
 const newGoal = {
     student_id: "",
@@ -88,7 +89,7 @@ function NewGoal({ goal=newGoal }) {
                 : <Search search={search} setSearch={setSearch}>
                     <ul>
                         {search 
-                            ? <ul>
+                            ? <Ul>
                                 {filtered.map((s) => <Li 
                                     key={s.id} 
                                     onClick={() => handleClick(s)}
@@ -96,7 +97,7 @@ function NewGoal({ goal=newGoal }) {
                                 <Li onClick={() => navigate(`/students/new/${search}`)}>
                                     Create New Student "<strong>{search}</strong>"
                                 </Li>
-                            </ul>
+                            </Ul>
                             : null
                         }
                     </ul>
@@ -106,4 +107,10 @@ function NewGoal({ goal=newGoal }) {
     );
 }
 
+const Ul = styled.ul`
+    background-color: #FFF;
+    border: solid 2px #6a8532;
+    border-radius: 4px;
+    padding: 16px;
+`
 export default NewGoal;
