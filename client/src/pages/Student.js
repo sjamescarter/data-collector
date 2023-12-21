@@ -6,7 +6,7 @@ import { Header } from '../styles'
 import Goal from "../components/Goal";
 
 function Student() {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser, students, setStudents } = useContext(UserContext);
     const { id } = useParams();
     const navigate = useNavigate();
     const student = user.students.find((student) => student.id === parseInt(id));
@@ -41,6 +41,10 @@ function Student() {
                     ...user.students.filter((student) => student.id !== studentId),
                     {...student, goals}
                 ]});
+                setStudents([...students.map((student) => student.id === studentId
+                    ? {...student, goals: [goals]}
+                    : student
+                )]);
             }
         })
     }
