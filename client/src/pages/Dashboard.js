@@ -30,7 +30,7 @@ function Dashboard() {
 
 const Container = styled.div`
     display: flex;
-    grid-template-columns: 1fr 1fr 1fr;
+    flex-wrap: wrap;
     margin: auto;
     width: 80%
 `
@@ -40,8 +40,9 @@ const Button = styled.button`
     border-radius: 8px;
     display: block;
     height: 150px;
-    margin: 25px;
     width: 150px;
+    margin: 25px;
+    box-sizing: border-box;
     opacity: .9;
     &:hover {
         opacity: 1;
