@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_19_202525) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_17_181308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "data", force: :cascade do |t|
-    t.string "note"
-    t.string "correct"
-    t.string "total"
-    t.bigint "goals_id", null: false
+  create_table "assignments", force: :cascade do |t|
+    t.text "note"
+    t.integer "correct"
+    t.integer "total"
+    t.bigint "goal_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["goals_id"], name: "index_data_on_goals_id"
+    t.index ["goal_id"], name: "index_assignments_on_goal_id"
   end
 
   create_table "goals", force: :cascade do |t|
@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_19_202525) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "data", "goals", column: "goals_id"
+  add_foreign_key "assignments", "goals"
   add_foreign_key "goals", "students"
   add_foreign_key "goals", "users"
 end

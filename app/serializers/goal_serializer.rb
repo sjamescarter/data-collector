@@ -1,5 +1,6 @@
 class GoalSerializer < ActiveModel::Serializer
   attributes :id, :user_id, :owner, :condition, :behavior, :accuracy, :measurement, :result
+  has_many :assignments
 
   def owner
     owner = User.find(object.user_id)
@@ -7,10 +8,10 @@ class GoalSerializer < ActiveModel::Serializer
   end
 
   def result
-    if object.trials_total
-      correct = object.trials_correct.to_f
-      total = object.trials_total.to_f
-      "#{(correct/total * 100).round}%"
+    if object.assignments.length() > 0
+      correct = object.assignments.map { |assignment| assignment.correct}.sum.to_f
+      total = object.assignments.map { |assignment| assignment.total}.sum.to_f
+      "#{((correct/total) * 100).round}%"
     end
   end
 end
