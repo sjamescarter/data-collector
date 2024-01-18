@@ -9,14 +9,14 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
     function handleSubmit(e) {
         e.preventDefault();
         setErrors([]);
-        fetch(`/goals/${goal.id}`, {
-            method: 'PATCH',
+        fetch(`/goals/${goal.id}/assignments`, {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                trials_correct: goalForm.correct,
-                trials_total: goalForm.total
+                correct: goalForm.correct,
+                total: goalForm.total
             })
         })
         .then((r) => {
