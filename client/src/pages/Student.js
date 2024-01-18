@@ -50,11 +50,11 @@ function Student() {
     }
 
     return (
-        <div>
+        <>
             <Header>
-                <div>
-                    <h1 style={{margin: "0"}}>{student.name}</h1>
-                    <small>Grade: {student.grade_level}</small>
+                <div style={{position: "relative"}}>
+                    <h1>{student.name}</h1>
+                    <small style={{position: "absolute", bottom: ".5em"}}>Grade: {student.grade_level}</small>
                 </div>
                 <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
                     <i 
@@ -63,7 +63,7 @@ function Student() {
                     >
                         assignment_add
                     </i>
-                    <p>New Goal</p>
+                    <p style={{padding: '0 6px 0 0'}}>New Goal</p>
                 </Button>
             </Header>
             <Container>
@@ -77,7 +77,7 @@ function Student() {
                     />)
                 }
             </Container>
-        </div>
+        </>
     );
 }
 
@@ -102,6 +102,8 @@ const Button = styled.button`
     border-radius: 8px;
     color: white;
     display: flex;
+    // flex-flow: row nowrap;
+    // justify-content: space-between;
     padding: 4px;
     opacity: .9;
     &:hover {

@@ -15,8 +15,8 @@ function MyStudents() {
     const navigate = useNavigate();
 
     return (
-        <div>
-            <Header style={{gridTemplateColumns: '3fr 145px'}}>
+        <>
+            <Header>
                 <h1>My Students</h1>
                 <Button onClick={() => navigate(`/students/new`)}>
                     <i 
@@ -39,7 +39,7 @@ function MyStudents() {
                 }
             </Search>}
             {<StudentList students={filtered} />}
-        </div>
+        </>
     );
 }
 
