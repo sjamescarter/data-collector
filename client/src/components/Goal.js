@@ -53,27 +53,27 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
                 </div>
             }
             <div style={{padding: '6px'}}>
-            <I 
-                className="material-icons"
-                onClick={() => setEditResults(!editResults)} 
-                title="Add Data"
-            >
-                addchart
-            </I>
-            <I 
-                className="material-icons"
-                onClick={() => setIsEditing(!isEditing)} 
-                title="Edit Goal"
-            >
-                edit
-            </I>
-            <I 
-                className="material-icons"
-                onClick={() => onDelete(goal.id, student.id)}
-                title="Delete Goal"
-            >
-                delete
-            </I>
+                <I 
+                    className="material-icons"
+                    onClick={() => setEditResults(!editResults)} 
+                    title="Add Data"
+                >
+                    addchart
+                </I>
+                <I 
+                    className="material-icons"
+                    onClick={() => setIsEditing(!isEditing)} 
+                    title="Edit Goal"
+                >
+                    edit
+                </I>
+                <I 
+                    className="material-icons"
+                    onClick={() => onDelete(goal.id, student.id)}
+                    title="Delete Goal"
+                >
+                    delete
+                </I>
             </div>
             {editResults 
                 ? <ResultsEditor student={student} goal={goal} setEditResults={setEditResults} handleUpdate={handleUpdate} /> 
