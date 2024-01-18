@@ -12,10 +12,12 @@ function StudentCard({ student }) {
 
     return (
         <StudentContainer>
-            <StudentGrid onClick={() => navigate(`/students/${student.id}`)}>
+            <Card onClick={() => navigate(`/students/${student.id}`)}>
                 <Circle>{student.initial}</Circle>
-                <p>{student.name}</p>
-                <p>Grade: {student.grade_level}</p>
+                <Info>
+                    <Name>{student.name}</Name>
+                    <Grade>Grade: {student.grade_level}</Grade>
+                </Info>
                 <I 
                     className="material-icons"
                     onClick={handleClick} 
@@ -23,7 +25,7 @@ function StudentCard({ student }) {
                 >
                     assignment_add
                 </I>
-            </StudentGrid>
+            </Card>
         </StudentContainer>
     );
 }
@@ -42,13 +44,33 @@ const StudentContainer = styled.div`
     }
 `
 
-const StudentGrid = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr 5%;
+const Card = styled.div`
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    height: 3.5em;
 `
-
+const Info = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 60%;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+`
+const Name = styled.p`
+    margin: 0;
+    padding: 0;
+`
+const Grade = styled(Name)`
+    font-size: 1em;
+    @media (max-width: 768px) {
+        font-size: .8em;
+    }
+`
 const Circle = styled.div`
     background-color: #6a8532;
     color: #f8f8f8;
