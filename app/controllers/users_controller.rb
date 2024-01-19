@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: @user, include: ['students', 'students.goals']
+    render json: @user, include: ['students', 'students.goals', 'students.goals.assignments']
   end
 
   private
