@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :assignments, only: [:index]
   resources :goals, only: [:index, :create, :update, :destroy] do
     resources :assignments, only: [:create]
   end

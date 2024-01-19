@@ -1,8 +1,4 @@
 class AssignmentsController < ApplicationController
-  def index
-    render json: Assignment.all
-  end
-
   def create
     goal = @user.goals.find(params[:goal_id].to_i)
     assignment = goal.assignments.create!(data_params)
