@@ -10,10 +10,14 @@ const Modal = forwardRef(({ id, children }, ref) => {
 });
 
 const Dialog = styled.dialog`
-    background-color: #d7dace
+    background-color: #d7dace;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    padding: 2em;
     &::backdrop {
-        // color: black;
-        // opacity: .9;
+        background-color: black;
+        opacity: .5;
     }
 `
 export default Modal;

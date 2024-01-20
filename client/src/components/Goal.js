@@ -4,6 +4,7 @@ import GoalEditor from './GoalEditor';
 import ResultsEditor from './ResultsEditor';
 import Modal from './Modal';
 import { I } from "../styles/index"
+import Warn from './Warn';
 
 // Student calls Goal
 function Goal({ goal, student, onDelete, handleUpdate }) {
@@ -92,9 +93,7 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
                 }
             </GoalGrid>
             <Modal ref={warnModal}>
-                <h1>Are you sure?</h1>
-                <button onClick={handleDelete}>Delete it!</button>
-                <button onClick={closeModal}>Cancel</button>
+                <Warn handleDelete={handleDelete} closeModal={closeModal} />
             </Modal>
         </>
     );
