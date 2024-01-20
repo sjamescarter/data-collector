@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
+  # resources :assessments
+  resources :objectives
   resources :goals, only: [:index, :create, :update, :destroy] do
-    resources :assignments, only: [:create]
+    resources :objectives, only: [:create, :update, :destroy] do
+      resources :assessments, only: [:create]
+    end
   end
   resources :students, only: [:index, :create]
   post '/login', to: 'sessions#create'

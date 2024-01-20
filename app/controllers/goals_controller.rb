@@ -6,7 +6,7 @@ class GoalsController < ApplicationController
   end
 
   def create
-    student = Student.find(params[:student_id])
+    student = Student.find(params[:student_id].to_i)
     goal = @user.goals.create(goal_params)
     student.goals << goal
     if goal.valid?
@@ -34,7 +34,7 @@ class GoalsController < ApplicationController
 
   private
   def goal_params
-    params.permit(:condition, :behavior, :accuracy, :measurement, :trials_correct, :trials_total)
+    params.permit(:condition, :behavior, :accuracy, :measurement)
   end
 
   def find_goal

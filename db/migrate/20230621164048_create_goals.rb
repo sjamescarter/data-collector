@@ -7,8 +7,6 @@ class CreateGoals < ActiveRecord::Migration[7.0]
       t.string :behavior
       t.integer :accuracy
       t.string :measurement
-      t.integer :trials_correct
-      t.integer :trials_total
 
       t.timestamps
     end

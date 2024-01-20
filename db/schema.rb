@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_17_181308) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_19_153503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "assignments", force: :cascade do |t|
+  create_table "assessments", force: :cascade do |t|
     t.text "note"
     t.integer "correct"
     t.integer "total"
-    t.bigint "goal_id", null: false
+    t.bigint "objective_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["goal_id"], name: "index_assignments_on_goal_id"
+    t.index ["objective_id"], name: "index_assessments_on_objective_id"
   end
 
   create_table "goals", force: :cascade do |t|
@@ -31,12 +31,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_17_181308) do
     t.string "behavior"
     t.integer "accuracy"
     t.string "measurement"
-    t.integer "trials_correct"
-    t.integer "trials_total"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subject"
     t.index ["student_id"], name: "index_goals_on_student_id"
     t.index ["user_id"], name: "index_goals_on_user_id"
+  end
+
+  create_table "objectives", force: :cascade do |t|
+    t.text "description"
+    t.bigint "goal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["goal_id"], name: "index_objectives_on_goal_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -57,7 +64,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_17_181308) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "assignments", "goals"
+  add_foreign_key "assessments", "objectives"
   add_foreign_key "goals", "students"
   add_foreign_key "goals", "users"
+  add_foreign_key "objectives", "goals"
 end

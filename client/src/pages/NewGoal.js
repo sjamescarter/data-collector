@@ -16,7 +16,7 @@ const newGoal = {
 }
 
 function NewGoal({ goal=newGoal }) {
-    const { user, setUser, students } = useContext(UserContext);
+    const { user, setUser, students, setStudents } = useContext(UserContext);
 
     const { id } = useParams();
     if(id) { goal.student_id = parseInt(id, 10); } 
@@ -48,6 +48,10 @@ function NewGoal({ goal=newGoal }) {
                         ...user.students.filter((s) => s.id !== student.id),
                         {...student, goals: [...student.goals, goal]}
                     ]});
+                    setStudents([...students.map((s) => s.id === student.id
+                        ? {...student, goals: [...student.goals, goal]}
+                        : s
+                    )])
                     navigate(`/students/${student.id}`);
                     setGoalForm(newGoal);
                 });

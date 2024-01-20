@@ -10,7 +10,7 @@ import NewStudent from "./pages/NewStudent";
 import Student from "./pages/Student"
 
 function App() {
-  const { user, setUser, setStudents } = useContext(UserContext);
+  const { user, setUser, students, setStudents } = useContext(UserContext);
 
   const loadApp = () => {
     fetch("/me")
@@ -23,7 +23,8 @@ function App() {
     .then((r) => r.json())
     .then((data) => setStudents(data))
   }
-
+console.log(user)
+console.log(students)
   useEffect(loadApp, []);
 
   if (!user) return <Login onLogin={setUser} loadApp={loadApp}/>
