@@ -8,13 +8,10 @@ class GoalsController < ApplicationController
 
   def create
     student = Student.find(params[:student_id].to_i)
-    goal = @user.goals.create(goal_params)
+    goal = @user.goals.build(goal_params)
     student.goals << goal
-    if goal.valid?
-      render json: goal, status: :created
-    else
-      render json: { errors: goal.errors.full_messages }, status: :unprocessable_entity
-    end
+    goal.save!
+    render json: goal, status: :created
   end
 
   def update
