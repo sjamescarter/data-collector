@@ -26,7 +26,6 @@ function Student() {
     }
 
     function handleDelete(goalId, studentId) {
-        // put in a confirmation before delete
         const goals = student.goals.filter((goal) => goal.id !== goalId)
 
         fetch('/goals/' + goalId, {
@@ -38,11 +37,12 @@ function Student() {
                 ? setUser({ ...user, students: [
                     ...user.students.filter((student) => student.id !== studentId)]})
                 : setUser({ ...user, students: [
-                    ...user.students.filter((student) => student.id !== studentId),
-                    {...student, goals}
-                ]});
+                    ...user.students.map((student) => student.id === studentId
+                    ? {...student, goals}
+                    : student
+                    )]});
                 setStudents([...students.map((student) => student.id === studentId
-                    ? {...student, goals: [goals]}
+                    ? {...student, goals}
                     : student
                 )]);
             }

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from "styled-components";
 import GoalEditor from './GoalEditor';
 import ResultsEditor from './ResultsEditor';
+import Modal from './Modal';
 import { I } from "../styles/index"
 
 // Student calls Goal
@@ -9,6 +10,13 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
     const [isEditing, setIsEditing] = useState(false)
     const [editResults, setEditResults] = useState(false)
     const [errors, setErrors] = useState([]);
+
+    const warnModal = useRef(null);
+    const closeModal = () => warnModal.current.close();
+    const handleDelete = () => {
+        onDelete(goal.id, student.id);
+        closeModal();
+    }
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
@@ -31,57 +39,64 @@ function Goal({ goal, student, onDelete, handleUpdate }) {
     }
 
     return (
-        <GoalGrid>
-            {isEditing 
-                ? <GoalEditor 
+        <>
+            <GoalGrid>
+                {isEditing 
+                    ? <GoalEditor 
                     student={student} 
                     goal={goal} 
                     setIsEditing={setIsEditing} 
                     onSubmit={handleSubmit}
-                >
-                    <div>
-                        <StyledSubmit type="submit" value="Save" />
-                        <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                    >
+                        <div>
+                            <StyledSubmit type="submit" value="Save" />
+                            <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                        </div>
+                        <ul className="errors">
+                            {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
+                        </ul>
+                    </GoalEditor>
+                    : <div>
+                        {/* <h5>Goal</h5> */}
+                        <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
                     </div>
-                    <ul className="errors">
-                        {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                    </ul>
-                </GoalEditor>
-                : <div>
-                    {/* <h5>Goal</h5> */}
-                    <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
+                }
+                <div style={{padding: '6px'}}>
+                    <I 
+                        className="material-icons"
+                        onClick={() => setEditResults(!editResults)} 
+                        title="Add Data"
+                        >
+                        addchart
+                    </I>
+                    <I 
+                        className="material-icons"
+                        onClick={() => setIsEditing(!isEditing)} 
+                        title="Edit Goal"
+                        >
+                        edit
+                    </I>
+                    <I 
+                        className="material-icons"
+                        onClick={() => warnModal.current.showModal()}
+                        title="Delete Goal"
+                        >
+                        delete
+                    </I>
                 </div>
-            }
-            <div style={{padding: '6px'}}>
-                <I 
-                    className="material-icons"
-                    onClick={() => setEditResults(!editResults)} 
-                    title="Add Data"
-                >
-                    addchart
-                </I>
-                <I 
-                    className="material-icons"
-                    onClick={() => setIsEditing(!isEditing)} 
-                    title="Edit Goal"
-                >
-                    edit
-                </I>
-                <I 
-                    className="material-icons"
-                    onClick={() => onDelete(goal.id, student.id)}
-                    title="Delete Goal"
-                >
-                    delete
-                </I>
-            </div>
-            {editResults 
-                ? <ResultsEditor student={student} goal={goal} setEditResults={setEditResults} handleUpdate={handleUpdate} /> 
-                : goal.result 
-                ? <p><b>Student results: {goal.result}</b></p> 
-                : null
-            }
-        </GoalGrid>
+                {editResults 
+                    ? <ResultsEditor student={student} goal={goal} setEditResults={setEditResults} handleUpdate={handleUpdate} /> 
+                    : goal.result 
+                    ? <p><b>Student results: {goal.result}</b></p> 
+                    : null
+                }
+            </GoalGrid>
+            <Modal ref={warnModal}>
+                <h1>Are you sure?</h1>
+                <button onClick={handleDelete}>Delete it!</button>
+                <button onClick={closeModal}>Cancel</button>
+            </Modal>
+        </>
     );
 }
 
