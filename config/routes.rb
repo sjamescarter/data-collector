@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  # resources :assessments
-  # resources :objectives
-  resources :goals, only: [:index, :create, :update, :destroy] do
-    resources :objectives, only: [:create, :update, :destroy] do
-      resources :assessments, only: [:create, :update, :destroy]
-    end
-  end
   resources :students, only: [:index, :create]
+  resources :goals, only: [:index, :create, :update, :destroy] do
+    resources :objectives, only: [:create]
+  end
+  resources :objectives, only: [:update, :destroy] do
+    resources :assessments, only: [:create]
+  end
+  resources :assessments, only: [:update, :destroy]
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get '/me', to: 'users#show'
