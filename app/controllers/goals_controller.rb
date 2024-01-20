@@ -1,4 +1,5 @@
 class GoalsController < ApplicationController
+  before_action :find_goal, except: [:index, :create]  
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
   def index
@@ -17,18 +18,12 @@ class GoalsController < ApplicationController
   end
 
   def update
-    goal = find_goal
-    goal.update(goal_params)
-    if goal.valid?
-      render json: goal, status: :accepted
-    else
-      render json: { errors: goal.errors.full_messages }, status: :unprocessable_entity
-    end
+    @goal.update!(goal_params)
+    render json: @goal, status: :accepted
   end
 
   def destroy
-    goal = find_goal
-    goal.destroy
+    @goal.destroy
     head :no_content
   end
 
@@ -38,7 +33,7 @@ class GoalsController < ApplicationController
   end
 
   def find_goal
-    @user.goals.find(params[:id])
+    @goal = @user.goals.find(params[:id])
   end
 
   def not_found_response

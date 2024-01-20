@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # resources :assessments
-  resources :objectives
+  # resources :objectives
   resources :goals, only: [:index, :create, :update, :destroy] do
     resources :objectives, only: [:create, :update, :destroy] do
       resources :assessments, only: [:create]
