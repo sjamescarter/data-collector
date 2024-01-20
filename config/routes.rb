@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # resources :objectives
   resources :goals, only: [:index, :create, :update, :destroy] do
     resources :objectives, only: [:create, :update, :destroy] do
-      resources :assessments, only: [:create]
+      resources :assessments, only: [:create, :update, :destroy]
     end
   end
   resources :students, only: [:index, :create]
