@@ -1,7 +1,7 @@
 class Goal < ApplicationRecord
   belongs_to :user
   belongs_to :student
-  has_many :objectives
+  has_many :objectives, dependent: :destroy
   has_many :assessments, through: :objectives
 
   validates :condition, :behavior, :accuracy, :measurement, presence: true
