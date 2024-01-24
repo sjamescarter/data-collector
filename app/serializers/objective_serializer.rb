@@ -1,6 +1,5 @@
 class ObjectiveSerializer < ActiveModel::Serializer
   attributes :id, :description, :result
-  has_one :goal
   has_many :assessments
 
   def result

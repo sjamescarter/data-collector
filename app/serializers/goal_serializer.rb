@@ -1,5 +1,5 @@
 class GoalSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :owner, :condition, :behavior, :accuracy, :measurement
+  attributes :id, :user_id, :owner, :subject, :condition, :behavior, :accuracy, :measurement
   has_many :objectives
 
   def owner
