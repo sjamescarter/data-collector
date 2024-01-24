@@ -1,21 +1,54 @@
-import { useRef } from "react";
-import EditButtons from "./EditButtons";
+import { useContext, useRef } from "react";
+import { UserContext } from "../context/user";
+import { destroy } from "./fetch";
 import styled from "styled-components";
+import EditButtons from "./EditButtons";
 import Modal from "./Modal";
 import Warn from "./Warn";
+import { useParams } from "react-router-dom";
 
 function ObjectiveCard({ objective }) {
     const addData = useRef(null);
     const editObjective = useRef(null);
     const deleteObjective = useRef(null);
-
+    const { studentId, goalId } = useParams();
     // context
+    const { user, setUser, students, setStudents } = useContext(UserContext);
+    // Update Objective
+
+    // Delete Objective
+    function handleDelete() {
+        const callback = () => {
+            setUser({
+                ...user, students: [
+                    ...user.students.map((s) => s.id === parseInt(studentId) 
+                        ? { ...s, goals: [
+                            ...s.goals.map((g) => g.id === parseInt(goalId)
+                                ? { ...g, objectives: [...g.objectives.filter((o) => o.id !== objective.id)]}
+                                : g
+                        )]}
+                        : s
+                    )
+                ]
+            });
+            setStudents([
+                ...students.map((s) => s.id === parseInt(studentId) 
+                        ? { ...s, goals: [
+                            ...s.goals.map((g) => g.id === goalId
+                                ? { ...g, objectives: [...g.objectives.filter((o) => o.id !== objective.id)]}
+                                : g
+                        )]}
+                        : s
+                    )
+            ]);
+            deleteObjective.current.close();
+        }
+
+        destroy(`/objectives/${objective.id}`, callback);
+    }
     // Create Assessment
     // Update Assessment
     // Destroy Assessment
-    function handleDelete() {
-        
-    }
 
     return (
         <Container>
@@ -47,10 +80,10 @@ function ObjectiveCard({ objective }) {
                 </div>
             </Modal>
             <Modal ref={editObjective}>
-
+                
             </Modal>
             <Modal ref={deleteObjective}>
-                <Warn handleDelete={handleDelete} closeModal={() => deleteObjective.close()}/>
+                <Warn handleDelete={handleDelete} closeModal={() => deleteObjective.current.close()}/>
             </Modal>
         </Container>
     );
