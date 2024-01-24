@@ -8,20 +8,15 @@ import NavBar from "./components/NavBar";
 import NewGoal from "./pages/NewGoal";
 import NewStudent from "./pages/NewStudent";
 import Student from "./pages/Student"
+import { get } from "./components/fetch";
+import Goal from "./pages/Goal";
 
 function App() {
   const { user, setUser, students, setStudents } = useContext(UserContext);
 
   const loadApp = () => {
-    fetch("/me")
-    .then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    })
-    fetch('/students')
-    .then((r) => r.json())
-    .then((data) => setStudents(data))
+    get('/me', setUser);
+    get('/students', setStudents);
   }
 console.log(user)
 console.log(students)
@@ -36,7 +31,10 @@ console.log(students)
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/students" element={<MyStudents />} />
-            <Route path="/students/:id" element={<Student />} />
+            <Route path="/students/:studentId" element={<Student />}>
+              <Route path="goals/:goalId" element={<Goal />} />
+            </Route>
+            <Route path="/goals/:id" element={<Goal />} />
             <Route path="/students/new" element={<NewStudent />}>
               <Route path=":name" element={<NewStudent />} />
             </Route>

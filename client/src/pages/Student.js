@@ -1,59 +1,59 @@
 import { useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import { Header } from '../styles'
-import Goal from "../components/Goal";
+import { destroy } from '../components/fetch';
+import GoalCard from '../components/GoalCard';
 
 function Student() {
     const { user, setUser, students, setStudents } = useContext(UserContext);
-    const { id } = useParams();
+    const { studentId, goalId } = useParams();
+    const id = parseInt(studentId)
+
     const navigate = useNavigate();
-    const student = user.students.find((student) => student.id === parseInt(id));
+    const student = user.students.find((student) => student.id === id);
     
     if(!student) { return <h1>Student not found</h1>}
 
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
 
-    function handleUpdate(studentId, updatedGoal) {
+    function handleUpdate(updatedGoal) {
         const goals = student.goals.map((goal) => goal.id === updatedGoal.id ? updatedGoal : goal);
 
         setUser({ ...user, students: [
-            ...user.students.map((student) => student.id === studentId 
+            ...user.students.map((student) => student.id === id 
             ? {...student, goals: [...goals]} 
             : student)
         ]});
     }
 
-    function handleDelete(goalId, studentId) {
+    function handleDelete(goalId) {
         const goals = student.goals.filter((goal) => goal.id !== goalId)
 
-        fetch('/goals/' + goalId, {
-            method: 'DELETE'
-        })
-        .then((r) => {
-            if(r.ok) {
-                filteredGoals.length === 1 
-                ? setUser({ ...user, students: [
-                    ...user.students.filter((student) => student.id !== studentId)]})
-                : setUser({ ...user, students: [
-                    ...user.students.map((student) => student.id === studentId
-                    ? {...student, goals}
-                    : student
-                    )]});
-                setStudents([...students.map((student) => student.id === studentId
-                    ? {...student, goals}
-                    : student
-                )]);
-            }
-        })
+        const callback = () => {
+            filteredGoals.length === 1 
+            ? setUser({ ...user, students: [
+                ...user.students.filter((student) => student.id !== id)]})
+            : setUser({ ...user, students: [
+                ...user.students.map((student) => student.id === id
+                ? {...student, goals}
+                : student
+                )]});
+            setStudents([...students.map((student) => student.id === id
+                ? {...student, goals}
+                : student
+            )]);
+        }
+
+        destroy('/goals/' + goalId, callback);
     }
 
     return (
         <>
             <Header>
                 <div style={{position: "relative"}}>
-                    <h1>{student.name}</h1>
+                    <Name onClick={() => navigate(`/students/${student.id}`)}>{student.name}</Name>
                     <small style={{position: "absolute", bottom: ".5em"}}>Grade: {student.grade_level}</small>
                 </div>
                 <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
@@ -67,14 +67,17 @@ function Student() {
                 </Button>
             </Header>
             <Container>
-                {filteredGoals.map((goal) => 
-                        <Goal 
-                        key={goal.id} 
-                        goal={goal} 
-                        student={student} 
-                        onDelete={handleDelete} 
-                        handleUpdate={handleUpdate} 
-                    />)
+                {goalId
+                    ? <Outlet context={[handleDelete, handleUpdate]} />
+                    : <>
+                        {filteredGoals.map((goal) => 
+                            <GoalCard 
+                                key={goal.id} 
+                                goal={goal} 
+                                student={student} 
+                            />
+                        )}
+                    </>
                 }
             </Container>
         </>
@@ -94,7 +97,11 @@ const Container = styled.div`
         opacity: 1;
     }
 `
-
+const Name = styled.h1`
+    &:hover {
+        cursor: pointer;
+    }
+`
 const Button = styled.button`
     align-items: center;
     background-color: #6a8532;
