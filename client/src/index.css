@@ -27,6 +27,15 @@ form {
   display: block;
 }
 
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.hide {
+  display: none;
+}
+
 .link {
   border: none;
   border-bottom: 1px solid #6a8532;

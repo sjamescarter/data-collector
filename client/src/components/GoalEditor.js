@@ -10,7 +10,8 @@ function GoalEditor({ children, student, goal, onSubmit }) {
     }
 
     return (
-        <form onSubmit={(e) => onSubmit(e, goalForm)}>
+        <form style={{boxSizing: "border-box", maxWidth: "500px"}} onSubmit={(e) => onSubmit(e, goalForm)}>
+            <h3>{goal.subject} Goal</h3>
             Given 
             <InputField 
                 type="text" 
@@ -19,7 +20,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 style={{width: `${calcWidth(goalForm.condition)}ch`}}
                 value={goalForm.condition} 
                 onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
-            />,
+                />,
             {` ${student.name.split(" ")[0]} `} 
             will
             <InputField 
@@ -29,7 +30,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 style={{width: `${calcWidth(goalForm.behavior)}ch`}}
                 value={goalForm.behavior} 
                 onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
-            />
+                />
             with
             <InputField 
                 type="number" 
@@ -38,7 +39,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 style={{width: "6ch"}} 
                 value={goalForm.accuracy} 
                 onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
-            />
+                />
             % accuracy as measured by 
             <InputField 
                 type="text" 
@@ -47,7 +48,7 @@ function GoalEditor({ children, student, goal, onSubmit }) {
                 style={{width: `${calcWidth(goalForm.measurement)}ch`}}
                 value={goalForm.measurement} 
                 onChange={(e) => handleChange(goalForm, setGoalForm, e)} 
-            />
+                />
             by the next annual review.
             {children}
         </form>
