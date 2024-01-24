@@ -78,7 +78,6 @@ function NewGoal({ goal=newGoal }) {
             </Header>
             {goalForm.student_id 
                 ? <FormContainer>
-                    <h3>Goal</h3>
                     <GoalEditor 
                         student={student}
                         goal={goalForm}
