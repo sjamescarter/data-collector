@@ -16,7 +16,7 @@ class GoalsController < ApplicationController
 
   def update
     @goal.update!(goal_params)
-    render json: @goal, status: :accepted
+    render json: @goal, status: :accepted, include: ['objectives', 'objectives.assessments']
   end
 
   def destroy
@@ -26,7 +26,7 @@ class GoalsController < ApplicationController
 
   private
   def goal_params
-    params.permit(:condition, :behavior, :accuracy, :measurement)
+    params.permit(:subject, :condition, :behavior, :accuracy, :measurement)
   end
 
   def find_goal

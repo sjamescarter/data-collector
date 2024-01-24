@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   def index
-    render json: Student.all
+    render json: Student.all, include: ['goals', 'goals.objectives', 'goals.objectives.assessments']
   end
 
   def create
