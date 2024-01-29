@@ -4,9 +4,9 @@ Rails.application.routes.draw do
     resources :objectives, only: [:create]
   end
   resources :objectives, only: [:update, :destroy] do
-    resources :assessments, only: [:create]
+    resources :assessments, only: [:create, :update]
   end
-  resources :assessments, only: [:update, :destroy]
+  resources :assessments, only: [:destroy]
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get '/me', to: 'users#show'

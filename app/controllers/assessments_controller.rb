@@ -1,15 +1,15 @@
 class AssessmentsController < ApplicationController
+  before_action :find_objective, except: [:destroy]  
   before_action :find_assessment, except: [:create]  
 
   def create
-    objective = @user.objectives.find(params[:objective_id].to_i)
-    assessment = objective.assessments.create!(assessment_params)
-    render json: assessment, status: :created
+    assessment = @objective.assessments.create!(assessment_params)
+    render json: @objective, status: :created
   end  
 
   def update
     @assessment.update!(assessment_params)
-    render json: @assessment, status: :accepted
+    render json: @objective, status: :accepted
   end
 
   def destroy
@@ -24,5 +24,9 @@ class AssessmentsController < ApplicationController
 
   def find_assessment
     @assessment = @user.assessments.find(params[:id])
+  end
+
+  def find_objective
+    @objective = @user.objectives.find(params[:objective_id].to_i)
   end
 end
