@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { handleChange } from './utilities';
 import Errors from './Errors';
+import { submit } from './fetch';
 
 const formFields = {
     first_name: "",
@@ -13,26 +14,19 @@ const formFields = {
 
 function SignUpForm({ onLogin, loadApp }) {
     const [signup, setSignup] = useState(formFields);
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState();
 
     function handleSubmit(e) {
         e.preventDefault();
-        fetch("/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(signup)
-        })
-        .then((r) => {
-            if (r.ok) {
-                r.json().then((user) => onLogin(user));
-                setSignup(formFields);
-                loadApp();
-            } else {
-                r.json().then((err) => setErrors(err.errors));
-            }
-        });
+        setErrors();
+
+        const callback = (user) => {
+            onLogin(user);
+            setSignup(formFields);
+            loadApp();
+        }
+
+        submit('/signup', 'POST', signup, callback, setErrors);
     }
 
     return (
