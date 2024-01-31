@@ -3,18 +3,19 @@ import { I } from "../styles/index"
 import { useNavigate } from 'react-router-dom';
 
 // Student calls GoalCard
-function GoalCard({ goal, student }) {
+function GoalCard({ goal }) {
+    const { id, subject, summary } = goal;
     const navigate = useNavigate();
 
     return (
-        <Container onClick={() => navigate(`goals/${goal.id}`)}>
+        <Container onClick={() => navigate(`goals/${id}`)}>
             <GoalHeader>
                 <div className='flex'>
                     <I className="material-icons">assignment</I>
-                    <h3>{goal.subject} Goal</h3>
+                    <h3>{subject} Goal</h3>
                 </div>
             </GoalHeader>
-            <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
+            <p>{summary}</p>
         </Container>
     );
 }
