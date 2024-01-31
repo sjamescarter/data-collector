@@ -1,13 +1,13 @@
 class StudentSerializer < ActiveModel::Serializer
-  attributes :id, :initial, :name, :grade_level
+  attributes :id, :initial, :name, :first_name, :grade_level
   has_many :goals 
   
   def initial
-    object.first_name[0]
+    object.last_name[0]
   end
 
   def name
-    "#{object.first_name} #{object.last_name}"
+    "#{object.last_name}, #{object.first_name}"
   end
 
 end
