@@ -3,6 +3,7 @@ import { handleChange } from "./utilities";
 import { submit } from "./fetch";
 import AssessmentCard from "./AssessmentCard";
 import styled from "styled-components";
+import Errors from "./Errors";
 
 function Assessments({ objective, updateObjectiveState, children }) {
     const { assessments } = objective;
@@ -36,9 +37,7 @@ function Assessments({ objective, updateObjectiveState, children }) {
                     <label htmlFor="total">Total Trials: </label>
                     <input type="number" name="total" value={assessmentForm.total} onChange={(e) => handleChange(assessmentForm, setAssessmentForm, e)} />
                     <input type="submit" value="save" />
-                    <ul className="errors">
-                        {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                    </ul>
+                    <Errors errors={errors} />
                 </form>
             </Li>
             {assessments.map((assessment) => <AssessmentCard key={assessment.id} assessment={assessment} objectiveId={objective.id} />)}
