@@ -6,11 +6,12 @@ import { submit } from "./fetch";
 import ObjectiveCard from "./ObjectiveCard";
 import Modal from "./Modal";
 import { handleChange } from "./utilities";
+import Errors from "./Errors";
 
 function Objectives({ student, goal }) {
     const { id, objectives } = goal;
     const { user, setUser, students, setStudents } = useContext(UserContext);
-    const [objectiveForm, setObjectiveForm] = useState({description: `Given ${goal.condition}, ${student.name.split(" ")[0]} will ${goal.behavior} with ${goal.accuracy}% accuracy as measured by ${goal.measurement} by the next annual review.`})
+    const [objectiveForm, setObjectiveForm] = useState({description: `Given ${goal.condition}, ${student.name.split(" ")[1]} will ${goal.behavior} with ${goal.accuracy}% accuracy.`})
     const [errors, setErrors] = useState();
     const createObjective = useRef(null);
 
@@ -19,31 +20,11 @@ function Objectives({ student, goal }) {
         e.preventDefault();
         setErrors();
 
-        const callback = (o) => {
-            setUser({
-                ...user, students: [
-                    ...user.students.map((s) => s.id === student.id
-                        ? { ...s, goals: [
-                            ...s.goals.map((g) => g.id === id
-                                ? { ...g, objectives: [...g.objectives, o] }
-                                : g
-                            )
-                        ]} 
-                        : s
-                    )
-                ]
-            });
-            setStudents([
-                ...students.map((s) => s.id === student.id
-                    ? { ...s, goals: [
-                        ...s.goals.map((g) => g.id === id
-                            ? { ...g, objectives: [...g.objectives, o] }
-                            : g
-                        )
-                    ]} 
-                    : s
-                )
-            ]);
+        const callback = (newObjective) => {
+            const updatedGoal = { ...goal, objectives: [...goal.objectives, newObjective] };
+            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === id ? updatedGoal : g)]};
+            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
+            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
             createObjective.current.close();
         }
         submit(`/goals/${id}/objectives`, 'POST', objectiveForm, callback, setErrors);
@@ -57,10 +38,7 @@ function Objectives({ student, goal }) {
                     <h4>Objectives</h4>
                 </div>
                 <Button 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        createObjective.current.showModal();
-                    }}
+                    onClick={(e) => {createObjective.current.showModal()}}
                 >
                     <i 
                         style={{padding: '0 4px'}}
@@ -86,9 +64,7 @@ function Objectives({ student, goal }) {
                             onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
                             />
                         <InputSubmit type="Submit" value="Submit" />
-                        <ul className="errors">
-                            {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                        </ul>
+                        <Errors errors={errors} />
                     </form>
                 </div>
             </Modal>

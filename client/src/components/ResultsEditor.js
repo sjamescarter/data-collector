@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components';
 import { handleChange } from './utilities';
+import Errors from './Errors';
 
 function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
     const [goalForm, setGoalForm] = useState({goal, correct: "", total: ""});
@@ -51,9 +52,7 @@ function ResultsEditor({ student, goal, setEditResults, handleUpdate }) {
             <StyledSubmit type="submit" value="Save" />
             <Button onClick={() => setEditResults(false)}>Cancel</Button>
             </div>
-            <ul className="errors">
-                {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-            </ul>
+            <Errors errors={errors} />
         </form>
     );
 }
@@ -84,7 +83,6 @@ const StyledSubmit = styled.input`
     margin: 5px;
     cursor: pointer;
 `
-
 const Button = styled.button`
     background-color: #f8f8f8;
     color: #6a8532;
@@ -96,5 +94,4 @@ const Button = styled.button`
     margin: 5px;
     cursor: pointer;
 `
-
 export default ResultsEditor;

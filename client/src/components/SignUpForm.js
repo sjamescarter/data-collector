@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { handleChange } from './utilities';
+import Errors from './Errors';
 
 const formFields = {
     first_name: "",
@@ -107,9 +108,7 @@ function SignUpForm({ onLogin, loadApp }) {
 
                 <input type="submit" className="input-submit" value="Sign Up" />
             </form>
-            <ul className="errors">
-                {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-            </ul>
+            <Errors errors={errors} />
         </div>
     );
 }

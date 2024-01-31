@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormContainer, Header, InputContainer, InputIcon, InputSubmit } from '../styles/';
 import { handleChange } from '../components/utilities';
+import Errors from '../components/Errors';
 
 const newStudentForm = {firstName: "", lastName: "", gradeLevel: ""}
 
@@ -13,8 +14,8 @@ function NewStudent({ newForm=newStudentForm }) {
     const { name } = useParams();
     if(name) {
         newForm = { 
-            firstName: name.split(" ")[0], 
-            lastName: name.split(" ")[1] || "",
+            firstName: name.split(" ")[1], 
+            lastName: name.split(" ")[0] || "",
             gradeLevel: ""
         }
     }
@@ -28,7 +29,7 @@ function NewStudent({ newForm=newStudentForm }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        setErrors([]);
+        setErrors();
         fetch("/students", {
             method: "POST",
             headers: {
@@ -45,7 +46,7 @@ function NewStudent({ newForm=newStudentForm }) {
                 r.json().then((student) => {
                     setStudents([...students, student])
                     setForm(newStudentForm);
-                    navigate(`/goals/new/students/${student.id}`);
+                    navigate(`/students/${student.id}`);
                 });
             } else {
                 r.json().then((err) => setErrors(err.errors))
@@ -73,9 +74,7 @@ function NewStudent({ newForm=newStudentForm }) {
                         <InputSubmit  type="submit" value="Create Student" />
                     </InputContainer>
                 </form>
-                <ul className="errors">
-                    {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                </ul>
+                <Errors errors={errors} />
             </FormContainer>
         </>
     );

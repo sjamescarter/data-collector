@@ -1,49 +1,61 @@
-import { useContext } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
-import { Header } from '../styles'
-import { destroy } from '../components/fetch';
+import { Header, InputSubmit } from '../styles'
+import { destroy, submit } from '../components/fetch';
 import GoalCard from '../components/GoalCard';
+import Modal from '../components/Modal';
+import GoalEditor from '../components/GoalEditor';
+import Errors from '../components/Errors';
 
 function Student() {
     const { user, setUser, students, setStudents } = useContext(UserContext);
     const { studentId, goalId } = useParams();
-    const id = parseInt(studentId)
-
+    const id = parseInt(studentId);
     const navigate = useNavigate();
-    const student = user.students.find((student) => student.id === id);
+    
+    const [errors, setErrors] = useState();
+    
+    const createGoal = useRef(null);
+
+    if(!students) { return <h1>Loading...</h1>}
+    const student = students.find((s) => s.id === id);
     
     if(!student) { return <h1>Student not found</h1>}
 
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
 
-    function handleUpdate(updatedGoal) {
-        const goals = student.goals.map((goal) => goal.id === updatedGoal.id ? updatedGoal : goal);
+    function handleSubmit(e, goalForm) {
+        e.preventDefault();
+        setErrors();
+        
+        const callback = (newGoal) => {
+            const updatedGoals = [...student.goals, newGoal];
+            const updatedStudent = { ...student, goals: updatedGoals };
+            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
+            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
+            createGoal.current.close();
+        }
 
-        setUser({ ...user, students: [
-            ...user.students.map((student) => student.id === id 
-            ? {...student, goals: [...goals]} 
-            : student)
-        ]});
+        submit('/goals', 'POST', goalForm, callback, setErrors);
+    }
+
+    function handleUpdate(updatedGoal) {
+        const updatedGoals = [...student.goals.map((g) => g.id === updatedGoal.id ? updatedGoal : g)];
+        const updatedStudent = { ...student, goals: updatedGoals };        
+        setUser({ ...user, students: [...user.students.map((s) => s.id === id ? updatedStudent : s)]});
+        setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
     }
 
     function handleDelete(goalId) {
-        const goals = student.goals.filter((goal) => goal.id !== goalId)
+        const updatedGoals = [...student.goals.filter((goal) => goal.id !== goalId)];
 
         const callback = () => {
             filteredGoals.length === 1 
-            ? setUser({ ...user, students: [
-                ...user.students.filter((student) => student.id !== id)]})
-            : setUser({ ...user, students: [
-                ...user.students.map((student) => student.id === id
-                ? {...student, goals}
-                : student
-                )]});
-            setStudents([...students.map((student) => student.id === id
-                ? {...student, goals}
-                : student
-            )]);
+                ? setUser({ ...user, students: [...user.students.filter((student) => student.id !== id)]})
+                : setUser({ ...user, students: [...user.students.map((s) => s.id === id ? { ...s, goals: updatedGoals } : s)] });
+            setStudents([...students.map((s) => s.id === id ? { ...s, goals: updatedGoals } : s)]);
         }
 
         destroy('/goals/' + goalId, callback);
@@ -56,7 +68,7 @@ function Student() {
                     <Name onClick={() => navigate(`/students/${student.id}`)}>{student.name}</Name>
                     <small style={{position: "absolute", bottom: ".5em"}}>Grade: {student.grade_level}</small>
                 </div>
-                <Button onClick={() => navigate(`/goals/new/students/${student.id}`)}>
+                <Button onClick={() => createGoal.current.showModal()}>
                     <i 
                         style={{padding: '0 6px'}}
                         className="material-icons" 
@@ -74,12 +86,28 @@ function Student() {
                             <GoalCard 
                                 key={goal.id} 
                                 goal={goal} 
-                                student={student} 
                             />
                         )}
                     </>
                 }
             </Container>
+            <Modal ref={createGoal}>
+                <GoalEditor 
+                    student={student}
+                    goal={{
+                        student_id: student.id,
+                        subject: "",
+                        condition: "", 
+                        behavior: "", 
+                        accuracy: "", 
+                        measurement: ""
+                    }}
+                    onSubmit={handleSubmit}
+                >
+                    <InputSubmit type="submit" value="Create Goal" />
+                    <Errors errors={errors} />
+                </GoalEditor>
+            </Modal>
         </>
     );
 }
@@ -92,10 +120,6 @@ const Container = styled.div`
     font-size: 1.25em;
     margin: auto;
     margin-top: .5em;
-    opacity: .9;
-    &:hover {
-        opacity: 1;
-    }
 `
 const Name = styled.h1`
     &:hover {

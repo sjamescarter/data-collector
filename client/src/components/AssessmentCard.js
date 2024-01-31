@@ -6,12 +6,16 @@ import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 import Warn from "./Warn";
 import styled from "styled-components";
-import { I } from "../styles";
 import { handleChange } from "./utilities";
+import Errors from "./Errors";
 
 function AssessmentCard({ assessment, objectiveId }) {
     const { studentId, goalId } = useParams();
     const { user, setUser, students, setStudents } = useContext(UserContext);
+    const student = user.students.find((s) => s.id === parseInt(studentId))
+    const goal = student.goals.find((g) => g.id === parseInt(goalId));
+    const objective = goal.objectives.find((o) => o.id === objectiveId);
+
     const warnModal = useRef(null);
     const closeModal = () => warnModal.current.close();
 
@@ -24,37 +28,13 @@ function AssessmentCard({ assessment, objectiveId }) {
         e.preventDefault();
         setErrors();
 
-        const callback = (objective) => {
-            setUser({
-                ...user, students: [...user.students.map((s) => s.id === parseInt(studentId)
-                    ? { ...s, goals: [...s.goals.map((g) => g.id === parseInt(goalId)
-                        ? { ...g, objectives: [...g.objectives.map((o) => o.id === objectiveId
-                            ? { ...o, result: objective.result, assessments: [...o.assessments.map((a) => a.id === assessment.id
-                                ? objective.assessments.find((a) => a.id === assessment.id)
-                                : a
-                            )]}
-                            : o
-                        )]}
-                        : g
-                    )]}
-                    : s
-                )]
-            });
-            setStudents([
-                ...students.map((s) => s.id === parseInt(studentId)
-                    ? { ...s, goals: [...s.goals.map((g) => g.id === parseInt(goalId)
-                        ? { ...g, objectives: [...g.objectives.map((o) => o.id === objectiveId
-                            ? { ...o, result: objective.result, assessments: [...o.assessments.map((a) => a.id === assessment.id
-                                ? objective.assessments.find((a) => a.id === assessment.id)
-                                : a
-                            )]}
-                            : o
-                        )]}
-                        : g
-                    )]}
-                    : s
-                )
-            ]);            
+        const callback = (returnedObjective) => {
+            const updatedAssessment = returnedObjective.assessments.find((a) => a.id === assessment.id);
+            const updatedObjective = { ...objective, result: returnedObjective.result, assessments: [...objective.assessments.map((a) => a.id === assessment.id ? updatedAssessment : a)] };
+            const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
+            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
+            setUser({ ...user, students: [...students.map((s) => s.id === student.id ? updatedStudent : s)] });
+            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);            
             setIsEditing(false);
         }
 
@@ -67,30 +47,12 @@ function AssessmentCard({ assessment, objectiveId }) {
 
     function handleDelete() {
         const callback = () => {
-            setUser({
-                ...user, students: [...user.students.map((s) => s.id === parseInt(studentId)
-                    ? { ...s, goals: [...s.goals.map((g) => g.id === parseInt(goalId)
-                        ? { ...g, objectives: [...g.objectives.map((o) => o.id === objectiveId
-                            ? { ...o, assessments: [...o.assessments.filter((a) => a.id !== assessment.id)]}
-                            : o
-                        )]}
-                        : g
-                    )]}
-                    : s
-                )]
-            });
-            setStudents([
-                ...students.map((s) => s.id === parseInt(studentId)
-                    ? { ...s, goals: [...s.goals.map((g) => g.id === parseInt(goalId)
-                        ? { ...g, objectives: [...g.objectives.map((o) => o.id === objectiveId
-                            ? { ...o, assessments: [...o.assessments.filter((a) => a.id !== assessment.id)]}
-                            : o
-                        )]}
-                        : g
-                    )]}
-                    : s
-                )
-            ]);
+            const updatedAssessments = [...objective.assessments.filter((a) => a.id !== assessment.id)];
+            const updatedObjective = { ...objective, assessments: updatedAssessments };
+            const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
+            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
+            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
+            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
         }
 
         destroy(`/assessments/${assessment.id}`, callback);
@@ -106,9 +68,7 @@ function AssessmentCard({ assessment, objectiveId }) {
                         <input type="number" name="total" value={assessmentForm.total} onChange={(e) => handleChange(assessmentForm, setAssessmentForm, e)} />
                         trials
                         <input type="submit" value="save" />
-                        <ul className="errors">
-                        {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                    </ul>
+                        <Errors errors={errors} />
                     </form>
                     : <div>{assessment.correct} correct of {assessment.total} trials</div>
                 }
@@ -133,5 +93,4 @@ const Li = styled.li`
     padding: 4px 4px 4px 10px;
     margin: .25em 0;
 `
-
 export default AssessmentCard;

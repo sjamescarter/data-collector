@@ -12,30 +12,27 @@ function Login({ onLogin, loadApp }) {
                 <Logo>myData [Collector]</Logo>
             </div>
                 
-            {showLogin? 
-                (
-                    <div className="login">
-                        <H1>Sign In</H1>
-                        <LoginForm onLogin={onLogin} loadApp={loadApp} />
-                        <P>
-                            Need an account? 
-                            <span className="link" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
-                        </P>
-                    </div>
-            ) : (
-                    <div className="login">
-                        <H1>Sign Up</H1>
-                        <SignUpForm onLogin={onLogin} loadApp={loadApp} />
-                        <P>
-                            Already have an account? 
-                            <span className="link" onClick={() => setShowLogin(true)}>Sign In Here!</span>
-                        </P>
-                    </div>
-            )}
+            {showLogin
+                ? <div className="login">
+                    <H1>Sign In</H1>
+                    <LoginForm onLogin={onLogin} loadApp={loadApp} />
+                    <P>
+                        Need an account? 
+                        <span className="link" onClick={() => setShowLogin(false)}>Sign Up Here!</span>
+                    </P>
+                </div>
+                : <div className="login">
+                    <H1>Sign Up</H1>
+                    <SignUpForm onLogin={onLogin} loadApp={loadApp} />
+                    <P>
+                        Already have an account? 
+                        <span className="link" onClick={() => setShowLogin(true)}>Sign In Here!</span>
+                    </P>
+                </div>
+            }
         </div>
-    )
+    );
 } 
-
 
 const H1 = styled.h1`
     text-align: center;

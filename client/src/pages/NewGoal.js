@@ -6,9 +6,11 @@ import { FormContainer, Header, InputSubmit, Li } from '../styles/';
 import GoalEditor from '../components/GoalEditor';
 import { alphabetize, filter } from '../components/utilities';
 import styled from 'styled-components';
+import Errors from '../components/Errors';
 
 const newGoal = {
     student_id: "",
+    subject: "",
     condition: "", 
     behavior: "", 
     accuracy: "", 
@@ -24,7 +26,7 @@ function NewGoal({ goal=newGoal }) {
 
     const [search, setSearch] = useState("");
     const [goalForm, setGoalForm] = useState(goal);
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState();
     
     const abc = alphabetize(students);
     const filtered = filter(abc, search);
@@ -32,7 +34,7 @@ function NewGoal({ goal=newGoal }) {
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
-        setErrors([]);
+        setErrors();
         fetch('/goals', {
             method: 'POST',
             headers: {
@@ -45,11 +47,13 @@ function NewGoal({ goal=newGoal }) {
                 r.json()
                 .then((goal) => {
                     setUser({ ...user, students: [
-                        ...user.students.filter((s) => s.id !== student.id),
-                        {...student, goals: [...student.goals, goal]}
+                        ...user.students.map((s) => s.id === student.id
+                        ? {...s, goals: [...s.goals, goal]}
+                        : s
+                        )
                     ]});
                     setStudents([...students.map((s) => s.id === student.id
-                        ? {...student, goals: [...student.goals, goal]}
+                        ? {...s, goals: [...s.goals, goal]}
                         : s
                     )])
                     navigate(`/students/${student.id}`);
@@ -84,9 +88,7 @@ function NewGoal({ goal=newGoal }) {
                         onSubmit={handleSubmit}
                     >
                         <InputSubmit type="submit" value="Create Goal" />
-                        <ul className="errors">
-                            {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                        </ul>
+                        <Errors errors={errors} />
                     </GoalEditor>
                 </FormContainer>
                 : <Search search={search} setSearch={setSearch}>

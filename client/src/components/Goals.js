@@ -9,21 +9,22 @@ import Objectives from '../components/Objectives';
 import EditButtons from '../components/EditButtons';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
+import Errors from './Errors';
 
-// Student calls Goal
-function Goal() {
+function Goals() {
     const { user } = useContext(UserContext);
     const [onDelete, handleUpdate] = useOutletContext();
     const { studentId, goalId } = useParams();
 
-    const [errors, setErrors] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [errors, setErrors] = useState();
 
     const navigate = useNavigate();
     const showAllGoals = () => navigate(`/students/${parseInt(studentId)}`);
     const student = user.students.find((s) => s.id === parseInt(studentId))
     const goal = student.goals.find((g) => g.id === parseInt(goalId));
     
-    const editGoal = useRef(null);
+    // const editGoal = useRef(null);
     const warnModal = useRef(null);
 
     const closeWarn = () => warnModal.current.close();
@@ -36,50 +37,53 @@ function Goal() {
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
-        setErrors([]);
+        setErrors();
 
         const callback = (goal) => {
             handleUpdate(goal);
-            editGoal.current.close();
+            setIsEditing(!isEditing);
         }
 
         submit('/goals/' + goal.id, 'PATCH', goalForm, callback, setErrors);
     }
 
     return (
-        <Container>
-            <GoalHeader>
-                <div className='flex' onClick={showAllGoals}>
-                    <I className="material-icons">assignment</I>
-                    <h3>{goal.subject} Goal</h3>
-                </div>
-                <EditButtons 
-                    title="Goal" 
-                    editAction={() => editGoal.current.showModal()} 
-                    deleteAction={() => warnModal.current.showModal()} 
-                />
-            </GoalHeader>
-            <p>Given {goal.condition}, {student.name.split(" ")[0]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
-            <Objectives student={student} goal={goal} />
-            <Modal ref={editGoal}>
-                <GoalEditor 
-                    student={student} 
-                    goal={goal} 
-                    onSubmit={handleSubmit}
-                >
-                    <div>
-                        <StyledSubmit type="submit" value="Save" />
-                        <Button type="button" onClick={(e) => {e.preventDefault();editGoal.current.close()}}>Cancel</Button>
+        <>
+            <Container>
+                <GoalHeader>
+                    <div className='flex' onClick={showAllGoals}>
+                        <I className="material-icons">assignment</I>
+                        <h3>{goal.subject} Goal</h3>
                     </div>
-                    <ul className="errors">
-                        {errors ? errors.map((error) => <li key={error}>{error}</li>) : null}
-                    </ul>
-                </GoalEditor>
-            </Modal>
-            <Modal ref={warnModal}>
-                <Warn handleDelete={handleDelete} closeModal={closeWarn} />
-            </Modal>
-        </Container>
+                    <EditButtons 
+                        title="Goal" 
+                        editAction={() => setIsEditing(!isEditing)} 
+                        deleteAction={() => warnModal.current.showModal()} 
+                        />
+                </GoalHeader>
+                { isEditing
+                    ? <GoalEditor 
+                        student={student} 
+                        goal={goal} 
+                        onSubmit={handleSubmit}
+                    >
+                        <div>
+                            <StyledSubmit type="submit" value="Save" />
+                            <Button type="button" onClick={() => setIsEditing(!isEditing)}>Cancel</Button>
+                        </div>
+                        <Errors errors={errors} />
+                    </GoalEditor>
+                    : <p>Given {goal.condition}, {student.name.split(" ")[1]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
+                    
+                }
+                <Modal ref={warnModal}>
+                    <Warn handleDelete={handleDelete} closeModal={closeWarn} />
+                </Modal>
+            </Container>
+            <Container>
+                <Objectives student={student} goal={goal} />
+            </Container>
+        </>
     );
 }
 
@@ -123,4 +127,4 @@ const Button = styled.button`
     cursor: pointer;
 `
 
-export default Goal;
+export default Goals;
