@@ -1,35 +1,32 @@
 import { useState } from "react";
 import { handleChange } from "./utilities";
-import { submit } from "./fetch";
 import AssessmentCard from "./AssessmentCard";
 import styled from "styled-components";
 import Errors from "./Errors";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 function Assessments({ objective, updateObjectiveState, children }) {
     const { assessments } = objective;
     const [assessmentForm, setAssessmentForm] = useState({note: "", correct: "", total: ""})
-    const [errors, setErrors] = useState();
     // context
 
     // Create Assessment
-    function handleSubmit(e) {
-        e.preventDefault();
-        setErrors();
-
-        const callback = (objective) => {
-            updateObjectiveState(objective);
-            setAssessmentForm({note: "", correct: "", total: ""});
-        }
-
-        submit(`/objectives/${objective.id}/assessments/`, 'POST', assessmentForm, callback, setErrors);
-    }
-    // Update Assessment
+    const callback = (objective) => {
+        updateObjectiveState(objective);
+        setAssessmentForm({note: "", correct: "", total: ""});
+    };
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: `/objectives/${objective.id}/assessments/`,
+        method: 'POST',
+        form: assessmentForm,
+        callback: callback
+    });
 
     return (
         <div>
             <h1>Data</h1>
             <Li>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={onSubmit}>
                     <label htmlFor="note">Note: </label>
                     <input type="text" name="note" value={assessmentForm.note} onChange={(e) => handleChange(assessmentForm, setAssessmentForm, e)} />
                     <label htmlFor="correct">Correct Trials: </label>

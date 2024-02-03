@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import EditButtons from "./EditButtons";
-import { destroy, submit } from "./fetch";
+import { destroy } from "./fetch";
 import { UserContext } from "../context/user";
 import { useParams } from "react-router-dom";
 import Modal from "./Modal";
@@ -8,6 +8,7 @@ import Warn from "./Warn";
 import styled from "styled-components";
 import { handleChange } from "./utilities";
 import Errors from "./Errors";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 function AssessmentCard({ assessment, objectiveId }) {
     const { studentId, goalId } = useParams();
@@ -21,25 +22,24 @@ function AssessmentCard({ assessment, objectiveId }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [assessmentForm, setAssessmentForm] = useState(assessment);
-    const [errors, setErrors] = useState();
 
     // Update Assessment
-    function handleSubmit(e) {
-        e.preventDefault();
-        setErrors();
-
-        const callback = (returnedObjective) => {
-            const updatedAssessment = returnedObjective.assessments.find((a) => a.id === assessment.id);
-            const updatedObjective = { ...objective, result: returnedObjective.result, assessments: [...objective.assessments.map((a) => a.id === assessment.id ? updatedAssessment : a)] };
-            const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
-            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
-            setUser({ ...user, students: [...students.map((s) => s.id === student.id ? updatedStudent : s)] });
-            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);            
-            setIsEditing(false);
-        }
-
-        submit(`/objectives/${objectiveId}/assessments/${assessment.id}`, 'PATCH', assessmentForm, callback, setErrors)
+    const callback = (returnedObjective) => {
+        const updatedAssessment = returnedObjective.assessments.find((a) => a.id === assessment.id);
+        const updatedObjective = { ...objective, result: returnedObjective.result, assessments: [...objective.assessments.map((a) => a.id === assessment.id ? updatedAssessment : a)] };
+        const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
+        const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
+        setUser({ ...user, students: [...students.map((s) => s.id === student.id ? updatedStudent : s)] });
+        setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);            
+        setIsEditing(false);
     }
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: `/objectives/${objectiveId}/assessments/${assessment.id}`,
+        method: 'PATCH',
+        form: assessmentForm,
+        callback: callback
+    });
+
     // Destroy Assessment
     function onDelete() {
         warnModal.current.showModal();
@@ -62,7 +62,7 @@ function AssessmentCard({ assessment, objectiveId }) {
         <>
             <Li>
                 {isEditing
-                    ? <form onSubmit={(e) => handleSubmit(e)}>
+                    ? <form onSubmit={onSubmit}>
                         <input type="number" name="correct" value={assessmentForm.correct} onChange={(e) => handleChange(assessmentForm, setAssessmentForm, e)} />
                         correct of 
                         <input type="number" name="total" value={assessmentForm.total} onChange={(e) => handleChange(assessmentForm, setAssessmentForm, e)} />

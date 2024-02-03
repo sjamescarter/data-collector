@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { UserContext } from "../context/user";
-import { destroy, submit } from "./fetch";
+import { destroy } from "./fetch";
 import styled from "styled-components";
 import EditButtons from "./EditButtons";
 import Modal from "./Modal";
@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { handleChange } from "./utilities";
 import Assessments from "./Assessments";
 import Errors from "./Errors";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 function ObjectiveCard({ objective }) {
     const { studentId, goalId } = useParams();
@@ -23,7 +24,6 @@ function ObjectiveCard({ objective }) {
 
     // state
     const [objectiveForm, setObjectiveForm] = useState({description: objective.description})
-    const [errors, setErrors] = useState();
 
     // Update Objective
     const updateObjectiveState = (updatedObjective) => {
@@ -33,17 +33,17 @@ function ObjectiveCard({ objective }) {
         setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
     }
 
-    function handleUpdate(e) {
-        e.preventDefault();
-        setErrors();
-
-        const callback = (updatedObjective) => {
-            updateObjectiveState(updatedObjective);
-            editObjective.current.close();
-        }
-
-        submit(`/objectives/${objective.id}`, "PATCH", objectiveForm, callback, setErrors);
+    const callback = (updatedObjective) => {
+        updateObjectiveState(updatedObjective);
+        editObjective.current.close();
     }
+
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: `/objectives/${objective.id}`,
+        method: 'PATCH',
+        form: objectiveForm,
+        callback: callback
+    });
 
     // Delete Objective
     function handleDelete() {
@@ -77,7 +77,7 @@ function ObjectiveCard({ objective }) {
             </Modal>
             <Modal ref={editObjective}>
                 <div>
-                    <form onSubmit={(e) => handleUpdate(e)}>
+                    <form onSubmit={onSubmit}>
                         <h1>Edit Objective</h1>
                         <textarea 
                             name="description" 

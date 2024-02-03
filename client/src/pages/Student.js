@@ -58,7 +58,7 @@ function Student() {
             setStudents([...students.map((s) => s.id === id ? { ...s, goals: updatedGoals } : s)]);
         }
 
-        destroy('/goals/' + goalId, callback);
+        destroy(`/goals/${goalId}`, callback);
     }
 
     return (
