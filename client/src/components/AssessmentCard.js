@@ -9,50 +9,40 @@ import styled from "styled-components";
 import { handleChange } from "./utilities";
 import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
+import useUpdate from "../hooks/useUpdate";
+import useModal from "../hooks/useModal";
 
-function AssessmentCard({ assessment, objectiveId }) {
+function AssessmentCard({ assessment, objectiveId, updateObjectiveState }) {
     const { studentId, goalId } = useParams();
-    const { user, setUser, students, setStudents } = useContext(UserContext);
-    const student = user.students.find((s) => s.id === parseInt(studentId))
+    const { user } = useContext(UserContext);
+    const student = user.students.find((s) => s.id === parseInt(studentId)) 
     const goal = student.goals.find((g) => g.id === parseInt(goalId));
     const objective = goal.objectives.find((o) => o.id === objectiveId);
 
-    const warnModal = useRef(null);
-    const closeModal = () => warnModal.current.close();
+    const updateObjective = useUpdate(objective, 'assessments');
 
+    const warning = useModal();
+
+    // State
     const [isEditing, setIsEditing] = useState(false);
     const [assessmentForm, setAssessmentForm] = useState(assessment);
 
     // Update Assessment
-    const callback = (returnedObjective) => {
-        const updatedAssessment = returnedObjective.assessments.find((a) => a.id === assessment.id);
-        const updatedObjective = { ...objective, result: returnedObjective.result, assessments: [...objective.assessments.map((a) => a.id === assessment.id ? updatedAssessment : a)] };
-        const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
-        const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
-        setUser({ ...user, students: [...students.map((s) => s.id === student.id ? updatedStudent : s)] });
-        setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);            
-        setIsEditing(false);
-    }
     const { errors, onSubmit } = useHandleSubmit({
         endpoint: `/objectives/${objectiveId}/assessments/${assessment.id}`,
         method: 'PATCH',
         form: assessmentForm,
-        callback: callback
+        callback: (returnedObjective) => {
+            updateObjectiveState(returnedObjective);            
+            setIsEditing(false);
+        }
     });
 
     // Destroy Assessment
-    function onDelete() {
-        warnModal.current.showModal();
-    }
-
     function handleDelete() {
         const callback = () => {
-            const updatedAssessments = [...objective.assessments.filter((a) => a.id !== assessment.id)];
-            const updatedObjective = { ...objective, assessments: updatedAssessments };
-            const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
-            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
-            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
-            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
+            const updatedObjective = updateObjective.updateWithout(assessment.id);
+            updateObjectiveState(updatedObjective);
         }
 
         destroy(`/assessments/${assessment.id}`, callback);
@@ -72,10 +62,10 @@ function AssessmentCard({ assessment, objectiveId }) {
                     </form>
                     : <div>{assessment.correct} correct of {assessment.total} trials</div>
                 }
-                <EditButtons title="Assessment" editAction={() => setIsEditing(!isEditing)} deleteAction={onDelete} />
+                <EditButtons title="Assessment" editAction={() => setIsEditing(!isEditing)} deleteAction={warning.open} />
             </Li>
-            <Modal ref={warnModal}>
-                <Warn handleDelete={handleDelete} closeModal={closeModal}/>
+            <Modal ref={warning.ref}>
+                <Warn handleDelete={handleDelete} closeModal={warning.close}/>
             </Modal>
         </>
     );

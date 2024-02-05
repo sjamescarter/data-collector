@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
@@ -8,6 +8,8 @@ import GoalCard from '../components/GoalCard';
 import Modal from '../components/Modal';
 import GoalEditor from '../components/GoalEditor';
 import Errors from '../components/Errors';
+import useUpdate from '../hooks/useUpdate';
+import useModal from '../hooks/useModal';
 
 function Student() {
     const { user, setUser, students, setStudents } = useContext(UserContext);
@@ -15,47 +17,46 @@ function Student() {
     const id = parseInt(studentId);
     const navigate = useNavigate();
     
+    const student = user.students.find((s) => s.id === parseInt(studentId)) 
+    const updateStudent = useUpdate(student, 'goals');
+    const updateUser = useUpdate(user, 'students');
+    
     const [errors, setErrors] = useState();
     
-    const createGoal = useRef(null);
-
+    const createGoal = useModal();
+    
     if(!students) { return <h1>Loading...</h1>}
-    const student = students.find((s) => s.id === id);
     
     if(!student) { return <h1>Student not found</h1>}
 
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
+
+    function handleUpdate(updatedGoal) {  
+        const updatedStudent = updateStudent.updateWith(updatedGoal);     
+        setUser(updateUser.updateWith(updatedStudent));
+        setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
+    }
 
     function handleSubmit(e, goalForm) {
         e.preventDefault();
         setErrors();
         
         const callback = (newGoal) => {
-            const updatedGoals = [...student.goals, newGoal];
-            const updatedStudent = { ...student, goals: updatedGoals };
-            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
-            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
-            createGoal.current.close();
+            handleUpdate(newGoal);
+            createGoal.close();
         }
 
         submit('/goals', 'POST', goalForm, callback, setErrors);
     }
 
-    function handleUpdate(updatedGoal) {
-        const updatedGoals = [...student.goals.map((g) => g.id === updatedGoal.id ? updatedGoal : g)];
-        const updatedStudent = { ...student, goals: updatedGoals };        
-        setUser({ ...user, students: [...user.students.map((s) => s.id === id ? updatedStudent : s)]});
-        setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
-    }
-
     function handleDelete(goalId) {
-        const updatedGoals = [...student.goals.filter((goal) => goal.id !== goalId)];
+        const updatedStudent = updateStudent.updateWithout(goalId);
 
         const callback = () => {
             filteredGoals.length === 1 
                 ? setUser({ ...user, students: [...user.students.filter((student) => student.id !== id)]})
-                : setUser({ ...user, students: [...user.students.map((s) => s.id === id ? { ...s, goals: updatedGoals } : s)] });
-            setStudents([...students.map((s) => s.id === id ? { ...s, goals: updatedGoals } : s)]);
+                : setUser(updateUser.updateWith(updatedStudent));
+            setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
         }
 
         destroy(`/goals/${goalId}`, callback);
@@ -68,7 +69,7 @@ function Student() {
                     <Name onClick={() => navigate(`/students/${student.id}`)}>{student.name}</Name>
                     <small style={{position: "absolute", bottom: ".5em"}}>Grade: {student.grade_level}</small>
                 </div>
-                <Button onClick={() => createGoal.current.showModal()}>
+                <Button onClick={createGoal.open}>
                     <i 
                         style={{padding: '0 6px'}}
                         className="material-icons" 
@@ -91,7 +92,7 @@ function Student() {
                     </>
                 }
             </Container>
-            <Modal ref={createGoal}>
+            <Modal ref={createGoal.ref}>
                 <GoalEditor 
                     student={student}
                     goal={{
@@ -105,6 +106,7 @@ function Student() {
                     onSubmit={handleSubmit}
                 >
                     <InputSubmit type="submit" value="Create Goal" />
+                    <button onClick={createGoal.close}>cancel</button>
                     <Errors errors={errors} />
                 </GoalEditor>
             </Modal>

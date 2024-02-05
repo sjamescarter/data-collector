@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from "styled-components";
 import { I } from "../styles/index"
 import { submit } from '../components/fetch';
@@ -10,6 +10,7 @@ import EditButtons from '../components/EditButtons';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import Errors from './Errors';
+import useModal from '../hooks/useModal';
 
 function Goals() {
     const { user } = useContext(UserContext);
@@ -24,14 +25,11 @@ function Goals() {
     const student = user.students.find((s) => s.id === parseInt(studentId))
     const goal = student.goals.find((g) => g.id === parseInt(goalId));
     
-    // const editGoal = useRef(null);
-    const warnModal = useRef(null);
-
-    const closeWarn = () => warnModal.current.close();
+    const warning = useModal();
 
     const handleDelete = () => {
         onDelete(goal.id);
-        closeWarn();
+        warning.close();
         showAllGoals();
     }
 
@@ -58,7 +56,7 @@ function Goals() {
                     <EditButtons 
                         title="Goal" 
                         editAction={() => setIsEditing(!isEditing)} 
-                        deleteAction={() => warnModal.current.showModal()} 
+                        deleteAction={warning.open} 
                         />
                 </GoalHeader>
                 { isEditing
@@ -76,8 +74,8 @@ function Goals() {
                     : <p>Given {goal.condition}, {student.name.split(" ")[1]} will {goal.behavior} with {goal.accuracy}% accuracy as measured by {goal.measurement} by the next annual review.</p>
                     
                 }
-                <Modal ref={warnModal}>
-                    <Warn handleDelete={handleDelete} closeModal={closeWarn} />
+                <Modal ref={warning.ref}>
+                    <Warn handleDelete={handleDelete} closeModal={warning.close} />
                 </Modal>
             </Container>
             <Container>

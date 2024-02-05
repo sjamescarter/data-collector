@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/user";
 import styled from "styled-components";
 import { I, InputSubmit } from "../styles";
@@ -7,18 +7,26 @@ import Modal from "./Modal";
 import { handleChange } from "./utilities";
 import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
+import useUpdate from "../hooks/useUpdate";
+import useModal from "../hooks/useModal";
 
 function Objectives({ student, goal }) {
     const { id, objectives } = goal;
     const { user, setUser, students, setStudents } = useContext(UserContext);
     const [objectiveForm, setObjectiveForm] = useState({description: `Given ${goal.condition}, ${student.name.split(" ")[1]} will ${goal.behavior} with ${goal.accuracy}% accuracy.`})
-    const createObjective = useRef(null);
     
+    // Modal
+    const createObjective = useModal();
+    
+    const updateGoal = useUpdate(goal, 'objectives');
+    const updateStudent = useUpdate(student, 'goals');
+    const updateUser = useUpdate(user, 'students');
+
     // Create Objective
-    const callback = (newObjective) => {
-        const updatedGoal = { ...goal, objectives: [...goal.objectives, newObjective] };
-        const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === id ? updatedGoal : g)]};
-        setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)] });
+    const updateObjectiveState = (newObjective) => {
+        const updatedGoal = updateGoal.updateWith(newObjective);
+        const updatedStudent = updateStudent.updateWith(updatedGoal);
+        setUser(updateUser.updateWith(updatedStudent));
         setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
         createObjective.current.close();
     } 
@@ -26,7 +34,7 @@ function Objectives({ student, goal }) {
         endpoint: `/goals/${id}/objectives`,
         method: 'POST',
         form: objectiveForm,
-        callback: callback
+        callback: updateObjectiveState
     });
 
     return (
@@ -37,7 +45,7 @@ function Objectives({ student, goal }) {
                     <h4>Objectives</h4>
                 </div>
                 <Button 
-                    onClick={(e) => {createObjective.current.showModal()}}
+                    onClick={createObjective.open}
                 >
                     <i 
                         style={{padding: '0 4px'}}
@@ -49,23 +57,21 @@ function Objectives({ student, goal }) {
                 </Button>
             </div>
             {objectives.length > 0
-                ? objectives.map((obj) => <ObjectiveCard key={obj.id} objective={obj} goalID={id} />)
+                ? objectives.map((obj) => <ObjectiveCard key={obj.id} objective={obj} goalID={id} updateObjectiveState={updateObjectiveState} />)
                 : null
             }
-            <Modal ref={createObjective}>
-                <div>
-                    <form onSubmit={onSubmit}>
-                        <h1>Create Objective</h1>
-                        <textarea 
-                            name="description" 
-                            rows={10}
-                            value={objectiveForm.description} 
-                            onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
-                            />
-                        <InputSubmit type="Submit" value="Submit" />
-                        <Errors errors={errors} />
-                    </form>
-                </div>
+            <Modal ref={createObjective.ref}>
+                <form onSubmit={onSubmit}>
+                    <h1>Create Objective</h1>
+                    <textarea 
+                        name="description" 
+                        rows={10}
+                        value={objectiveForm.description} 
+                        onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
+                        />
+                    <InputSubmit type="Submit" value="Submit" />
+                    <Errors errors={errors} />
+                </form>
             </Modal>
         </>
     );

@@ -10,49 +10,47 @@ import { handleChange } from "./utilities";
 import Assessments from "./Assessments";
 import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
+import useUpdate from "../hooks/useUpdate";
+import useModal from "../hooks/useModal";
 
-function ObjectiveCard({ objective }) {
+function ObjectiveCard({ objective, updateObjectiveState }) {
     const { studentId, goalId } = useParams();
-    const addData = useRef(null);
-    const editObjective = useRef(null);
-    const deleteObjective = useRef(null);
-
-    // context
     const { user, setUser, students, setStudents } = useContext(UserContext);
-    const student = user.students.find((s) => s.id === parseInt(studentId));
+
+    const student = user.students.find((s) => s.id === parseInt(studentId)); 
     const goal = student.goals.find((g) => g.id === parseInt(goalId));
 
-    // state
+    const updateGoal = useUpdate(goal, 'objectives');
+    const updateStudent = useUpdate(student, 'goals');
+    const updateUser = useUpdate(user, 'students');
+
+    // Modals
+    const addData = useModal();
+    const editObjective = useModal();
+    const deleteObjective = useModal();
+
+    // State
     const [objectiveForm, setObjectiveForm] = useState({description: objective.description})
 
     // Update Objective
-    const updateObjectiveState = (updatedObjective) => {
-        const updatedGoal = { ...goal, objectives: [...goal.objectives.map((o) => o.id === objective.id ? updatedObjective : o)] };
-        const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] };
-        setUser({...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)]});
-        setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
-    }
-
-    const callback = (updatedObjective) => {
-        updateObjectiveState(updatedObjective);
-        editObjective.current.close();
-    }
-
     const { errors, onSubmit } = useHandleSubmit({
         endpoint: `/objectives/${objective.id}`,
         method: 'PATCH',
         form: objectiveForm,
-        callback: callback
+        callback: (updatedObjective) => {
+            updateObjectiveState(updatedObjective);
+            editObjective.close();
+        }
     });
 
     // Delete Objective
     function handleDelete() {
         const callback = () => {
-            const updatedGoal = { ...goal, objectives: [...goal.objectives.filter((o) => o.id !== objective.id)]}
-            const updatedStudent = { ...student, goals: [...student.goals.map((g) => g.id === goal.id ? updatedGoal : g)] }
-            setUser({ ...user, students: [...user.students.map((s) => s.id === student.id ? updatedStudent : s)]});
-            setStudents([...user.students.map((s) => s.id === student.id ? updatedStudent : s)]);
-            deleteObjective.current.close();
+            const updatedGoal = updateGoal.updateWithout(objective.id);
+            const updatedStudent = updateStudent.updateWith(updatedGoal);
+            setUser(updateUser.updateWith(updatedStudent));
+            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
+            deleteObjective.close();
         }
 
         destroy(`/objectives/${objective.id}`, callback);
@@ -65,34 +63,32 @@ function ObjectiveCard({ objective }) {
                 <Circle>{objective.result || "No Data"}</Circle>
                 <EditButtons 
                     title="Objective" 
-                    addData={() => addData.current.showModal()}
-                    editAction={() => editObjective.current.showModal()} 
-                    deleteAction={() => deleteObjective.current.showModal()} 
+                    addData={addData.open}
+                    editAction={editObjective.open} 
+                    deleteAction={deleteObjective.open} 
                     />
             </Group>
-            <Modal ref={addData}>
+            <Modal ref={addData.ref}>
                 <Assessments objective={objective} updateObjectiveState={updateObjectiveState}>
-                    <button onClick={() => addData.current.close()}>Close</button>
+                    <button onClick={addData.close}>Close</button>
                 </Assessments>
             </Modal>
-            <Modal ref={editObjective}>
-                <div>
-                    <form onSubmit={onSubmit}>
-                        <h1>Edit Objective</h1>
-                        <textarea 
-                            name="description" 
-                            rows={10}
-                            value={objectiveForm.description} 
-                            onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
-                            />
-                        <input type="Submit" value="Submit" />
-                        <button type="button" onClick={() => editObjective.current.close()}>Cancel</button>
-                        <Errors errors={errors} />
-                    </form>
-                </div>
+            <Modal ref={editObjective.ref}>
+                <form onSubmit={onSubmit}>
+                    <h1>Edit Objective</h1>
+                    <textarea 
+                        name="description" 
+                        rows={10}
+                        value={objectiveForm.description} 
+                        onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
+                        />
+                    <input type="Submit" value="Submit" />
+                    <button type="button" onClick={editObjective.close}>Cancel</button>
+                    <Errors errors={errors} />
+                </form>
             </Modal>
-            <Modal ref={deleteObjective}>
-                <Warn handleDelete={handleDelete} closeModal={() => deleteObjective.current.close()}/>
+            <Modal ref={deleteObjective.ref}>
+                <Warn handleDelete={handleDelete} closeModal={deleteObjective.close}/>
             </Modal>
         </Container>
     );

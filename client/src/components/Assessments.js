@@ -5,21 +5,21 @@ import styled from "styled-components";
 import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
 
+const newAssessment = {note: "", correct: "", total: ""}
+
 function Assessments({ objective, updateObjectiveState, children }) {
     const { assessments } = objective;
-    const [assessmentForm, setAssessmentForm] = useState({note: "", correct: "", total: ""})
-    // context
+    const [assessmentForm, setAssessmentForm] = useState(newAssessment);
 
     // Create Assessment
-    const callback = (objective) => {
-        updateObjectiveState(objective);
-        setAssessmentForm({note: "", correct: "", total: ""});
-    };
     const { errors, onSubmit } = useHandleSubmit({
         endpoint: `/objectives/${objective.id}/assessments/`,
         method: 'POST',
         form: assessmentForm,
-        callback: callback
+        callback: (objective) => {
+            updateObjectiveState(objective);
+            setAssessmentForm(newAssessment);
+        }
     });
 
     return (
@@ -37,7 +37,12 @@ function Assessments({ objective, updateObjectiveState, children }) {
                     <Errors errors={errors} />
                 </form>
             </Li>
-            {assessments.map((assessment) => <AssessmentCard key={assessment.id} assessment={assessment} objectiveId={objective.id} />)}
+            {assessments.map((a) => <AssessmentCard
+                key={a.id} 
+                assessment={a} 
+                objectiveId={objective.id} 
+                updateObjectiveState={updateObjectiveState} 
+            />)}
             {children}
         </div>
     );
