@@ -1,15 +1,14 @@
 import { useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserContext } from "./context/user";
+import { get } from "./components/fetch";
 import Dashboard from "./pages/Dashboard";
+import Goal from "./components/Goal";
 import Login from "./pages/Login";
 import MyStudents from "./pages/MyStudents";
 import NavBar from "./components/NavBar";
-import NewGoal from "./pages/NewGoal";
 import NewStudent from "./pages/NewStudent";
 import Student from "./pages/Student"
-import { get } from "./components/fetch";
-import Goal from "./pages/Goal";
 
 function App() {
   const { user, setUser, students, setStudents } = useContext(UserContext);
@@ -34,12 +33,8 @@ console.log(students)
             <Route path="/students/:studentId" element={<Student />}>
               <Route path="goals/:goalId" element={<Goal />} />
             </Route>
-            <Route path="/goals/:id" element={<Goal />} />
             <Route path="/students/new" element={<NewStudent />}>
               <Route path=":name" element={<NewStudent />} />
-            </Route>
-            <Route path="/goals/new" element={<NewGoal />}>
-              <Route path="students/:id" element={<NewGoal />} />
             </Route>
           </Routes>
         </div>
