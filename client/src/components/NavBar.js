@@ -33,10 +33,6 @@ function NavBar() {
                 <Icon className="material-icons">groups</Icon>
                 My Students
             </StyledNavLink>
-            <StyledNavLink to="/goals/new" className={activate}>
-                <Icon className="material-icons">assignment_add</Icon>
-                New Goal
-            </StyledNavLink>
             <SignOutButton onClick={handleLogout}>
                 <Icon className="material-icons">logout</Icon>
                 Sign Out
