@@ -1,8 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useState } from "react";
 import EditButtons from "./EditButtons";
 import { destroy } from "./fetch";
-import { UserContext } from "../context/user";
-import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 import Warn from "./Warn";
 import styled from "styled-components";
@@ -12,15 +10,10 @@ import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
 
-function AssessmentCard({ assessment, objectiveId, updateObjectiveState }) {
-    const { studentId, goalId } = useParams();
-    const { user } = useContext(UserContext);
-    const student = user.students.find((s) => s.id === parseInt(studentId)) 
-    const goal = student.goals.find((g) => g.id === parseInt(goalId));
-    const objective = goal.objectives.find((o) => o.id === objectiveId);
-
+function AssessmentCard({ objective, assessment, updateObjectiveState }) {
     const updateObjective = useUpdate(objective, 'assessments');
 
+    // Modal
     const warning = useModal();
 
     // State
@@ -29,7 +22,7 @@ function AssessmentCard({ assessment, objectiveId, updateObjectiveState }) {
 
     // Update Assessment
     const { errors, onSubmit } = useHandleSubmit({
-        endpoint: `/objectives/${objectiveId}/assessments/${assessment.id}`,
+        endpoint: `/objectives/${objective.id}/assessments/${assessment.id}`,
         method: 'PATCH',
         form: assessmentForm,
         callback: (returnedObjective) => {
@@ -76,11 +69,11 @@ const Li = styled.li`
     list-style: none;
     display: flex;
     justify-content: space-between;
-    background-color: white;
+    background-color: #f8f8f8;
     box-sizing: border-box;
     border: solid 1px #999;
     border-radius: 4px;
-    padding: 4px 4px 4px 10px;
+    padding: 14px 14px 14px 10px;
     margin: .25em 0;
 `
 export default AssessmentCard;
