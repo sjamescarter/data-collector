@@ -5,11 +5,11 @@ function EditButtons({ addData, title, editAction, deleteAction }) {
         <div className="flex">
             {addData
                 ? <I 
-                className="material-icons"
-                onClick={addData}
-                title="Add Data"
+                    className="material-icons"
+                    onClick={addData}
+                    title="Add Data"
                 >
-                add_chart
+                    add_chart
                 </I>
                 : null
             }
