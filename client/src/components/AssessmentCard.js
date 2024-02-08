@@ -57,7 +57,7 @@ function AssessmentCard({ objective, assessment, updateObjectiveState }) {
                 }
                 <EditButtons title="Assessment" editAction={() => setIsEditing(!isEditing)} deleteAction={warning.open} />
             </Li>
-            <Modal ref={warning.ref}>
+            <Modal title='Delete Data' ref={warning.ref}>
                 <Warn handleDelete={handleDelete} closeModal={warning.close}/>
             </Modal>
         </>
