@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../context/user";
+import { useState } from "react";
 import styled from "styled-components";
 import { I, InputSubmit } from "../styles";
 import ObjectiveCard from "./ObjectiveCard";
@@ -9,32 +8,31 @@ import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
+import ObjectiveEditor from "./ObjectiveEditor";
 
-function Objectives({ student, goal }) {
+function Objectives({ student, goal, handleUpdate }) {
     const { id, objectives } = goal;
-    const { user, setUser, students, setStudents } = useContext(UserContext);
     const [objectiveForm, setObjectiveForm] = useState({description: `Given ${goal.condition}, ${student.name.split(" ")[1]} will ${goal.behavior} with ${goal.accuracy}% accuracy.`})
     
     // Modal
     const createObjective = useModal();
     
     const updateGoal = useUpdate(goal, 'objectives');
-    const updateStudent = useUpdate(student, 'goals');
-    const updateUser = useUpdate(user, 'students');
 
     // Create Objective
     const updateObjectiveState = (newObjective) => {
         const updatedGoal = updateGoal.updateWith(newObjective);
-        const updatedStudent = updateStudent.updateWith(updatedGoal);
-        setUser(updateUser.updateWith(updatedStudent));
-        setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
-        createObjective.current.close();
+        handleUpdate(updatedGoal);
     } 
-    const { errors, onSubmit } = useHandleSubmit({
+
+    const { errors, setErrors, onSubmit } = useHandleSubmit({
         endpoint: `/goals/${id}/objectives`,
         method: 'POST',
         form: objectiveForm,
-        callback: updateObjectiveState
+        callback: (newObjective) => { 
+            updateObjectiveState(newObjective); 
+            createObjective.close(); 
+        }
     });
 
     return (
@@ -57,21 +55,29 @@ function Objectives({ student, goal }) {
                 </Button>
             </div>
             {objectives.length > 0
-                ? objectives.map((obj) => <ObjectiveCard key={obj.id} objective={obj} goalID={id} updateObjectiveState={updateObjectiveState} />)
+                ? objectives.map((o) => 
+                    <ObjectiveCard 
+                        key={o.id} 
+                        goal={goal}
+                        objective={o} 
+                        updateObjectiveState={updateObjectiveState}
+                        handleUpdate={handleUpdate} 
+                    />
+                )
                 : null
             }
-            <Modal ref={createObjective.ref}>
-                <form onSubmit={onSubmit}>
-                    <h1>Create Objective</h1>
-                    <textarea 
-                        name="description" 
-                        rows={10}
-                        value={objectiveForm.description} 
-                        onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
-                        />
-                    <InputSubmit type="Submit" value="Submit" />
-                    <Errors errors={errors} />
-                </form>
+            <Modal title='Create Objective' ref={createObjective.ref}>
+                <ObjectiveEditor 
+                    onSubmit={onSubmit}
+                    errors={errors}
+                    form={objectiveForm}
+                    setForm={setObjectiveForm}
+                    cancel={() => {
+                        createObjective.close();
+                        setErrors();
+                        setObjectiveForm({description: `Given ${goal.condition}, ${student.name.split(" ")[1]} will ${goal.behavior} with ${goal.accuracy}% accuracy.`});
+                    }}
+                />
             </Modal>
         </>
     );

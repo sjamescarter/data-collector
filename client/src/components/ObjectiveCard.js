@@ -1,28 +1,17 @@
-import { useContext, useRef, useState } from "react";
-import { UserContext } from "../context/user";
+import { useState } from "react";
 import { destroy } from "./fetch";
 import styled from "styled-components";
 import EditButtons from "./EditButtons";
 import Modal from "./Modal";
 import Warn from "./Warn";
-import { useParams } from "react-router-dom";
-import { handleChange } from "./utilities";
 import Assessments from "./Assessments";
-import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
+import ObjectiveEditor from "./ObjectiveEditor";
 
-function ObjectiveCard({ objective, updateObjectiveState }) {
-    const { studentId, goalId } = useParams();
-    const { user, setUser, students, setStudents } = useContext(UserContext);
-
-    const student = user.students.find((s) => s.id === parseInt(studentId)); 
-    const goal = student.goals.find((g) => g.id === parseInt(goalId));
-
+function ObjectiveCard({ goal, objective, updateObjectiveState, handleUpdate }) {
     const updateGoal = useUpdate(goal, 'objectives');
-    const updateStudent = useUpdate(student, 'goals');
-    const updateUser = useUpdate(user, 'students');
 
     // Modals
     const addData = useModal();
@@ -30,10 +19,10 @@ function ObjectiveCard({ objective, updateObjectiveState }) {
     const deleteObjective = useModal();
 
     // State
-    const [objectiveForm, setObjectiveForm] = useState({description: objective.description})
+    const [objectiveForm, setObjectiveForm] = useState({ ...objective })
 
     // Update Objective
-    const { errors, onSubmit } = useHandleSubmit({
+    const { errors, setErrors, onSubmit } = useHandleSubmit({
         endpoint: `/objectives/${objective.id}`,
         method: 'PATCH',
         form: objectiveForm,
@@ -47,9 +36,7 @@ function ObjectiveCard({ objective, updateObjectiveState }) {
     function handleDelete() {
         const callback = () => {
             const updatedGoal = updateGoal.updateWithout(objective.id);
-            const updatedStudent = updateStudent.updateWith(updatedGoal);
-            setUser(updateUser.updateWith(updatedStudent));
-            setStudents([...students.map((s) => s.id === student.id ? updatedStudent : s)]);
+            handleUpdate(updatedGoal);
             deleteObjective.close();
         }
 
@@ -60,35 +47,40 @@ function ObjectiveCard({ objective, updateObjectiveState }) {
         <Container>
             <p>{objective.description}</p>
             <Group>
-                <Circle>{objective.result || "No Data"}</Circle>
+                <Percentage>{objective.result || "No Data"}</Percentage>
                 <EditButtons 
                     title="Objective" 
                     addData={addData.open}
                     editAction={editObjective.open} 
                     deleteAction={deleteObjective.open} 
-                    />
+                />
             </Group>
-            <Modal ref={addData.ref}>
-                <Assessments objective={objective} updateObjectiveState={updateObjectiveState}>
-                    <button onClick={addData.close}>Close</button>
+            <Modal title='Objective Data' ref={addData.ref}>
+                <Assessments 
+                    objective={objective} 
+                    updateObjectiveState={updateObjectiveState}
+                >
+                    <Cancel onClick={addData.close}>Close</Cancel>
                 </Assessments>
             </Modal>
-            <Modal ref={editObjective.ref}>
-                <form onSubmit={onSubmit}>
-                    <h1>Edit Objective</h1>
-                    <textarea 
-                        name="description" 
-                        rows={10}
-                        value={objectiveForm.description} 
-                        onChange={(e) => handleChange(objectiveForm, setObjectiveForm, e)} 
-                        />
-                    <input type="Submit" value="Submit" />
-                    <button type="button" onClick={editObjective.close}>Cancel</button>
-                    <Errors errors={errors} />
-                </form>
+            <Modal title='Edit Objective' ref={editObjective.ref}>
+                <ObjectiveEditor 
+                    onSubmit={onSubmit}
+                    form={objectiveForm}
+                    setForm={setObjectiveForm}
+                    errors={errors}
+                    cancel={() => {
+                        editObjective.close();
+                        setErrors();
+                        setObjectiveForm({ ...objective });
+                    }}
+                />
             </Modal>
-            <Modal ref={deleteObjective.ref}>
-                <Warn handleDelete={handleDelete} closeModal={deleteObjective.close}/>
+            <Modal title='Delete Objective' ref={deleteObjective.ref}>
+                <Warn 
+                    handleDelete={handleDelete} 
+                    closeModal={deleteObjective.close}
+                />
             </Modal>
         </Container>
     );
@@ -96,8 +88,6 @@ function ObjectiveCard({ objective, updateObjectiveState }) {
 
 const Container = styled.div`
     display: flex;
-    // background-color: white;
-    // align-items: top;
     justify-content: space-between;
     gap: 10px;
     border: solid 1px #999;
@@ -114,7 +104,7 @@ const Group = styled.div`
     margin: .5em 0 .5em .25em;
     gap: 10px;
 `
-const Circle = styled.div`
+const Percentage = styled.div`
     background-color: #6a8532;
     display: flex;
     color: #f8f8f8;
@@ -125,5 +115,19 @@ const Circle = styled.div`
     border-radius: 4px;
     padding: .5em;
     box-sizing: border-box;
+`
+const Cancel = styled.button`
+    border: 2px solid #6a8532;
+    border-radius: 4px;
+    color: #6a8532;
+    font-weight: bold;
+    font-size: .8em;
+    // margin: 20px;
+    padding: 10px;
+    background-color: #f8f8f8;
+    &:hover {
+        background-color: #f8f8f8;
+        cursor: pointer;
+    }
 `
 export default ObjectiveCard;
