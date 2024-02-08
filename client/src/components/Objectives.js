@@ -1,10 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { I, InputSubmit } from "../styles";
+import { I } from "../styles";
 import ObjectiveCard from "./ObjectiveCard";
 import Modal from "./Modal";
-import { handleChange } from "./utilities";
-import Errors from "./Errors";
 import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
