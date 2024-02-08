@@ -56,7 +56,7 @@ function Goal() {
             <Container>
                 <GoalHeader>
                     <div className='flex' onClick={showAllGoals}>
-                        <I className="material-icons">assignment</I>
+                        <I className="material-icons">arrow_back_ios_new</I>
                         <h3>{goal.subject} Goal</h3>
                     </div>
                     <EditButtons 
