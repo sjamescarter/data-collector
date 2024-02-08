@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-function Warn({ handleDelete, closeModal}) {
+function Warn({ handleDelete, closeModal }) {
     return (
         <div>
+            <I className="material-icons">warning</I>
             <h1>Are you sure?</h1>
             <Container>
                 <Delete onClick={handleDelete}>Delete</Delete>
@@ -30,10 +31,15 @@ const Delete = styled.button`
     }
 `
 const Cancel = styled(Delete)`
+    border: 2px solid #6a8532;
     color: #6a8532;
     background-color: #f8f8f8;
     &:hover {
         background-color: #f8f8f8;
     }
+`
+const I = styled.i`
+    font-size: 5em;
+    color: #eb5e28;
 `
 export default Warn;

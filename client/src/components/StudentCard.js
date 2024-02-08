@@ -1,14 +1,9 @@
-import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { I } from '../styles';
+import styled from "styled-components";
+import EditButtons from "./EditButtons";
 
 function StudentCard({ student }) {
-    const navigate = useNavigate();
-
-    function handleClick(e) {
-        e.stopPropagation(); 
-        navigate(`/goals/new/students/${student.id}`);
-    }
+    const navigate = useNavigate(); 
 
     return (
         <StudentContainer>
@@ -18,13 +13,7 @@ function StudentCard({ student }) {
                     <Name>{student.name}</Name>
                     <Grade>Grade: {student.grade_level}</Grade>
                 </Info>
-                <I 
-                    className="material-icons"
-                    onClick={handleClick} 
-                    title="Add Goal"
-                >
-                    assignment_add
-                </I>
+                <EditButtons />
             </Card>
         </StudentContainer>
     );
@@ -43,7 +32,6 @@ const StudentContainer = styled.div`
         opacity: 1;
     }
 `
-
 const Card = styled.div`
     display: flex;
     flex-flow: row nowrap;

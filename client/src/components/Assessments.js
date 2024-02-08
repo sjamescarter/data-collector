@@ -26,24 +26,34 @@ function Assessments({ objective, updateObjectiveState, children }) {
 
     return (
         <div>
-            <Li>
+            <Container>
                 <form onSubmit={onSubmit}>
                     <label>NOTE
                         <TextArea rows="2" name="note" value={assessmentForm.note} onChange={onChange} />
                     </label>
                     <div className="flex" style={{gap: '1em'}}>
-                        <label>CORRECT TRIALS 
-                            <InputField type="number" name="correct" value={assessmentForm.correct} onChange={onChange} />
+                        <label>CORRECT TRIALS
+                            <InputField 
+                                type="number" 
+                                name="correct" 
+                                value={assessmentForm.correct} 
+                                onChange={onChange} 
+                            />
                         </label>
                         /
-                        <label>TOTAL TRIALS 
-                            <InputField type="number" name="total" value={assessmentForm.total} onChange={onChange} />
+                        <label>TOTAL TRIALS
+                            <InputField 
+                                type="number" 
+                                name="total" 
+                                value={assessmentForm.total} 
+                                onChange={onChange} 
+                            />
                         </label>
                     </div>
                     <InputSubmit type="submit" value="Create Data" />
                     <Errors errors={errors} />
                 </form>
-            </Li>
+            </Container>
             <div style={{margin: '1em 0'}}>
                 {assessments.map((a) => 
                     <AssessmentCard
@@ -59,22 +69,18 @@ function Assessments({ objective, updateObjectiveState, children }) {
     );
 }
 
-const Li = styled.li`
-    // background-color: white;
+const Container = styled.div`
     box-sizing: border-box;
     border-bottom: solid 2px #999;
-    // border-radius: 4px;
     display: flex;
     text-align: left;
     justify-content: space-between;
     list-style: none;
     padding: 0 0 1em;
-    // margin: 1em 0;
 `
 const TextArea = styled.textarea`
     background-color: #f8f8f8;
-    border: none;
-    border-bottom: 1px solid #999;
+    border: 1px solid #999;
     box-sizing: border-box;
     border-radius: 4px;
     font-family: 'Ubuntu';

@@ -3,13 +3,14 @@ import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
 import { Header, InputSubmit } from '../styles'
-import { destroy, submit } from '../components/fetch';
+import { destroy } from '../components/fetch';
 import GoalCard from '../components/GoalCard';
 import Modal from '../components/Modal';
 import GoalEditor from '../components/GoalEditor';
 import Errors from '../components/Errors';
 import useUpdate from '../hooks/useUpdate';
 import useModal from '../hooks/useModal';
+import useHandleSubmit from '../hooks/useHandleSubmit';
 
 function Student() {
     const { user, setUser, students, setStudents } = useContext(UserContext);
@@ -17,38 +18,53 @@ function Student() {
     const id = parseInt(studentId);
     const navigate = useNavigate();
     
-    const student = user.students.find((s) => s.id === parseInt(studentId)) 
+    const student = user.students.find((s) => s.id === id) 
+    
+    const newGoalForm = {
+        student_id: id,
+        subject: "",
+        condition: "", 
+        behavior: "", 
+        accuracy: "", 
+        measurement: ""
+    };
+
+    const [goalForm, setGoalForm] = useState(newGoalForm)
+    
+    const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
+
+    // Modal
+    const createGoal = useModal();
+    const cancelCreateGoal = () => {
+        createGoal.close();
+        setGoalForm(newGoalForm);
+        setErrors();
+    }
+
+    // Update State
     const updateStudent = useUpdate(student, 'goals');
     const updateUser = useUpdate(user, 'students');
-    
-    const [errors, setErrors] = useState();
-    
-    const createGoal = useModal();
-    
-    if(!students) { return <h1>Loading...</h1>}
-    
-    if(!student) { return <h1>Student not found</h1>}
-
-    const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
 
     function handleUpdate(updatedGoal) {  
         const updatedStudent = updateStudent.updateWith(updatedGoal);     
         setUser(updateUser.updateWith(updatedStudent));
         setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
     }
-
-    function handleSubmit(e, goalForm) {
-        e.preventDefault();
-        setErrors();
-        
-        const callback = (newGoal) => {
+    
+    // Create Goal
+    const { errors, setErrors, onSubmit } = useHandleSubmit({
+        endpoint: '/goals',
+        method: 'POST',
+        form: goalForm,
+        callback: (newGoal) => {
             handleUpdate(newGoal);
+            setGoalForm(newGoalForm);
             createGoal.close();
+            navigate(`/students/${student.id}`);
         }
+    });
 
-        submit('/goals', 'POST', goalForm, callback, setErrors);
-    }
-
+    // Delete Goal
     function handleDelete(goalId) {
         const updatedStudent = updateStudent.updateWithout(goalId);
 
@@ -61,6 +77,11 @@ function Student() {
 
         destroy(`/goals/${goalId}`, callback);
     }
+
+    if(!students) { return <h1>Loading...</h1>}
+    
+    if(!student) { return <h1>Student not found</h1>}
+
 
     return (
         <>
@@ -81,7 +102,7 @@ function Student() {
             </Header>
             <Container>
                 {goalId
-                    ? <Outlet context={[handleDelete, handleUpdate]} />
+                    ? <Outlet context={[handleDelete, handleUpdate, student]} />
                     : <>
                         {filteredGoals.map((goal) => 
                             <GoalCard 
@@ -91,25 +112,19 @@ function Student() {
                         )}
                     </>
                 }
+                <Modal title='Goal Editor' ref={createGoal.ref}>
+                    <GoalEditor 
+                        student={student}
+                        goalForm={goalForm}
+                        setGoalForm={setGoalForm}
+                        onSubmit={onSubmit}
+                        cancel={cancelCreateGoal}
+                    >
+                        <InputSubmit type="submit" value="Create Goal" />
+                        <Errors errors={errors} />
+                    </GoalEditor>
+                </Modal>
             </Container>
-            <Modal ref={createGoal.ref}>
-                <GoalEditor 
-                    student={student}
-                    goal={{
-                        student_id: student.id,
-                        subject: "",
-                        condition: "", 
-                        behavior: "", 
-                        accuracy: "", 
-                        measurement: ""
-                    }}
-                    onSubmit={handleSubmit}
-                >
-                    <InputSubmit type="submit" value="Create Goal" />
-                    <button onClick={createGoal.close}>cancel</button>
-                    <Errors errors={errors} />
-                </GoalEditor>
-            </Modal>
         </>
     );
 }

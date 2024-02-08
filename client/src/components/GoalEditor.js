@@ -86,8 +86,7 @@ const P = styled.p`
 `
 const TextArea = styled.textarea`
     background-color: #f8f8f8;
-    border: none;
-    border-bottom: 1px solid #999;
+    border: 1px solid #999;
     box-sizing: border-box;
     border-radius: 4px;
     font-family: 'Ubuntu';

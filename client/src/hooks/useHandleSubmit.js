@@ -26,6 +26,7 @@ function useHandleSubmit(initialValue) {
 
     const submitProps = {
         errors: errors,
+        setErrors: setErrors,
         onSubmit: handleSubmit
     }
 

@@ -28,7 +28,7 @@ function MyStudents() {
                     <p style={{padding: '0 6px 0 0'}}>Create Student</p>
                 </Button>
             </Header>
-            {<Search search={search} setSearch={setSearch}>
+            <Search search={search} setSearch={setSearch}>
                 {search 
                     ? <ul>
                         <Li onClick={() => navigate(`/goals/new`)}>
@@ -37,8 +37,8 @@ function MyStudents() {
                     </ul>
                     : null
                 }
-            </Search>}
-            {<StudentList students={filtered} />}
+            </Search>
+            <StudentList students={filtered} />
         </>
     );
 }
