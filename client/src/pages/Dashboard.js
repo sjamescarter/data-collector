@@ -19,10 +19,6 @@ function Dashboard() {
                     <I className="material-icons">person_add_alt_1</I>
                     <Text>Add New Student</Text>
                 </Button>
-                <Button onClick={() => navigate('/goals/new')}>
-                    <I className="material-icons">assignment_add</I>
-                    <Text>Add New Goal</Text>
-                </Button>
             </Container>
         </div>
     )
@@ -32,6 +28,7 @@ const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     margin: auto;
+    box-sizing: border-box;
     width: 80%
 `
 const Button = styled.button`
