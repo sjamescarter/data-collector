@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
-import { Header, InputSubmit } from '../styles'
+import { Header, I, InputSubmit } from '../styles'
 import { destroy } from '../components/fetch';
 import GoalCard from '../components/GoalCard';
 import Modal from '../components/Modal';
@@ -87,8 +87,19 @@ function Student() {
         <>
             <Header>
                 <div style={{position: "relative"}}>
-                    <Name onClick={() => navigate(`/students/${student.id}`)}>{student.name}</Name>
-                    <small style={{position: "absolute", bottom: ".5em"}}>Grade: {student.grade_level}</small>
+                    <I 
+                        className="material-icons" 
+                        style={{position: "absolute", top: '1.7em', left: '-1.1em'}}
+                        onClick={() => navigate(`/students`)}
+                    >
+                        arrow_back_ios
+                    </I>
+                    <Name>{student.name}</Name>
+                    <small 
+                        style={{position: "absolute", bottom: ".5em"}}
+                    >
+                        Grade: {student.grade_level}
+                    </small>
                 </div>
                 <Button onClick={createGoal.open}>
                     <i 
