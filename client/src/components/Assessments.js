@@ -3,8 +3,8 @@ import { handleChange } from "./utilities";
 import AssessmentCard from "./AssessmentCard";
 import styled from "styled-components";
 import Errors from "./Errors";
-import useHandleSubmit from "../hooks/useHandleSubmit";
 import { InputField, InputSubmit } from "../styles";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 const newAssessment = {note: "", correct: "", total: ""}
 

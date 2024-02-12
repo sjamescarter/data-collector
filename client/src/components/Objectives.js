@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { I } from "../styles";
 import ObjectiveCard from "./ObjectiveCard";
 import Modal from "./Modal";
-import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
 import ObjectiveEditor from "./ObjectiveEditor";
+import useHandleSubmit from "../hooks/useHandleSubmit";
+import IconButton from "./IconButton";
 
 function Objectives({ student, goal, handleUpdate }) {
     const { id, objectives } = goal;
@@ -40,17 +41,11 @@ function Objectives({ student, goal, handleUpdate }) {
                     <I className="material-icons">task_alt</I>
                     <h4>Objectives</h4>
                 </div>
-                <Button 
+                <IconButton 
                     onClick={createObjective.open}
-                >
-                    <i 
-                        style={{padding: '0 4px'}}
-                        className="material-icons" 
-                        >
-                        add_task
-                    </i>
-                    <p style={{padding: '0 4px 0 0'}}>New Objective</p>
-                </Button>
+                    icon='add_task'
+                    text='New Objective'
+                />
             </div>
             {objectives.length > 0
                 ? objectives.map((o) => 
@@ -80,22 +75,5 @@ function Objectives({ student, goal, handleUpdate }) {
         </>
     );
 }
-
-const Button = styled.button`
-    align-items: center;
-    background-color: #6a8532;
-    border: 2px solid #6a8532;
-    border-radius: 4px;
-    color: white;
-    display: flex;
-    // flex-flow: row nowrap;
-    // justify-content: space-between;
-    padding: 4px;
-    opacity: .9;
-    &:hover {
-        opacity: 1;
-        cursor: pointer;
-    }
-`
 
 export default Objectives;

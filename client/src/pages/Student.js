@@ -11,6 +11,8 @@ import Errors from '../components/Errors';
 import useUpdate from '../hooks/useUpdate';
 import useModal from '../hooks/useModal';
 import useHandleSubmit from '../hooks/useHandleSubmit';
+import { alphabetize } from '../components/utilities';
+import IconButton from '../components/IconButton';
 
 function Student() {
     const { user, setUser, students, setStudents } = useContext(UserContext);
@@ -18,7 +20,7 @@ function Student() {
     const id = parseInt(studentId);
     const navigate = useNavigate();
     
-    const student = user.students.find((s) => s.id === id) 
+    const student = students.find((s) => s.id === id); 
     
     const newGoalForm = {
         student_id: id,
@@ -29,7 +31,7 @@ function Student() {
         measurement: ""
     };
 
-    const [goalForm, setGoalForm] = useState(newGoalForm)
+    const [goalForm, setGoalForm] = useState(newGoalForm);
     
     const filteredGoals = [...student.goals.filter((goal) => goal.user_id === user.id)];
 
@@ -39,15 +41,18 @@ function Student() {
         createGoal.close();
         setGoalForm(newGoalForm);
         setErrors();
-    }
+    };
 
     // Update State
     const updateStudent = useUpdate(student, 'goals');
     const updateUser = useUpdate(user, 'students');
 
     function handleUpdate(updatedGoal) {  
-        const updatedStudent = updateStudent.updateWith(updatedGoal);     
-        setUser(updateUser.updateWith(updatedStudent));
+        const updatedStudent = updateStudent.updateWith(updatedGoal); 
+        const alphabetizedStudents = alphabetize([...user.students, updatedStudent]);
+        filteredGoals.length === 1 
+            ? setUser({ ...user, students: alphabetizedStudents})
+            : setUser(updateUser.updateWith(updatedStudent));
         setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
     }
     
@@ -73,14 +78,14 @@ function Student() {
                 ? setUser({ ...user, students: [...user.students.filter((student) => student.id !== id)]})
                 : setUser(updateUser.updateWith(updatedStudent));
             setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
-        }
+        };
 
         destroy(`/goals/${goalId}`, callback);
     }
 
-    if(!students) { return <h1>Loading...</h1>}
+    if(!students) { return <h1>Loading...</h1>};
     
-    if(!student) { return <h1>Student not found</h1>}
+    if(!student) { return <h1>Student not found</h1>};
 
 
     return (
@@ -101,15 +106,11 @@ function Student() {
                         Grade: {student.grade_level}
                     </small>
                 </div>
-                <Button onClick={createGoal.open}>
-                    <i 
-                        style={{padding: '0 6px'}}
-                        className="material-icons" 
-                    >
-                        assignment_add
-                    </i>
-                    <p style={{padding: '0 6px 0 0'}}>New Goal</p>
-                </Button>
+                <IconButton 
+                    onClick={createGoal.open}
+                    icon='assignment_add'
+                    text='New Goal'
+                />
             </Header>
             <Container>
                 {goalId
@@ -123,7 +124,7 @@ function Student() {
                         )}
                     </>
                 }
-                <Modal title='Goal Editor' ref={createGoal.ref}>
+                <Modal title='New Goal' ref={createGoal.ref}>
                     <GoalEditor 
                         student={student}
                         goalForm={goalForm}

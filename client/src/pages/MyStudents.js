@@ -5,56 +5,58 @@ import styled from 'styled-components';
 import Search from "../components/Search";
 import StudentList from "../components/StudentList";
 import { filter } from '../components/utilities';
-import { Header, Li } from '../styles'
+import { Header } from '../styles'
+import IconButton from '../components/IconButton';
 
 function MyStudents() {
-    const { user } = useContext(UserContext);
+    const { user, students } = useContext(UserContext);
     const [search, setSearch] = useState("");
-    const filtered = filter(user.students, search);
+    const [myStudents, setMyStudents] = useState(true);
+    const studentList = myStudents ? user.students : students;
+    const filtered = filter(studentList, search);
 
     const navigate = useNavigate();
 
     return (
         <>
             <Header>
-                <h1>My Students</h1>
-                <Button onClick={() => navigate(`/students/new`)}>
-                    <i 
-                        style={{padding: '0 6px'}}
-                        className="material-icons" 
-                        >
-                        person_add_alt_1
-                    </i>
-                    <p style={{padding: '0 6px 0 0'}}>Create Student</p>
-                </Button>
+                <h1>Students</h1>
+                <IconButton 
+                    onClick={() => navigate(`/students/new`)}
+                    icon='person_add_alt_1'
+                    text='New Student'
+                />
             </Header>
-            <Search search={search} setSearch={setSearch}>
-                {search 
-                    ? <ul>
-                        <Li onClick={() => navigate(`/goals/new`)}>
-                            Can't find a student? Click here to add an existing student to your caseload.
-                        </Li> 
-                    </ul>
-                    : null
-                }
-            </Search>
+            <div className="flex" style={{width: '250px', justifyContent: 'space-between', margin: 'auto'}}>
+                <h4 onClick={() => setMyStudents(false)}>
+                    {myStudents
+                        ? <NotSelected>All Students</NotSelected>
+                        : <Selected>All Students</Selected>
+                    }
+                </h4>
+                <h4 onClick={() => setMyStudents(true)}>
+                    {myStudents
+                        ? <Selected>My Students</Selected>
+                        : <NotSelected>My Students</NotSelected>
+                    }
+                </h4>
+            </div>
+            <Search search={search} setSearch={setSearch} />
             <StudentList students={filtered} />
         </>
     );
 }
 
-const Button = styled.button`
-    align-items: center;
-    background-color: #6a8532;
-    border: 2px solid #6a8532;
-    border-radius: 8px;
-    color: white;
-    display: flex;
-    padding: 4px;
-    opacity: .9;
+const Selected = styled.span`
+    background-color: #d7dace;
+    padding: 15px;
+    border-radius: 4px;
+    box-sizing: border-box;
     &:hover {
-        opacity: 1;
         cursor: pointer;
     }
+`
+const NotSelected = styled(Selected)`
+    background-color: inherit;
 `
 export default MyStudents;
