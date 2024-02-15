@@ -28,16 +28,16 @@ function MyStudents() {
                 />
             </Header>
             <div className="flex" style={{width: '250px', justifyContent: 'space-between', margin: 'auto'}}>
-                <h4 onClick={() => setMyStudents(false)}>
-                    {myStudents
-                        ? <NotSelected>All Students</NotSelected>
-                        : <Selected>All Students</Selected>
-                    }
-                </h4>
                 <h4 onClick={() => setMyStudents(true)}>
                     {myStudents
                         ? <Selected>My Students</Selected>
                         : <NotSelected>My Students</NotSelected>
+                    }
+                </h4>
+                <h4 onClick={() => setMyStudents(false)}>
+                    {myStudents
+                        ? <NotSelected>All Students</NotSelected>
+                        : <Selected>All Students</Selected>
                     }
                 </h4>
             </div>
