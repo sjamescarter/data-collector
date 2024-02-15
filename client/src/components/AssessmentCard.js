@@ -6,9 +6,9 @@ import Warn from "./Warn";
 import styled from "styled-components";
 import { handleChange } from "./utilities";
 import Errors from "./Errors";
-import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 function AssessmentCard({ objective, assessment, updateObjectiveState }) {
     const updateObjective = useUpdate(objective, 'assessments');
@@ -53,7 +53,10 @@ function AssessmentCard({ objective, assessment, updateObjectiveState }) {
                         <input type="submit" value="save" />
                         <Errors errors={errors} />
                     </form>
-                    : <div>{assessment.correct} correct of {assessment.total} trials</div>
+                    : <div style={{textAlign: "left"}}>
+                        <p>{assessment.correct} correct of {assessment.total} trials</p>
+                        <small><em>{assessment.note}</em></small>
+                    </div>
                 }
                 <EditButtons title="Assessment" editAction={() => setIsEditing(!isEditing)} deleteAction={warning.open} />
             </Li>
