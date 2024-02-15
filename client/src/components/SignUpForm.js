@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { handleChange } from './utilities';
 import Errors from './Errors';
-import { submit } from './fetch';
+import useHandleSubmit from '../hooks/useHandleSubmit';
 
 const formFields = {
     first_name: "",
@@ -14,24 +14,22 @@ const formFields = {
 
 function SignUpForm({ onLogin, loadApp }) {
     const [signup, setSignup] = useState(formFields);
-    const [errors, setErrors] = useState();
+    const onChange = (e) => handleChange(signup, setSignup, e)
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setErrors();
-
-        const callback = (user) => {
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: '/signup',
+        method: 'POST',
+        form: signup,
+        callback: (user) => {
             onLogin(user);
             setSignup(formFields);
             loadApp();
         }
-
-        submit('/signup', 'POST', signup, callback, setErrors);
-    }
+    });
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={onSubmit}>
                 <div className="input-container">
                     <i className="material-icons input-icon">person</i>
                     <input 
@@ -40,7 +38,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="First Name" 
                         value={signup.first_name} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                     <input 
                         type="text" 
@@ -48,7 +46,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="Last Name" 
                         value={signup.last_name} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                 </div>
 
@@ -60,7 +58,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="Job Title" 
                         value={signup.job_title} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                 </div>
                 
@@ -72,7 +70,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="Email" 
                         value={signup.email} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                 </div>
 
@@ -84,7 +82,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="Password" 
                         value={signup.password} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                 </div>
 
@@ -96,7 +94,7 @@ function SignUpForm({ onLogin, loadApp }) {
                         className="input-field" 
                         placeholder="Confirm Password" 
                         value={signup.password_confirmation} 
-                        onChange={(e) => handleChange(signup, setSignup, e)} 
+                        onChange={onChange} 
                     />
                 </div>
 

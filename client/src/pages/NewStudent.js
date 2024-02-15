@@ -1,58 +1,37 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../context/user';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FormContainer, Header, InputContainer, InputIcon, InputSubmit } from '../styles/';
-import { handleChange } from '../components/utilities';
+import { alphabetize, handleChange } from '../components/utilities';
 import Errors from '../components/Errors';
+import useHandleSubmit from '../hooks/useHandleSubmit';
 
 const newStudentForm = {firstName: "", lastName: "", gradeLevel: ""}
 
 function NewStudent({ newForm=newStudentForm }) {
     const { students, setStudents } = useContext(UserContext);
 
-    const { name } = useParams();
-    if(name) {
-        newForm = { 
-            firstName: name.split(" ")[1], 
-            lastName: name.split(" ")[0] || "",
-            gradeLevel: ""
-        }
-    }
-
     const [form, setForm] = useState(newForm)
-    const [errors, setErrors] = useState([]);
 
     const navigate = useNavigate();
 
-    const change = (e) => handleChange(form, setForm, e)
+    const onChange = (e) => handleChange(form, setForm, e)
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setErrors();
-        fetch("/students", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                first_name: form.firstName,
-                last_name: form.lastName,
-                grade_level: form.gradeLevel
-            })
-        })
-        .then((r) => {
-            if (r.ok) {
-                r.json().then((student) => {
-                    setStudents([...students, student])
-                    setForm(newStudentForm);
-                    navigate(`/students/${student.id}`);
-                });
-            } else {
-                r.json().then((err) => setErrors(err.errors))
-            }
-        })
-    }
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: '/students',
+        method: 'POST',
+        form: {
+            first_name: form.firstName,
+            last_name: form.lastName,
+            grade_level: form.gradeLevel
+        },
+        callback: (student) => {
+            setStudents(alphabetize([...students, student]))
+            setForm(newStudentForm);
+            navigate(`/students/${student.id}`);
+        }
+    });
 
     return (
         <>
@@ -60,15 +39,15 @@ function NewStudent({ newForm=newStudentForm }) {
                 <h1>New Student</h1>
             </Header>
             <FormContainer>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={onSubmit}>
                     <InputContainer>
                         <InputIcon className='material-icons'>person</InputIcon>
-                        <InputField type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={change} />
-                        <InputField  type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={change} />
+                        <InputField type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={onChange} />
+                        <InputField  type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={onChange} />
                     </InputContainer>
                     <InputContainer>
                         <InputIcon className='material-icons'>school</InputIcon>
-                        <InputField  type="number" name="gradeLevel" placeholder="Grade Level: 1–12" value={form.gradeLevel} onChange={change} />
+                        <InputField  type="number" name="gradeLevel" placeholder="Grade Level: 1–12" value={form.gradeLevel} onChange={onChange} />
                     </InputContainer>
                     <InputContainer>
                         <InputSubmit  type="submit" value="Create Student" />

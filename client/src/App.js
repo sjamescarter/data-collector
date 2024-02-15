@@ -29,12 +29,11 @@ console.log(students)
         <div style={{marginLeft: "12.5em"}}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            {/* <Route path="/school" element={<Students />} /> */}
             <Route path="/students" element={<MyStudents />} />
+            <Route path="/students/new" element={<NewStudent />} />
             <Route path="/students/:studentId" element={<Student />}>
               <Route path="goals/:goalId" element={<Goal />} />
-            </Route>
-            <Route path="/students/new" element={<NewStudent />}>
-              <Route path=":name" element={<NewStudent />} />
             </Route>
           </Routes>
         </div>

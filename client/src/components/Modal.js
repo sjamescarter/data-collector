@@ -24,6 +24,9 @@ const Dialog = styled.dialog`
         background-color: black;
         opacity: .5;
     }
+    @media (min-width: 1000px) {
+        max-width: 60%;
+    }
 `
 const Title = styled.h1`
     color: #f8f8f8;

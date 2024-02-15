@@ -1,24 +1,28 @@
-import { InputContainer, InputIcon, InputField } from '../styles/';
+import styled from 'styled-components';
+import { InputField } from '../styles/';
 
-function Search({ children, search, setSearch }) {
+function Search({ search, setSearch }) {
     return (
-        <div style={{width: '80%', margin: 'auto'}}>
-            <h3>Search</h3>
-            <InputContainer>
-                <InputIcon className="material-icons">search</InputIcon>     
-                <InputField 
-                    type="text" 
-                    name="search" 
-                    style={{backgroundColor: "#f8f8f8"}}
-                    placeholder="Search Student Name" 
-                    autoComplete="off"
-                    value={search} 
-                    onChange={(e) => setSearch(e.target.value)} 
-                />
-            </InputContainer>
-            {children}
-        </div>
+        <Container className='flex'>
+            <i className="material-icons">search</i>
+            <InputField 
+                type="text" 
+                name="search" 
+                style={{backgroundColor: "#f8f8f8"}}
+                placeholder="Search Student Name" 
+                autoComplete="off"
+                value={search} 
+                onChange={(e) => setSearch(e.target.value)} 
+            />
+        </Container>
     );
 }
-
+const Container = styled.div`
+    gap: 1em;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    width: 80%;
+`
 export default Search;

@@ -5,10 +5,10 @@ import EditButtons from "./EditButtons";
 import Modal from "./Modal";
 import Warn from "./Warn";
 import Assessments from "./Assessments";
-import useHandleSubmit from "../hooks/useHandleSubmit";
 import useUpdate from "../hooks/useUpdate";
 import useModal from "../hooks/useModal";
 import ObjectiveEditor from "./ObjectiveEditor";
+import useHandleSubmit from "../hooks/useHandleSubmit";
 
 function ObjectiveCard({ goal, objective, updateObjectiveState, handleUpdate }) {
     const updateGoal = useUpdate(goal, 'objectives');

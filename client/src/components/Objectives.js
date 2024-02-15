@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { I } from "../styles";
 import ObjectiveCard from "./ObjectiveCard";
 import Modal from "./Modal";

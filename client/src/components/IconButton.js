@@ -15,13 +15,16 @@ function IconButton({ onClick, icon, text, style }) {
 
 const Button = styled.button`
 align-items: center;
+font: inherit;
+font-size: .75em;
+font-weight: 600;
 background-color: #6a8532;
 border: none;
 border-radius: 4px;
 color: white;
 display: flex;
 gap: 10px;
-padding: 6px 16px;
+padding: 3px 16px;
 opacity: .9;
 &:hover {
     opacity: 1;

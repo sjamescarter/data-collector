@@ -49,10 +49,12 @@ function Student() {
 
     function handleUpdate(updatedGoal) {  
         const updatedStudent = updateStudent.updateWith(updatedGoal); 
-        const alphabetizedStudents = alphabetize([...user.students, updatedStudent]);
-        filteredGoals.length === 1 
-            ? setUser({ ...user, students: alphabetizedStudents})
-            : setUser(updateUser.updateWith(updatedStudent));
+        if(user.students.find((s) => s.id === id)) {
+            setUser(updateUser.updateWith(updatedStudent));
+        } else {
+            const alphabetizedStudents = alphabetize([...user.students, updatedStudent]);
+            setUser({ ...user, students: alphabetizedStudents});
+        }
         setStudents([...students.map((s) => s.id === id ? updatedStudent : s)]);
     }
     

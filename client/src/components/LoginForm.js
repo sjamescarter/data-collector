@@ -1,27 +1,25 @@
 import { useState } from 'react';
 import { handleChange } from './utilities';
 import Errors from './Errors';
-import { submit } from './fetch';
+import useHandleSubmit from '../hooks/useHandleSubmit';
 
 function LoginForm({ onLogin, loadApp }) {
     const [form, setForm] = useState({email: "", password: ""});
-    const [errors, setErrors] = useState();
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setErrors();
-
-        const callback = (user) => {
+    const { errors, onSubmit } = useHandleSubmit({
+        endpoint: '/login',
+        method: 'POST',
+        form: form,
+        callback: (user) => {
             onLogin(user);
             setForm({email: "", password: ""});
             loadApp();
         }
+    })
 
-        submit('/login', 'POST', form, callback, setErrors);
-    }
-
+    
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
             <div className="input-container">
                 <i className="material-icons input-icon">mail</i>
                 <input 

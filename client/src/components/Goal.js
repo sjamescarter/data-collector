@@ -3,13 +3,13 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import styled from "styled-components";
 import { I, InputSubmit } from "../styles/index"
 import useModal from '../hooks/useModal';
-import useHandleSubmit from '../hooks/useHandleSubmit';
 import EditButtons from '../components/EditButtons';
 import Errors from './Errors';
 import GoalEditor from '../components/GoalEditor';
 import Modal from '../components/Modal';
 import Objectives from '../components/Objectives';
 import Warn from '../components/Warn';
+import useHandleSubmit from '../hooks/useHandleSubmit';
 
 function Goal() {
     // Context

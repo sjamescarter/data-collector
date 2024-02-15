@@ -32,7 +32,8 @@ function Assessments({ objective, updateObjectiveState, children }) {
                         <TextArea rows="2" name="note" value={assessmentForm.note} onChange={onChange} />
                     </label>
                     <div className="flex" style={{gap: '1em'}}>
-                        <label>CORRECT TRIALS
+                        <label>
+                            CORRECT TRIALS
                             <InputField 
                                 type="number" 
                                 name="correct" 
@@ -41,7 +42,8 @@ function Assessments({ objective, updateObjectiveState, children }) {
                             />
                         </label>
                         /
-                        <label>TOTAL TRIALS
+                        <label>
+                            TOTAL TRIALS
                             <InputField 
                                 type="number" 
                                 name="total" 

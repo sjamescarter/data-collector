@@ -4,7 +4,7 @@ import { UserContext } from '../context/user';
 import styled from 'styled-components';
 
 function NavBar() {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser, setStudents } = useContext(UserContext);
     const navigate = useNavigate();
 
     function handleLogout() {
@@ -15,11 +15,12 @@ function NavBar() {
             if (r.ok) {
                 navigate('/');
                 setUser(null);
+                setStudents(null);
             }
-        })
+        });
     }
     
-    const activate = ({ isActive }) => isActive ? "active" : ""
+    const activate = ({ isActive }) => isActive ? "active" : "";
 
     return (
         <SideNav>
@@ -31,7 +32,7 @@ function NavBar() {
             </StyledNavLink>
             <StyledNavLink to="/students" className={activate}>
                 <Icon className="material-icons">groups</Icon>
-                My Students
+                Students
             </StyledNavLink>
             <SignOutButton onClick={handleLogout}>
                 <Icon className="material-icons">logout</Icon>
@@ -53,13 +54,11 @@ const SideNav = styled.div`
     overflow-x: hidden;
     padding-top: 20px;
 `
-
 const Welcome = styled.h2`
     color: white;
     text-align: center;
     font-size: 1.2em;
 `
-
 const StyledNavLink = styled(NavLink)`
     color: white;
     display: flex;
@@ -75,7 +74,6 @@ const StyledNavLink = styled(NavLink)`
         color: #6a8532;
     }
 `
-
 const Icon = styled.i`
     padding: 0 16px;
 `
