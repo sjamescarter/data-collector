@@ -157,20 +157,4 @@ const Name = styled.h1`
         cursor: pointer;
     }
 `
-const Button = styled.button`
-    align-items: center;
-    background-color: #6a8532;
-    border: 2px solid #6a8532;
-    border-radius: 8px;
-    color: white;
-    display: flex;
-    // flex-flow: row nowrap;
-    // justify-content: space-between;
-    padding: 4px;
-    opacity: .9;
-    &:hover {
-        opacity: 1;
-        cursor: pointer;
-    }
-`
 export default Student;
