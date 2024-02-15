@@ -43,7 +43,7 @@ function NewStudent({ newForm=newStudentForm }) {
                     <InputContainer>
                         <InputIcon className='material-icons'>person</InputIcon>
                         <InputField type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={onChange} />
-                        <InputField  type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={onChange} />
+                        <InputField type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={onChange} />
                     </InputContainer>
                     <InputContainer>
                         <InputIcon className='material-icons'>school</InputIcon>
@@ -64,10 +64,11 @@ const InputField = styled.input`
     display: flex;
     border: none;
     border-bottom: 1px solid #999;
-    padding: 6px;
+    padding: 16px;
     font-family: 'Ubuntu';
     box-sizing: border-box;
     font-size: 1em;
+    margin: 1em 0;
     &:focus {
         outline-color: #6a8532;
     }
