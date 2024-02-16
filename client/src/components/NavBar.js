@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 function NavBar() {
     const { user, setUser, setStudents } = useContext(UserContext);
-    const { first_name: first, last_name: last, job_title: job } = user
+    const { first_name: first, last_name: last, job_title: job } = user;
     const navigate = useNavigate();
 
     function handleLogout() {
