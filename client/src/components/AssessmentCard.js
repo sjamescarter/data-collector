@@ -35,7 +35,11 @@ function AssessmentCard({ objective, assessment, updateObjectiveState }) {
     function handleDelete() {
         const callback = () => {
             const updatedObjective = updateObjective.updateWithout(assessment.id);
-            updateObjectiveState(updatedObjective);
+            let correct = updatedObjective.assessments.map((a) => a.correct).reduce((total, current) => total + current, 0);
+            let total = updatedObjective.assessments.map((a) => a.total).reduce((total, current) => total + current, 0);
+            const resultUpdate = Math.floor((correct/total)*100);
+            const updatedResult = { ...updatedObjective, result: `${resultUpdate}%` };
+            updateObjectiveState(updatedResult);
         }
 
         destroy(`/assessments/${assessment.id}`, callback);
