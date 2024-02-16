@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 function NavBar() {
     const { user, setUser, setStudents } = useContext(UserContext);
+    const { first_name: first, last_name: last, job_title: job } = user
     const navigate = useNavigate();
 
     function handleLogout() {
@@ -25,17 +26,20 @@ function NavBar() {
     return (
         <SideNav>
             <h2>myData [Collector]</h2>
-            <Welcome>{user.first_name} {user.last_name}, {user.job_title}</Welcome>
+            <Welcome>
+                <p style={{marginBottom: "0"}}>{first} {last}</p> 
+                <small style={{marginTop: "0"}}>{job}</small>
+            </Welcome>
             <StyledNavLink to="/" className={activate}>
-                <Icon className="material-icons">dashboard</Icon>
+                <i className="material-icons">dashboard</i>
                 Dashboard
             </StyledNavLink>
             <StyledNavLink to="/students" className={activate}>
-                <Icon className="material-icons">groups</Icon>
+                <i className="material-icons">groups</i>
                 Students
             </StyledNavLink>
             <SignOutButton onClick={handleLogout}>
-                <Icon className="material-icons">logout</Icon>
+                <i className="material-icons">logout</i>
                 Sign Out
             </SignOutButton>
         </SideNav>
@@ -56,13 +60,13 @@ const SideNav = styled.div`
 `
 const Welcome = styled.h2`
     color: white;
-    text-align: center;
     font-size: 1.2em;
 `
 const StyledNavLink = styled(NavLink)`
     color: white;
     display: flex;
-    padding: 10px 0;
+    padding: 10px 16px;
+    gap: 10px;
     text-decoration: none;
     font-size: 1.25em;
     &.active {
@@ -74,15 +78,13 @@ const StyledNavLink = styled(NavLink)`
         color: #6a8532;
     }
 `
-const Icon = styled.i`
-    padding: 0 16px;
-`
 const SignOutButton = styled.button`
     background-color: #6a8532;
     border: none;
     color: white;
     display: flex;
-    padding: 10px 0;
+    gap: 10px;
+    padding: 10px 16px;
     text-decoration: none;
     font-size: 1.25em;
     width: 100%;
