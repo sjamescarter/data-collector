@@ -29,5 +29,6 @@ opacity: .9;
 &:hover {
     opacity: 1;
     cursor: pointer;
+    transition: 1s;
 `
 export default IconButton;
