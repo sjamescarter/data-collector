@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :organizations
   resources :students, only: [:index, :create]
   resources :goals, only: [:index, :create, :update, :destroy] do
     resources :objectives, only: [:create]

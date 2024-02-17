@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_19_153503) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_17_230823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,12 +46,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_19_153503) do
     t.index ["goal_id"], name: "index_objectives_on_goal_id"
   end
 
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.integer "grade_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_students_on_organization_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -62,10 +71,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_19_153503) do
     t.string "job_title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
   end
 
   add_foreign_key "assessments", "objectives"
   add_foreign_key "goals", "students"
   add_foreign_key "goals", "users"
   add_foreign_key "objectives", "goals"
+  add_foreign_key "students", "organizations"
+  add_foreign_key "users", "organizations"
 end
